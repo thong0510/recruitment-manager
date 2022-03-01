@@ -1,7 +1,7 @@
 package fpt.com.fresher.recruitmentmanager.object.mapper;
 
 import fpt.com.fresher.recruitmentmanager.object.entity.Candidates;
-import fpt.com.fresher.recruitmentmanager.object.request.CandidateRequest;
+import fpt.com.fresher.recruitmentmanager.object.response.CandidateResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
@@ -11,7 +11,7 @@ import org.mapstruct.ReportingPolicy;
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface CandidateMapper {
 
-    CandidateRequest entityToCandidateRequest(Candidates candidates);
+    CandidateResponse entityToCandidateRequest(Candidates candidates);
 
-    Candidates candidateRequestToEntity(CandidateRequest request);
+    Candidates candidateRequestToEntity(CandidateResponse request);
 }

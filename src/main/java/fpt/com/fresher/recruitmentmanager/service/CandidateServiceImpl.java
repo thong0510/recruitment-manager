@@ -2,7 +2,7 @@ package fpt.com.fresher.recruitmentmanager.service;
 
 import fpt.com.fresher.recruitmentmanager.object.entity.Candidates;
 import fpt.com.fresher.recruitmentmanager.object.filter.CandidateFilter;
-import fpt.com.fresher.recruitmentmanager.object.request.CandidateRequest;
+import fpt.com.fresher.recruitmentmanager.object.response.CandidateResponse;
 import fpt.com.fresher.recruitmentmanager.repository.CandidateRepository;
 import fpt.com.fresher.recruitmentmanager.repository.spec.CandidateSpecification;
 import lombok.RequiredArgsConstructor;
@@ -33,12 +33,12 @@ public class CandidateServiceImpl implements CandidateService {
     }
 
     @Override
-    public void updateCandidate(CandidateRequest request) {
+    public void updateCandidate(CandidateResponse request) {
 
     }
 
     @Override
-    public void createCandidate(CandidateRequest request) {
+    public void createCandidate(CandidateResponse request) {
 
     }
 

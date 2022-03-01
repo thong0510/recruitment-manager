@@ -2,9 +2,8 @@ package fpt.com.fresher.recruitmentmanager.controller.candidate;
 
 import fpt.com.fresher.recruitmentmanager.object.filter.CandidateFilter;
 import fpt.com.fresher.recruitmentmanager.object.mapper.CandidateMapper;
-import fpt.com.fresher.recruitmentmanager.object.request.CandidateRequest;
+import fpt.com.fresher.recruitmentmanager.object.response.CandidateResponse;
 import fpt.com.fresher.recruitmentmanager.service.CandidateService;
-import fpt.com.fresher.recruitmentmanager.service.CandidateServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +23,7 @@ public class CandidateController {
     public String getCandidatesList(Model model) {
 
         CandidateFilter filter = new CandidateFilter();
-        List<CandidateRequest> listOfCandidate = candidateService.getAllCandidates(filter).getContent().stream()
+        List<CandidateResponse> listOfCandidate = candidateService.getAllCandidates(filter).getContent().stream()
                 .map(candidateMapper::entityToCandidateRequest).collect(Collectors.toList());
         model.addAttribute("candidates", listOfCandidate);
 

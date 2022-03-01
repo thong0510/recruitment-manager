@@ -2,7 +2,7 @@ package fpt.com.fresher.recruitmentmanager.repository.spec;
 
 import fpt.com.fresher.recruitmentmanager.object.entity.Candidates;
 import fpt.com.fresher.recruitmentmanager.object.filter.CandidateFilter;
-import fpt.com.fresher.recruitmentmanager.object.request.StatusRequest;
+import fpt.com.fresher.recruitmentmanager.object.response.StatusResponse;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.ObjectUtils;
 
@@ -60,7 +60,7 @@ public final class CandidateSpecification {
                         : builder.equal(root.get("phone"), phone);
     }
 
-    private static Specification<Candidates> hasStatus(StatusRequest status) {
+    private static Specification<Candidates> hasStatus(StatusResponse status) {
         return (root, query, builder) ->
                 ObjectUtils.isEmpty(status)
                         ? builder.conjunction()

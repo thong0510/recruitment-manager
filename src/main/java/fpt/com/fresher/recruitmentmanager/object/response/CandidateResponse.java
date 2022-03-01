@@ -1,4 +1,4 @@
-package fpt.com.fresher.recruitmentmanager.object.request;
+package fpt.com.fresher.recruitmentmanager.object.response;
 
 import lombok.Data;
 import lombok.Getter;
@@ -7,9 +7,9 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
-public class CandidateRequest {
+public class CandidateResponse {
 
-    private int candidateId;
+    private Long candidateId;
 
     private String candidateName;
 
@@ -23,6 +23,6 @@ public class CandidateRequest {
 
     private String photo;
 
-    private StatusRequest status;
+    private StatusResponse status;
 
 }

@@ -2,7 +2,7 @@ package fpt.com.fresher.recruitmentmanager.service;
 
 import fpt.com.fresher.recruitmentmanager.object.entity.Candidates;
 import fpt.com.fresher.recruitmentmanager.object.filter.CandidateFilter;
-import fpt.com.fresher.recruitmentmanager.object.request.CandidateRequest;
+import fpt.com.fresher.recruitmentmanager.object.response.CandidateResponse;
 import org.springframework.data.domain.Page;
 
 public interface CandidateService {
@@ -13,9 +13,9 @@ public interface CandidateService {
 
     void deleteCandidate(int id);
 
-    void updateCandidate(CandidateRequest request);
+    void updateCandidate(CandidateResponse request);
 
-    void createCandidate(CandidateRequest request);
+    void createCandidate(CandidateResponse request);
 
     Page<Candidates> findByName(String name);
 }
