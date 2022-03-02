@@ -1,11 +1,16 @@
 package fpt.com.fresher.recruitmentmanager.controller.candidate;
 
 import fpt.com.fresher.recruitmentmanager.object.entity.Candidates;
+import fpt.com.fresher.recruitmentmanager.object.entity.Skills;
 import fpt.com.fresher.recruitmentmanager.object.filter.CandidateFilter;
+import fpt.com.fresher.recruitmentmanager.object.filter.SkillFilter;
 import fpt.com.fresher.recruitmentmanager.object.mapper.CandidateMapper;
+import fpt.com.fresher.recruitmentmanager.object.mapper.SkillMapper;
 import fpt.com.fresher.recruitmentmanager.object.request.CandidateRequest;
 import fpt.com.fresher.recruitmentmanager.object.response.CandidateResponse;
+import fpt.com.fresher.recruitmentmanager.object.response.SkillResponse;
 import fpt.com.fresher.recruitmentmanager.service.CandidateService;
+import fpt.com.fresher.recruitmentmanager.service.SkillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -24,6 +29,8 @@ public class CandidateController {
 
     private final CandidateService candidateService;
     private final CandidateMapper candidateMapper;
+    private final SkillService skillService;
+    private final SkillMapper skillMapper;
 
     @GetMapping("/hr/list-potential-candidate")
     public String getCandidatesList(Model model) {
@@ -32,15 +39,13 @@ public class CandidateController {
         Page<Candidates> listOfCandidate = candidateService.getAllCandidates(filter);
         List<CandidateResponse> listOfCandidateResponse = listOfCandidate.getContent().stream().map(candidateMapper::entityToCandidateResponse).collect(Collectors.toList());
         model.addAttribute("listC", listOfCandidateResponse);
+        model.addAttribute("candidate", new CandidateRequest());
+        SkillFilter skillFilter = new SkillFilter();
+        Page<Skills> listSkill = skillService.getAllSkills(skillFilter);
+        List<SkillResponse> listSkillResponse = listSkill.getContent().stream().map(skillMapper::entityToSkillResponse).collect(Collectors.toList());
+        model.addAttribute("listSkill", listSkillResponse);
 
         return "hr/candidateManage";
-    }
-
-    @GetMapping("/hr/create-candidate")
-    public String createCandidate(Model model) {
-        CandidateRequest candidateRequest = new CandidateRequest();
-        model.addAttribute("candidate", candidateRequest);
-        return "hr/create-candidate";
     }
 
     @PostMapping("/hr/create-candidate")

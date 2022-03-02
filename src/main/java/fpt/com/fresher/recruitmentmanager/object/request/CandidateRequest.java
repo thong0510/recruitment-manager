@@ -3,6 +3,7 @@ package fpt.com.fresher.recruitmentmanager.object.request;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @Getter
@@ -21,7 +22,7 @@ public class CandidateRequest {
 
     private String experience;
 
-    private String photo;
+    private MultipartFile imageFile;
 
     private String status;
 
