@@ -2,6 +2,7 @@ package fpt.com.fresher.recruitmentmanager.service;
 
 import fpt.com.fresher.recruitmentmanager.object.entity.Candidates;
 import fpt.com.fresher.recruitmentmanager.object.filter.CandidateFilter;
+import fpt.com.fresher.recruitmentmanager.object.mapper.CandidateMapper;
 import fpt.com.fresher.recruitmentmanager.object.request.CandidateRequest;
 import fpt.com.fresher.recruitmentmanager.repository.CandidateRepository;
 import fpt.com.fresher.recruitmentmanager.repository.spec.CandidateSpecification;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class CandidateServiceImpl implements CandidateService {
 
     private final CandidateRepository candidateRepository;
+    private final CandidateMapper candidateMapper;
 
     @Override
     public Page<Candidates> getAllCandidates(CandidateFilter filter) {
@@ -40,6 +42,13 @@ public class CandidateServiceImpl implements CandidateService {
     @Override
     public void createCandidate(CandidateRequest request) {
 
+        try {
+            Candidates candidate = candidateMapper.candidateRequestToEntity(request);
+            candidateRepository.save(candidate);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
