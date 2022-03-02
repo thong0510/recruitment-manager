@@ -26,17 +26,25 @@ public class CandidateServiceImpl implements CandidateService {
     }
 
     @Override
-    public Candidates findOne(int id) {
-        return null;
+    public CandidateResponse findOne(Long id) {
+        Candidates candidates = candidateRepository.getById(id);
+        CandidateResponse candidateResponse = candidateMapper.entityToCandidateResponse(candidates);
+        return candidateResponse;
     }
 
     @Override
-    public void deleteCandidate(int id) {
+    public void deleteCandidate(Long id) {
+
+        Candidates candidates = candidateRepository.getById(id);
+        candidateRepository.delete(candidates);
 
     }
 
     @Override
-    public void updateCandidate(CandidateResponse request) {
+    public void updateCandidate(CandidateRequest request) {
+
+        Candidates candidates = candidateMapper.candidateRequestToEntity(request);
+        candidateRepository.save(candidates);
 
     }
 
@@ -52,8 +60,4 @@ public class CandidateServiceImpl implements CandidateService {
         }
     }
 
-    @Override
-    public Page<Candidates> findByName(String name) {
-        return null;
-    }
 }

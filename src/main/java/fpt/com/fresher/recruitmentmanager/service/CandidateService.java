@@ -10,13 +10,12 @@ public interface CandidateService {
 
     Page<Candidates> getAllCandidates(CandidateFilter filter);
 
-    Candidates findOne(int id);
+    CandidateResponse findOne(Long id);
 
-    void deleteCandidate(int id);
+    void deleteCandidate(Long id);
 
-    void updateCandidate(CandidateResponse request);
+    void updateCandidate(CandidateRequest request);
 
     void createCandidate(CandidateRequest request);
 
-    Page<Candidates> findByName(String name);
 }
