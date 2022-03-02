@@ -23,6 +23,6 @@ public class CandidateResponse {
 
     private String photo;
 
-    private StatusResponse status;
+    private String status;
 
 }
