@@ -112,13 +112,13 @@
                     </thead>
                     <tbody>
 
-                    <th:block th:each="candidate : ${candidates}">
+                    <th:block th:each="candidate : ${listC}">
                         <td th:text="${candidate.candidateId}"></td>
                         <td th:text="${candidate.candidateName}"></td>
                         <td th:text="${candidate.phone}">Otto</td>
                         <td th:text="${candidate.gender}">Otto</td>
                         <td th:text="${candidate.email}">Otto</td>
-                        <td th:text="${candidate.status.statusName}">Otto</td>
+                        <td th:text="${candidate.status}">Otto</td>
                         <td class="modal" tabindex="-1"><div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">

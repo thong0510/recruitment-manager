@@ -1,10 +1,13 @@
 package fpt.com.fresher.recruitmentmanager.controller.candidate;
 
+import fpt.com.fresher.recruitmentmanager.object.entity.Candidates;
 import fpt.com.fresher.recruitmentmanager.object.filter.CandidateFilter;
 import fpt.com.fresher.recruitmentmanager.object.mapper.CandidateMapper;
+import fpt.com.fresher.recruitmentmanager.object.request.CandidateRequest;
 import fpt.com.fresher.recruitmentmanager.object.response.CandidateResponse;
 import fpt.com.fresher.recruitmentmanager.service.CandidateService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,9 +28,9 @@ public class CandidateController {
     public String getCandidatesList(Model model) {
 
         CandidateFilter filter = new CandidateFilter();
-        List<CandidateResponse> listOfCandidate = candidateService.getAllCandidates(filter).getContent().stream()
-                .map(candidateMapper::entityToCandidateRequest).collect(Collectors.toList());
-        model.addAttribute("candidates", listOfCandidate);
+        Page<Candidates> listOfCandidate = candidateService.getAllCandidates(filter);
+        List<CandidateResponse> listOfCandidateResponse = listOfCandidate.getContent().stream().map(candidateMapper::entityToCandidateResponse).collect(Collectors.toList());
+        model.addAttribute("listC", listOfCandidateResponse);
 
         return "hr/list";
     }

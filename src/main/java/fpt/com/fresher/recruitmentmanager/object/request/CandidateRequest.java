@@ -1,10 +1,13 @@
-package fpt.com.fresher.recruitmentmanager.object.filter;
+package fpt.com.fresher.recruitmentmanager.object.request;
 
-import fpt.com.fresher.recruitmentmanager.object.model.Pagination;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
-public class CandidateFilter {
+@Getter
+@Setter
+public class CandidateRequest {
 
     private Long candidateId;
 
@@ -21,7 +24,5 @@ public class CandidateFilter {
     private String photo;
 
     private String status;
-
-    private Pagination pagination = new Pagination(10);
 
 }

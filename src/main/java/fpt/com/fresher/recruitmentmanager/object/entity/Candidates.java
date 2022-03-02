@@ -58,10 +58,8 @@ public class Candidates extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "candidates")
     private Set<SkillCandidate> skillCandidates;
 
-    @NotNull(message = MessageConst.INVALID_STATUS_NULL)
-    @OneToOne
-    @JoinColumn(name = "status_id", referencedColumnName = "status_id")
-    private Status status;
+    @Column
+    private String status;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "candidates")
     private EntryTest entryTest;
