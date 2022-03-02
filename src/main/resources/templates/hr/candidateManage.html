@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@1.24.3/dist/full.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css" />
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.25.0/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+</head>
+
+<body>
+ <!-- Form Navbar -->
+<script>
+    $(document).ready(function () {
+        $('#toggle').click(function () {
+            $('#menu').slideToggle();
+        })
+
+        $('#clickdrop').click(function () {
+            $('#dropdown').slideToggle();
+        })
+    })
+
+    changeIcon = (icon) => icon.classList.toggle('fa-times');
+
+</script>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+<header class="sticky top-0 w-screen flex flex-row items-center p-1 justify-between shadow-xs fixed z-50 bg-black"
+    style="background-image: linear-gradient(10deg, rgb(46, 193, 219) 50%, transparent 50%), linear-gradient(-60deg, brown 30%, transparent 30%);">
+    <div class="ml-8 text-lg text-gray-100 hidden lg:flex text-gray-50">BRAND</div>
+
+    <!-- Dropdown -->
+    <div class="dropdown ml-8 text-lg text-gray-700 hidden lg:flex cursor-pointer">
+        <div tabindex="0" class="text-white">Categories</div>
+        <ul tabindex="0" style="margin-top: 40px;"
+            class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52">
+            <li>
+                <a>Item 1</a>
+            </li>
+            <li>
+                <a>Item 2</a>
+            </li>
+            <li>
+                <a>Item 3</a>
+            </li>
+        </ul>
+    </div>
+
+
+    <span
+        class="w-screen lg:w-1/3 h-10 bg-gray-200 ml-5 cursor-pointer border border-gray-300 text-sm rounded-full flex">
+        <input type="search" name="serch" placeholder="Search"
+            class="flex-grow px-4 rounded-l-full rounded-r-full text-sm focus:outline-none rounded-full"
+            style="border: 0px;">
+        <i class="fas fa-search m-3 mr-5 text-lg text-gray-700 w-4 h-4">
+        </i>
+    </span>
+    <div id="toggle" class="cursor-pointer flex flex-row-reverse mr-4 ml-4 lg:hidden">
+        <i onclick="changeIcon(this)" class="fas fa-bars text-white"></i>
+    </div>
+
+
+    <div class="ml-8 text-md hidden lg:flex text-white">Become an instructor</div>
+    <div class="flex flex-row-reverse mr-8 hidden lg:flex">
+        <div class="text-gray-700 text-center bg-white px-2 py-2 m-2 rounded-md  cursor-pointer"><i
+                style="font-size:25px;" class="fas fa-globe"></i></div>
+        <div class="text-gray-700 text-center bg-white px-4 py-2 m-2 rounded-md  cursor-pointer">Sign in</div>
+        <div class="text-gray-700 text-center bg-white px-4 py-2 m-2 rounded-md  cursor-pointer">Login</div>
+    </div>
+</header>
+
+<div class="lg:hidden">
+    <nav id="menu" class="flex flex-col items-center justify-center w-full lg:hidden hidden top-12 fixed z-50"
+        style="background-image: linear-gradient(360deg, rgb(0, 0, 0) 1%, transparent 100%); background-color: rgb(0, 0, 0); opacity: 0.8;">
+        <ul>
+            <li
+                class=" z-50 flex flex-col items-center justify-center text-white text-center py-3 rounded-md text-lg cursor-pointer font-bold hover:text-blue-600">
+                <a href="">Brand</a>
+            </li>
+            <li
+                class=" z-50 flex flex-col items-center justify-center text-white text-center py-3 rounded-md text-lg cursor-pointer font-bold">
+                <div class="dropdown dropdown-end w-full px-2">
+                    <div tabindex="0" id="clickdrop" class="w-full text-white hover:text-blue-600">Categories</div>
+                    <ul id="dropdown" tabindex="0"
+                        class="p-2 mt-5 hidden w-full flex justify-center items-center text-white shadow menu dropdown-end rounded-box">
+                        <li class="w-full flex justify-center hover:text-blue-600">
+                            <a class="w-full flex justify-center items-center">Item 1</a>
+                        </li>
+                        <li class="w-full flex justify-center hover:text-blue-600">
+                            <a class="w-full flex justify-center items-center">Item 1</a>
+                        </li>
+                        <li class="w-full flex justify-center hover:text-blue-600">
+                            <a class="w-full flex justify-center items-center">Item 1</a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li
+                class=" z-50 flex flex-col items-center justify-center text-white text-center py-3 rounded-md text-lg cursor-pointer font-bold hover:text-blue-600">
+                <a href="">Become an instructor</a>
+            </li>
+            <li
+                class=" z-50 flex flex-col items-center justify-center text-white text-center py-3 rounded-md text-lg cursor-pointer font-bold hover:text-blue-600">
+                <a href="">Login</a>
+            </li>
+            <li
+                class=" z-50 flex flex-col items-center justify-center text-white text-center py-3 rounded-md text-lg cursor-pointer font-bold hover:text-blue-600">
+                <a href="">Sign in</a>
+            </li>
+            <li
+                class=" z-50 flex flex-col items-center justify-center text-white text-center py-3 rounded-md text-lg cursor-pointer font-bold hover:text-blue-600">
+                <a href=""><i style="font-size:25px;" class="fas fa-globe"></i></a>
+            </li>
+
+        </ul>
+    </nav>
+</div>
+
+
+    <div class=" shadow bg-base-200 drawer drawer-mobile " style="height: 91vh;">
+        <input id="my-drawer-2" type="checkbox" class="drawer-toggle">
+
+        <div class="flex flex-col items-center drawer-content">
+            <label for="my-drawer-2" class="mb-4 btn btn-primary drawer-button lg:hidden w-10 rounded-full right-5 top-16 md:top-28 fixed"><i class="fas fa-angle-right"></i></label>
+            <!-- STRART MAIN -->
+            <main class="my-4 w-11/12 mx-auto">
+                <!-- START Welcome text-->
+                <p>User management: Welcome to user management</p>
+                <!-- END welcome text -->
+                <div class="flex justify-between">
+                <button onclick="openModal('main-modal')" class="btn btn-sm w-42 h-10 btn-primary">Add Candidate</button>
+
+                <div class="flex justify-between">
+                    <select class="select select-bordered select-sm select-info w-36 max-w-xs my-4 ml-4 mr-5">
+                        <option disabled="disabled" selected="selected">Choose Status</option>
+                        <option>Pending</option>
+                        <option>Process</option>
+                        <option>Close</option>
+                        <option>Open</option>
+                        <option>...</option>
+                    </select>
+                    
+                </div>
+                    
+                </div>
+                <!-- START TABLE -->
+                <div class="card text-center shadow-lg my-4">
+                    <div class="card-body p-0">
+                        <div class="overflow-x-auto ">
+                            <div class="overflow-x-auto">
+                                <table class="table w-full">
+                                    <thead>
+                                        <tr>
+                                            <th>Image</th>
+                                            <th>Full name</th>
+                                            <th>Gender</th>
+                                            <th>Phone Number</th>
+                                            <th>Email</th>
+                                            <th>Details</th>
+                                            <th>Status</th>
+                                            <th>Activity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="candidate : ${listC}">
+                                            <td>
+                                                <div class="avatar">
+                                                    <div class="rounded-btn w-10 h-10">
+                                                        <img src="http://daisyui.com/tailwind-css-component-profile-1@40w.png">
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td th:text="${candidate.candidateName}">Tran Thanh Hai</td>
+                                            <td th:text="${candidate.gender}" >12356688</td>
+                                            <td th:text="${candidate.phone}" >12356688</td>
+                                            <td th:text="${candidate.email}">haitt23@gmail.com</td>
+                                            <td>
+                                                <i class="fas fa-info-circle fa-lg cursor-pointer"></i>
+                                            </td>
+                                            <td>
+                                                <div class="flex justify-start items-center">
+                                                <input type="radio" name="radio-3" class="radio radio-secondary mr-2" checked> Pending
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="flex justify-start items-center">
+                                                    <i class="fas fa-edit mr-3 cursor-pointer"></i>
+                                                    <i class="fas fa-trash-alt cursor-pointer" onclick="openModal('delete-modal')"></i>
+                                                </div>
+                                                
+                                            </td>
+                                        </tr>
+                                       
+                                    </tbody>
+                                </table>
+
+                                <div class="flex justify-center">
+                                    
+                                    <div class="btn-group my-4 mr-4">
+                                        <button class="btn btn-sm btn-outline ">Previous</button>
+                                        <button class="btn btn-sm btn-outline ">1</button>
+                                        <button class="btn btn-sm btn-outline ">2</button>
+                                        <button class="btn btn-sm btn-outline btn-disabled">...</button>
+                                        <button class="btn btn-sm btn-outline ">99</button>
+                                        <button class="btn btn-sm btn-outline ">100</button>
+                                        <button class="btn btn-sm btn-outline ">Next</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END TABLE -->
+
+            </main>
+            <!-- END MAIN -->
+        </div>
+
+        <div class="drawer-side">
+            <label for="my-drawer-2" class="drawer-overlay"></label>
+            <ul class="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
+                <li class="bordered">
+                    <a>Dashboard</a>
+                </li>
+                <li class="hover-bordered">
+                    <a>Candidate management</a>
+                </li>
+                <li class="hover-bordered">
+                    <a>Job management</a>
+                </li>
+                <li class="hover-bordered">
+                    <a>Vacancies management</a>
+                </li>
+                <li class="hover-bordered">
+                    <a>Skill management</a>
+                </li>
+                <li class="hover-bordered">
+                    <a>Recruitment management</a>
+                </li>
+                <li class="hover-bordered">
+                    <a>Statistics</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Delete Candidate -->
+    <dialog id="delete-modal" class="bg-transparent z-0 relative w-screen h-screen fadeIn">
+        <div
+            class="p-7 pt-52 flex justify-center items-start overflow-x-hidden overflow-y-auto fixed left-0 top-0 w-full h-full bg-gray-900 bg-opacity-50 z-50 transition-opacity duration-300 opacity-0">
+            <div class="bg-white flex rounded-lg lg:w-4/12 md:w-1/2 w-full relative">
+                <div class="flex flex-col items-start w-full">
+                    <div class="p-7 flex items-center w-full">
+                        <div class="text-gray-900 font-bold text-lg">Do you want to delete ?</div>
+                        <svg onclick="modalClose('delete-modal')"
+                            class="ml-auto fill-current text-gray-700 w-5 h-5 cursor-pointer"
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
+                            <path
+                                d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z" />
+                        </svg>
+                    </div>
+    
+                    <div class="px-7 w-full">
+                        <!-- START FORM -->
+    
+    
+                        <!--Footer-->
+                        <div class="flex justify-center pt-2 mt-3 mb-5">
+                            <button type="submit" onclick="exits();"
+                                class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3">
+                                Yes
+                            </button>
+                            <button type="button" onclick="modalClose('delete-modal')"
+                                class="bg-transparent hover:bg-gray-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                                No
+                            </button>
+    
+                        </div>
+                        <!-- END FORM -->
+    
+                    </div>
+    
+    
+                </div>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Add Candidate -->
+    <dialog id="main-modal" class="bg-transparent z-0 relative w-screen h-screen fadeIn">
+        <div
+            class="p-7 flex justify-center items-start overflow-x-hidden overflow-y-auto fixed left-0 top-0 w-full h-full bg-gray-900 bg-opacity-50 z-50 transition-opacity duration-300 opacity-0">
+            <div class="bg-white flex rounded-lg md:w-1/2 w-full relative mb-20">
+                <div class="flex flex-col items-start w-full">
+                    <div class="p-7 flex items-center w-full">
+                        <div class="text-gray-900 font-bold text-lg">Add Candidate</div>
+                        <svg onclick="modalClose('main-modal')"
+                            class="ml-auto fill-current text-gray-700 w-5 h-5 cursor-pointer"
+                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
+                            <path
+                                d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z" />
+                        </svg>
+                    </div>
+    
+                    <div class="px-7 w-full">
+                        <!-- START FORM -->
+                        <form id="question-form">
+
+                            <div class="form-control"> 
+                                <div class="flex justify-center">
+                                    <div
+                                                    class="relative border-dotted h-48 rounded-lg overflow-hidden rounded-2xl border-dashed border-2 border-blue-700 bg-gray-100 flex justify-center items-center">
+                                                <div class="absolute">
+                                                    <div class="flex flex-col items-center">
+                                                            <span>
+                                                               <img id="preview-image" class="h-48 w-screen" src="https://mntech.com.vn/common/images/noimg64.png">
+                                                            </span>
+                                                    </div>
+                                                </div> <input type="file" class="opacity-0"
+                                                              onchange="showPreviewImage(event);" name=""
+                                                              >
+                                            </div>
+                                </div>
+                                <!-- <img th:if="${category.image != null}" th:src="${category.image}" th:id="'image' + ${category.id}"> -->
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text font-bold">Full Name:</span>
+                                </label>
+                                <input type="text" id="quizName" class="input input-bordered">
+                            </div>
+    
+                            <div class="flex">
+                                <div class="w-1/2 mr-5 flex flex-col">
+                                    <label class="label">
+                                        <span class="label-text font-bold">Card ID:</span>
+                                    </label>
+                                    <input type="text" id="quizName" class="input input-bordered">
+                                </div>
+                                <div class="w-1/2 flex flex-col">
+                                    <label class="label">
+                                        <span class="label-text font-bold">Email:</span>
+                                    </label>
+                                    <input type="text" id="quizName" class="input input-bordered">
+                                </div>
+                               
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text font-bold">Phone Number:</span>
+                                </label>
+                                <input type="text" id="quizName" class="input input-bordered">
+                            </div>
+    
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text font-bold">Gender:</span>
+                                </label>
+                                <select class="select select-bordered select-primary w-full">
+                                    <option disabled="disabled" selected="selected">Choose gender</option>
+                                    <option>Male</option>
+                                    <option>Female</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+    
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text font-bold">Experiences:</span>
+                                </label>
+                                <textarea type="text" class="input input-bordered h-24"> </textarea>
+                            </div>
+
+                            <div class="form-control">
+                                <label class="label">
+                                    <span class="label-text font-bold">Skill:</span>
+                                </label>
+                                <div>
+                                    <script type="module" src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
+                                    <script nomodule src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine-ie11.min.js" defer></script>
+                                
+                                    <style>
+                                        [x-cloak] {
+                                            display: none;
+                                        }
+                                    </style>
+                                    <select x-cloak id="select">
+                                        <option value="1">Option 2</option>
+                                        <option value="2">Option 3</option>
+                                        <option value="3">Option 4</option>
+                                        <option value="4">Option 5</option>
+                                        <option value="4">Option 5</option>
+                                        <option value="4">Option 5</option>
+                                        <option value="4">Option 5</option>
+                                        <option value="4">Option 5</option>
+                                        <option value="4">Option 5</option>
+                                    </select>
+                                
+                                    <div x-data="dropdownX()" x-init="loadOptions()" class="w-full flex justify-start items-center">
+                                        <form>
+                                            <input name="values" type="hidden" x-bind:value="selectedValues()">
+                                            <div class="inline-block relative w-full">
+                                                <div class="flex flex-col items-center relative">
+                                                    <div x-on:click="open" class="w-full  svelte-1l8159u">
+                                                        <div class="w-full my-2 p-1 flex border border-gray-200 bg-white rounded svelte-1l8159u">
+                                                            <div class="flex flex-auto flex-wrap">
+                                                                <template x-for="(option,index) in selected" :key="options[option].value">
+                                                                    <div
+                                                                        class="flex justify-center items-center m-1 font-medium py-1 px-2 bg-white rounded-full text-teal-700 bg-teal-100 border border-teal-300 ">
+                                                                        <div class="text-xs font-normal leading-none max-w-full flex-initial x-model="
+                                                                            options[option] x-text="options[option].text"></div>
+                                                                        <div class="flex flex-auto flex-row-reverse">
+                                                                            <div x-on:click="remove(index,option)">
+                                                                                <svg class="fill-current h-6 w-6 " role="button" viewBox="0 0 20 20">
+                                                                                    <path d="M14.348,14.849c-0.469,0.469-1.229,0.469-1.697,0L10,11.819l-2.651,3.029c-0.469,0.469-1.229,0.469-1.697,0
+                                                                         c-0.469-0.469-0.469-1.229,0-1.697l2.758-3.15L5.651,6.849c-0.469-0.469-0.469-1.228,0-1.697s1.228-0.469,1.697,0L10,8.183
+                                                                         l2.651-3.031c0.469-0.469,1.228-0.469,1.697,0s0.469,1.229,0,1.697l-2.758,3.152l2.758,3.15
+                                                                         C14.817,13.62,14.817,14.38,14.348,14.849z" />
+                                                                                </svg>
+                                
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </template>
+                                                                <div x-show="selected.length    == 0" class="flex-1">
+                                                                    <input placeholder="Select a option"
+                                                                        class="bg-transparent p-1 px-2 appearance-none outline-none h-full w-full text-gray-800"
+                                                                        x-bind:value="selectedValues()">
+                                                                </div>
+                                                            </div>
+                                                            <div
+                                                                class="text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-200 svelte-1l8159u">
+                                
+                                                                <button type="button" x-show="isOpen() === true" x-on:click="open"
+                                                                    class="cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none">
+                                                                    <svg version="1.1" class="fill-current h-4 w-4" viewBox="0 0 20 20">
+                                                                        <path d="M17.418,6.109c0.272-0.268,0.709-0.268,0.979,0s0.271,0.701,0,0.969l-7.908,7.83
+                                c-0.27,0.268-0.707,0.268-0.979,0l-7.908-7.83c-0.27-0.268-0.27-0.701,0-0.969c0.271-0.268,0.709-0.268,0.979,0L10,13.25
+                                L17.418,6.109z" />
+                                                                    </svg>
+                                
+                                                                </button>
+                                                                <button type="button" x-show="isOpen() === false" @click="close"
+                                                                    class="cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none">
+                                                                    <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
+                                                                        <path d="M2.582,13.891c-0.272,0.268-0.709,0.268-0.979,0s-0.271-0.701,0-0.969l7.908-7.83
+                                c0.27-0.268,0.707-0.268,0.979,0l7.908,7.83c0.27,0.268,0.27,0.701,0,0.969c-0.271,0.268-0.709,0.268-0.978,0L10,6.75L2.582,13.891z
+                                " />
+                                                                    </svg>
+                                
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="w-full">
+                                                        <div x-show.transition.origin.top="isOpen()"
+                                                            class="absolute shadow top-100 bg-white z-40 w-full lef-0 rounded max-h-select overflow-y-auto svelte-5uyqqj"
+                                                            x-on:click.away="close">
+                                                            <div class="flex flex-col w-full overflow-y-auto h-32">
+                                                                <template x-for="(option,index) in options" :key="option">
+                                                                    <div>
+                                                                        <div class="cursor-pointer w-full border-gray-100 rounded-t border-b hover:bg-teal-100"
+                                                                            @click="select(index,$event)">
+                                                                            <div x-bind:class="option.selected ? 'border-teal-600' : ''"
+                                                                                class="flex w-full items-center p-2 pl-2 border-transparent border-l-2 relative">
+                                                                                <div class="w-full items-center flex">
+                                                                                    <div class="mx-2 leading-6" x-model="option" x-text="option.text">
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </template>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- on tailwind components page will no work  -->
+                                        </form>
+                                    </div>
+                            </div>
+                            
+                            <!--Footer-->
+                            <div class="flex justify-end pt-2 mt-3 mb-5">
+                                <button type="submit"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3">
+                                    Add
+                                </button>
+                                <button type="button" onclick="modalClose('main-modal')"
+                                    class="bg-transparent hover:bg-gray-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                                    Close
+                                </button>
+                            </div>
+                        </form>
+                        <!-- END FORM -->
+    
+                    </div>
+    
+    
+                </div>
+            </div>
+        </div>
+    </dialog>
+
+    <!-- Delete -->
+
+    
+
+    <script>
+        function openModal(key) {
+                document.getElementById(key).showModal();
+                document.body.setAttribute('style', 'overflow: hidden;');
+                document.getElementById(key).children[0].scrollTop = 0;
+                document.getElementById(key).children[0].classList.remove('opacity-0');
+                document.getElementById(key).children[0].classList.add('opacity-100')
+            }
+
+            function modalClose(key) {
+                document.getElementById(key).children[0].classList.remove('opacity-100');
+                document.getElementById(key).children[0].classList.add('opacity-0');
+                setTimeout(function () {
+                    document.getElementById(key).close();
+                    document.body.removeAttribute('style');
+                }, 100);
+            }
+
+            function showPreviewImage(event) {
+                    if (event.target.files.length > 0) {
+                        var preview = document.getElementById("preview-image");
+                        var src = URL.createObjectURL(event.target.files[0]);
+                        preview.src = src;
+                    }
+                }
+
+            function dropdownX() {
+                    return {
+                        options: [],
+                        selected: [],
+                        show: false,
+                        open() { this.show = true },
+                        close() { this.show = false },
+                        isOpen() { return this.show === true },
+                        select(index, event) {
+
+                            if (!this.options[index].selected) {
+
+                                this.options[index].selected = true;
+                                this.options[index].element = event.target;
+                                this.selected.push(index);
+
+                            } else {
+                                this.selected.splice(this.selected.lastIndexOf(index), 1);
+                                this.options[index].selected = false
+                            }
+                        },
+                        remove(index, option) {
+                            this.options[option].selected = false;
+                            this.selected.splice(index, 1);
+
+
+                        },
+                        loadOptions() {
+                            const options = document.getElementById('select').options;
+                            for (let i = 0; i < options.length; i++) {
+                                this.options.push({
+                                    value: options[i].value,
+                                    text: options[i].innerText,
+                                    selected: options[i].getAttribute('selected') != null ? options[i].getAttribute('selected') : false
+                                });
+                                if (options[i].getAttribute('selected') === '') {
+                                    this.selected.push(i);
+                                }
+                            }
+                            console.log(this.options)
+                           
+
+                        },
+                        selectedValues() {
+                            return this.selected.map((option) => {
+                                return this.options[option].value;
+                            })
+                        }
+                    }
+                }
+    </script>
+</body>
+
+</html>
