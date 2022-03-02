@@ -318,7 +318,7 @@
     
                     <div class="px-7 w-full">
                         <!-- START FORM -->
-                        <form id="question-form">
+                        <form id="question-form" method="post" th:object="${candidate}" th:action="@{/hr/create-candidate}" enctype="multipart/form-data">
 
                             <div class="form-control"> 
                                 <div class="flex justify-center">
@@ -332,7 +332,7 @@
                                                     </div>
                                                 </div> <input type="file" class="opacity-0"
                                                               onchange="showPreviewImage(event);" name=""
-                                                              >
+                                                              th:field="*{imageFile}">
                                             </div>
                                 </div>
                                 <!-- <img th:if="${category.image != null}" th:src="${category.image}" th:id="'image' + ${category.id}"> -->
@@ -342,21 +342,15 @@
                                 <label class="label">
                                     <span class="label-text font-bold">Full Name:</span>
                                 </label>
-                                <input type="text" id="quizName" class="input input-bordered">
+                                <input type="text" th:field="*{candidateName}" class="input input-bordered">
                             </div>
     
                             <div class="flex">
-                                <div class="w-1/2 mr-5 flex flex-col">
-                                    <label class="label">
-                                        <span class="label-text font-bold">Card ID:</span>
-                                    </label>
-                                    <input type="text" id="quizName" class="input input-bordered">
-                                </div>
                                 <div class="w-1/2 flex flex-col">
                                     <label class="label">
                                         <span class="label-text font-bold">Email:</span>
                                     </label>
-                                    <input type="text" id="quizName" class="input input-bordered">
+                                    <input type="text" th:field="*{email}" class="input input-bordered">
                                 </div>
                                
                             </div>
@@ -365,18 +359,18 @@
                                 <label class="label">
                                     <span class="label-text font-bold">Phone Number:</span>
                                 </label>
-                                <input type="text" id="quizName" class="input input-bordered">
+                                <input type="text" th:field="*{phone}" class="input input-bordered">
                             </div>
     
                             <div class="form-control">
                                 <label class="label">
                                     <span class="label-text font-bold">Gender:</span>
                                 </label>
-                                <select class="select select-bordered select-primary w-full">
-                                    <option disabled="disabled" selected="selected">Choose gender</option>
-                                    <option>Male</option>
-                                    <option>Female</option>
-                                    <option>Other</option>
+                                <select class="select select-bordered select-primary w-full" th:field="*{gender}">
+                                    <option value="" disabled="disabled" selected="selected">Choose gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
                                 </select>
                             </div>
     
@@ -384,7 +378,7 @@
                                 <label class="label">
                                     <span class="label-text font-bold">Experiences:</span>
                                 </label>
-                                <textarea type="text" class="input input-bordered h-24"> </textarea>
+                                <textarea type="text" class="input input-bordered h-24" th:field="*{experience}"> </textarea>
                             </div>
 
                             <div class="form-control">
@@ -400,7 +394,7 @@
                                             display: none;
                                         }
                                     </style>
-                                    <select x-cloak id="select">
+                                    <select x-cloak id="select" >
                                         <option value="1">Option 2</option>
                                         <option value="2">Option 3</option>
                                         <option value="3">Option 4</option>
