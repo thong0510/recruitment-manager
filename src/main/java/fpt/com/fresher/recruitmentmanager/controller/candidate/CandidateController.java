@@ -38,12 +38,14 @@ public class CandidateController {
         CandidateFilter filter = new CandidateFilter();
         Page<Candidates> listOfCandidate = candidateService.getAllCandidates(filter);
         List<CandidateResponse> listOfCandidateResponse = listOfCandidate.getContent().stream().map(candidateMapper::entityToCandidateResponse).collect(Collectors.toList());
-        model.addAttribute("listC", listOfCandidateResponse);
-        model.addAttribute("candidate", new CandidateRequest());
+
         SkillFilter skillFilter = new SkillFilter();
         Page<Skills> listSkill = skillService.getAllSkills(skillFilter);
         List<SkillResponse> listSkillResponse = listSkill.getContent().stream().map(skillMapper::entityToSkillResponse).collect(Collectors.toList());
+
         model.addAttribute("listSkill", listSkillResponse);
+        model.addAttribute("listC", listOfCandidateResponse);
+        model.addAttribute("candidate", new CandidateRequest());
 
         return "hr/candidateManage";
     }

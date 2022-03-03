@@ -388,16 +388,21 @@
                                 <div>
                                     <script type="module" src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
                                     <script nomodule src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine-ie11.min.js" defer></script>
-                                
+
                                     <style>
                                         [x-cloak] {
                                             display: none;
                                         }
                                     </style>
-                                    <select x-cloak id="select" >
-                                        <option th:each="skill : ${listSkill}" th:value="${skill.skillId}" th:utext="${skill.skillName}"></option>
+
+                                    <select x-cloak id="select">
+                                        <option th:each="skill : ${listSkill}"
+                                                th:value="${skill.skillId}"
+                                                th:utext="${skill.skillName}">
+                                        </option>
                                     </select>
-                                
+                                    <div id="skills"></div>
+
                                     <div x-data="dropdownX()" x-init="loadOptions()" class="w-full flex justify-start items-center">
                                         <form>
                                             <input name="values" type="hidden" x-bind:value="selectedValues()">
@@ -410,7 +415,8 @@
                                                                     <div
                                                                         class="flex justify-center items-center m-1 font-medium py-1 px-2 bg-white rounded-full text-teal-700 bg-teal-100 border border-teal-300 ">
                                                                         <div class="text-xs font-normal leading-none max-w-full flex-initial x-model="
-                                                                            options[option] x-text="options[option].text"></div>
+                                                                            options[option] x-text="options[option].text">
+                                                                        </div>
                                                                         <div class="flex flex-auto flex-row-reverse">
                                                                             <div x-on:click="remove(index,option)">
                                                                                 <svg class="fill-current h-6 w-6 " role="button" viewBox="0 0 20 20">
@@ -419,7 +425,7 @@
                                                                          l2.651-3.031c0.469-0.469,1.228-0.469,1.697,0s0.469,1.229,0,1.697l-2.758,3.152l2.758,3.15
                                                                          C14.817,13.62,14.817,14.38,14.348,14.849z" />
                                                                                 </svg>
-                                
+
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -432,7 +438,7 @@
                                                             </div>
                                                             <div x-on:click="open"
                                                                 class="text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-200 svelte-1l8159u">
-                                
+
                                                                 <button type="button" x-show="isOpen() === true" x-on:click="open"
                                                                     class="cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none">
                                                                     <svg version="1.1" class="fill-current h-4 w-4" viewBox="0 0 20 20">
@@ -440,7 +446,7 @@
                                 c-0.27,0.268-0.707,0.268-0.979,0l-7.908-7.83c-0.27-0.268-0.27-0.701,0-0.969c0.271-0.268,0.709-0.268,0.979,0L10,13.25
                                 L17.418,6.109z" />
                                                                     </svg>
-                                
+
                                                                 </button>
                                                                 <button type="button" x-show="isOpen() === false" @click="close"
                                                                     class="cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none">
@@ -449,7 +455,7 @@
                                 c0.27-0.268,0.707-0.268,0.979,0l7.908,7.83c0.27,0.268,0.27,0.701,0,0.969c-0.271,0.268-0.709,0.268-0.978,0L10,6.75L2.582,13.891z
                                 " />
                                                                     </svg>
-                                
+
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -478,6 +484,7 @@
                                                     </div>
                                                 </div>
                                                 <!-- on tailwind components page will no work  -->
+                                            </div>
                                         </form>
                                     </div>
                             </div>
@@ -549,17 +556,19 @@
                                 this.options[index].selected = true;
                                 this.options[index].element = event.target;
                                 this.selected.push(index);
-
+                                let addInput = `<input hidden name="listOfSkill" id="${this.options[index].text}" value="${this.options[index].value}"/>`
+                                document.querySelector("#skills").insertAdjacentHTML('beforeend', addInput);
                             } else {
                                 this.selected.splice(this.selected.lastIndexOf(index), 1);
                                 this.options[index].selected = false
+                                document.getElementById(this.options[index].text).remove();
                             }
+
                         },
                         remove(index, option) {
                             this.options[option].selected = false;
                             this.selected.splice(index, 1);
-
-
+                            document.getElementById(this.options[index].text).remove();
                         },
                         loadOptions() {
                             const options = document.getElementById('select').options;
@@ -571,10 +580,10 @@
                                 });
                                 if (options[i].getAttribute('selected') === '') {
                                     this.selected.push(i);
+                                    let addInput = `<input hidden name="listOfSkill" id="${this.options[i].text}" value="${this.options[i].value}"/>`
+                                    document.querySelector("#skills").insertAdjacentHTML('beforeend', addInput);
                                 }
                             }
-                            console.log(this.options)
-                           
 
                         },
                         selectedValues() {
