@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class SkillFilter {
 
-    private int skillId;
+    private Long skillId;
 
     private String skillName;
 

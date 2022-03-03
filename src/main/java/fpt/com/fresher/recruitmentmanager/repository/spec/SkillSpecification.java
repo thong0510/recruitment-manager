@@ -15,7 +15,7 @@ public final class SkillSpecification {
 
     }
 
-    private static Specification<Skills> hasSkillId(int skillId) {
+    private static Specification<Skills> hasSkillId(Long skillId) {
         return (root, query, builder) ->
                 ObjectUtils.isEmpty(skillId)
                         ? builder.conjunction()
@@ -33,7 +33,7 @@ public final class SkillSpecification {
         return (root, query, builder) ->
                 ObjectUtils.isEmpty(des)
                         ? builder.conjunction()
-                        : builder.equal(root.get("des"), des);
+                        : builder.equal(root.get("description"), des);
     }
 
 

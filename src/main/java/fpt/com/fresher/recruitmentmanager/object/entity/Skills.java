@@ -15,7 +15,7 @@ public class Skills extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "skill_id")
-    private int skillId;
+    private Long skillId;
 
     @NotBlank(message = MessageConst.INVALID_NAME)
     @Column(name = "skill_name", nullable = false)

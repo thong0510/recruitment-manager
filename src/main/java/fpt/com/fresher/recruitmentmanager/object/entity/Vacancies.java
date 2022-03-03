@@ -18,13 +18,9 @@ public class Vacancies extends BaseEntity {
     @Column(name = "vacancies_id")
     private int vacanciesId;
 
-    @NotBlank(message = MessageConst.INVALID_NAME)
-    @Column(name = "vacancies_name", nullable = false)
-    private String vacanciesName;
-
     @Min(value = 1, message = MessageConst.INVALID_QUANTITY)
     @Column(nullable = false)
-    private int quantity;
+    private Integer quantity;
 
     @Column
     private String description;
@@ -33,6 +29,11 @@ public class Vacancies extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "major_id", referencedColumnName = "major_id")
     private Major major;
+
+    @NotNull(message = MessageConst.INVALID_MAJOR_NULL)
+    @ManyToOne
+    @JoinColumn(name = "major_detail_id", referencedColumnName = "major_detail_id")
+    private MajorDetail majorDetail;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "vacancies")
     private Set<Recruitment> recruitments;

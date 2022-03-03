@@ -15,7 +15,7 @@ import java.util.Set;
 public class Users extends BaseEntity {
 
     @Id
-    @Column(name = "user_name")
+    @Column(name = "user_name", unique = true)
     private String userName;
 
     @NotBlank(message = MessageConst.INVALID_NAME)
