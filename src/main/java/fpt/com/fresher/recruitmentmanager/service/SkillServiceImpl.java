@@ -27,13 +27,12 @@ public class SkillServiceImpl implements SkillService{
     }
 
     @Override
-    public SkillResponse findOne(int id) {
-        Skills skills = skillRepository.getById(id);
-        return skillMapper.entityToSkillResponse(skills);
+    public Skills findOne(Long id) {
+        return skillRepository.getById(id);
     }
 
     @Override
-    public void deleteSkill(int id) {
+    public void deleteSkill(Long id) {
 
     }
 

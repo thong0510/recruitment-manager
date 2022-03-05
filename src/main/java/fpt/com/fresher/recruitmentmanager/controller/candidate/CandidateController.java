@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,7 +52,7 @@ public class CandidateController {
     }
 
     @PostMapping("/hr/create-candidate")
-    public String createCandidate(@ModelAttribute(name = "candidate") CandidateRequest candidateRequest) {
+    public String createCandidate(@ModelAttribute(name = "candidate") @Valid CandidateRequest candidateRequest) {
         candidateService.createCandidate(candidateRequest);
         return "redirect:/hr/list-potential-candidate";
     }

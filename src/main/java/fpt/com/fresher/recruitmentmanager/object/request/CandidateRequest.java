@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,14 +16,22 @@ import java.util.List;
 @Setter
 public class CandidateRequest {
 
+    private Long candidateId;
+
+    @NotBlank
     private String candidateName;
 
+    @NotBlank
     private String phone;
 
+    @NotBlank
     private String gender;
 
+    @Email
+    @NotBlank
     private String email;
 
+    @NotBlank
     private String experience;
 
     @NotEmpty(message = "empty")
