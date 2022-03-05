@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +19,7 @@ public class CandidateServiceImpl implements CandidateService {
 
     private final CandidateRepository candidateRepository;
     private final CandidateMapper candidateMapper;
+    private final CloudinaryService cloudinaryService;
 
     @Override
     public Page<Candidates> getAllCandidates(CandidateFilter filter) {
@@ -49,15 +51,16 @@ public class CandidateServiceImpl implements CandidateService {
     }
 
     @Override
-    public void createCandidate(CandidateRequest request) {
+    public void createCandidate(CandidateRequest requestBody) {
 
-        try {
-            Candidates candidate = candidateMapper.candidateRequestToEntity(request);
-            candidateRepository.save(candidate);
+        Candidates candidate = candidateMapper.candidateRequestToEntity(requestBody);
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (!ObjectUtils.isEmpty(requestBody.getImageFile())) {
+            String image = cloudinaryService.uploadImage(null, requestBody.getImageFile());
+            if (image != null) candidate.setPhoto(image);
         }
+        candidateRepository.save(candidate);
+
     }
 
 }

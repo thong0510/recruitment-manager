@@ -36,6 +36,7 @@ dependencies {
 
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 
+    implementation 'com.cloudinary:cloudinary-http44:1.30.0'
 
 }
 
