@@ -16,7 +16,7 @@ public class Report extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "report_id")
-    private int reportId;
+    private Long reportId;
 
     @NotBlank(message = MessageConst.INVALID_EVALUATE)
     @Column(nullable = false)

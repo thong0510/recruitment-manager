@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List Skill</title>
+</head>
+<body>
+    <div>
+        <h1>LIST QUESTION</h1>
+        <a th:href="@{'/hr/create-question'}">CREATE QUESTION</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>Question Id</th>
+                    <th>Question Name</th>
+                    <th>DETAIL</th>
+                    <th>EDIT</th>
+                    <th>DELETE</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="question : ${questions}">
+                    <td th:text="${question.questionId}"></td>
+                    <td th:text="${question.questionName}"></td>
+                    <td ><a th:href="@{'/hr/detail-question?id=' + ${question.questionId}}">DETAIL</a></td>
+                    <td ><a th:href="@{'/hr/edit-question?id=' + ${question.questionId}}">EDIT</a></td>
+                    <td ><a th:href="@{'/hr/delete-question?id=' + ${question.questionId}}">DELETE</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

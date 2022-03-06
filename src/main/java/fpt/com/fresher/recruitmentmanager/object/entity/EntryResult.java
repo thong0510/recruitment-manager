@@ -17,7 +17,7 @@ public class EntryResult extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "entry_result_id")
-    private int entryResultId;
+    private Long entryResultId;
 
     @Min(value = 0, message = MessageConst.INVALID_IS_CORRECT)
     @Column(name = "no_correct")

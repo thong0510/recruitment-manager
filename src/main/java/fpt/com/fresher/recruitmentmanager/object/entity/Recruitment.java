@@ -19,7 +19,7 @@ public class Recruitment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "recruitment_id")
-    private int recruitmentId;
+    private Long recruitmentId;
 
     @Min(value = 0, message = MessageConst.INVALID_SALARY)
     @Column
