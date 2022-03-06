@@ -7,7 +7,7 @@
 <body>
     <div>
         <h1 >EDIT SKILL</h1>
-        <form th:object="${skill}" th:action="@{/hr/create-skill}" method="post">
+        <form th:object="${skill}" th:action="@{/hr/edit-skill}" method="post">
             <input th:field="*{skillId}" type="hidden">
             <label>SKILL NAME</label>
             <label>

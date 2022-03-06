@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org">
+    <title>Create question</title>
+</head>
+<body>
+    <div>
+        <h1 >CREATE QUESTION</h1>
+        <form th:object="${question}" th:action="@{/hr/create-question}" method="post">
+            <label>QUESTION NAME</label>
+            <label>
+                <input th:field="*{questionName}" type="text" placeholder="question name">
+            </label>
+
+
+            <button type="submit">CREATE QUESTION</button>
+
+
+        </form>
+    </div>
+
+</body>
+</html>
