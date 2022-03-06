@@ -11,4 +11,8 @@ public class SkillCandidateService {
 
     private final SkillCandidateRepository skillCandidateRepository;
 
+    public void deleteById(Long id) {
+        skillCandidateRepository.deleteById(id);
+    }
+
 }

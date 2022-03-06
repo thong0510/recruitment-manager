@@ -27,7 +27,7 @@ public class Skills extends BaseEntity implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "skills")
     private Set<SkillRecruitment> skillRecruitments;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "skills")
+    @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "skills")
     private Set<SkillCandidate> skillCandidates;
 
 }

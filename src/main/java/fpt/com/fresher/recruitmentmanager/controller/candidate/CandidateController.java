@@ -85,7 +85,7 @@ public class CandidateController {
         model.addAttribute("candidate", candidateResponse);
         model.addAttribute("listSkill", listSkillResponse);
 
-        return "/hr/potential-candidate-edit";
+        return "/hr/EditCandidate";
     }
 
     @PostMapping("/hr/update-potential-candidate")

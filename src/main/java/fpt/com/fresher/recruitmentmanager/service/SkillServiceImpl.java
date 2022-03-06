@@ -33,7 +33,7 @@ public class SkillServiceImpl implements SkillService{
 
     @Override
     public void deleteSkill(Long id) {
-
+        skillRepository.deleteById(id);
     }
 
     @Override

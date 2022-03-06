@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz form</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@1.20.1/dist/full.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+        integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/28a05ca2b4.js" crossorigin="anonymous"></script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+
+    <!-- Form Navbar -->
+    <script>
+        $(document).ready(function () {
+            $('#toggle').click(function () {
+                $('#menu').slideToggle();
+            })
+
+            $('#clickdrop').click(function () {
+                $('#dropdown').slideToggle();
+            })
+        })
+
+        changeIcon = (icon) => icon.classList.toggle('fa-times');
+
+    </script>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+    <header class="sticky top-0 w-screen flex flex-row items-center p-1 justify-between shadow-xs fixed z-50 bg-black"
+        style="background-image: linear-gradient(10deg, rgb(46, 193, 219) 50%, transparent 50%), linear-gradient(-60deg, brown 30%, transparent 30%);">
+        <div class="ml-8 text-lg text-gray-100 hidden lg:flex text-gray-50">BRAND</div>
+    
+        <!-- Dropdown -->
+        <div class="dropdown ml-8 text-lg text-gray-700 hidden lg:flex cursor-pointer">
+            <div tabindex="0" class="text-white">Categories</div>
+            <ul tabindex="0" style="margin-top: 40px;"
+                class="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52">
+                <li>
+                    <a>Item 1</a>
+                </li>
+                <li>
+                    <a>Item 2</a>
+                </li>
+                <li>
+                    <a>Item 3</a>
+                </li>
+            </ul>
+        </div>
+    
+    
+        <span
+            class="w-screen lg:w-1/3 h-10 bg-gray-200 ml-5 cursor-pointer border border-gray-300 text-sm rounded-full flex">
+            <input type="search" name="serch" placeholder="Search"
+                class="flex-grow px-4 rounded-l-full rounded-r-full text-sm focus:outline-none rounded-full"
+                style="border: 0px;">
+            <i class="fas fa-search m-3 mr-5 text-lg text-gray-700 w-4 h-4">
+            </i>
+        </span>
+        <div id="toggle" class="cursor-pointer flex flex-row-reverse mr-4 ml-4 lg:hidden">
+            <i onclick="changeIcon(this)" class="fas fa-bars text-white"></i>
+        </div>
+    
+    
+        <div class="ml-8 text-md hidden lg:flex text-white">Become an instructor</div>
+        <div class="flex flex-row-reverse mr-8 hidden lg:flex">
+            <div class="text-gray-700 text-center bg-white px-2 py-2 m-2 rounded-md  cursor-pointer"><i
+                    style="font-size:25px;" class="fas fa-globe"></i></div>
+            <div class="text-gray-700 text-center bg-white px-4 py-2 m-2 rounded-md  cursor-pointer">Sign in</div>
+            <div class="text-gray-700 text-center bg-white px-4 py-2 m-2 rounded-md  cursor-pointer">Login</div>
+        </div>
+    </header>
+    
+    <div class="lg:hidden">
+        <nav id="menu" class="flex flex-col items-center justify-center w-full lg:hidden hidden top-12 fixed z-50"
+            style="background-image: linear-gradient(360deg, rgb(0, 0, 0) 1%, transparent 100%); background-color: rgb(0, 0, 0); opacity: 0.8;">
+            <ul>
+                <li
+                    class=" z-50 flex flex-col items-center justify-center text-white text-center py-3 rounded-md text-lg cursor-pointer font-bold hover:text-blue-600">
+                    <a href="">Brand</a>
+                </li>
+                <li
+                    class=" z-50 flex flex-col items-center justify-center text-white text-center py-3 rounded-md text-lg cursor-pointer font-bold">
+                    <div class="dropdown dropdown-end w-full px-2">
+                        <div tabindex="0" id="clickdrop" class="w-full text-white hover:text-blue-600">Categories</div>
+                        <ul id="dropdown" tabindex="0"
+                            class="p-2 mt-5 hidden w-full flex justify-center items-center text-white shadow menu dropdown-end rounded-box">
+                            <li class="w-full flex justify-center hover:text-blue-600">
+                                <a class="w-full flex justify-center items-center">Item 1</a>
+                            </li>
+                            <li class="w-full flex justify-center hover:text-blue-600">
+                                <a class="w-full flex justify-center items-center">Item 1</a>
+                            </li>
+                            <li class="w-full flex justify-center hover:text-blue-600">
+                                <a class="w-full flex justify-center items-center">Item 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li
+                    class=" z-50 flex flex-col items-center justify-center text-white text-center py-3 rounded-md text-lg cursor-pointer font-bold hover:text-blue-600">
+                    <a href="">Become an instructor</a>
+                </li>
+                <li
+                    class=" z-50 flex flex-col items-center justify-center text-white text-center py-3 rounded-md text-lg cursor-pointer font-bold hover:text-blue-600">
+                    <a href="">Login</a>
+                </li>
+                <li
+                    class=" z-50 flex flex-col items-center justify-center text-white text-center py-3 rounded-md text-lg cursor-pointer font-bold hover:text-blue-600">
+                    <a href="">Sign in</a>
+                </li>
+                <li
+                    class=" z-50 flex flex-col items-center justify-center text-white text-center py-3 rounded-md text-lg cursor-pointer font-bold hover:text-blue-600">
+                    <a href=""><i style="font-size:25px;" class="fas fa-globe"></i></a>
+                </li>
+    
+            </ul>
+        </nav>
+    </div>
+
+    <div class="lg:hidden">
+        <nav id="menu" class="flex flex-col items-center justify-center w-full lg:hidden hidden top-12 fixed z-50"
+            style="background-image: linear-gradient(360deg, rgb(0, 0, 0) 1%, transparent 100%); background-color: rgb(0, 0, 0); opacity: 0.8;">
+            <ul>
+                <li
+                    class=" z-50 flex flex-col items-center justify-center text-white text-center py-3 rounded-md text-lg cursor-pointer font-bold hover:text-blue-600">
+                    <div class="avatar">
+                        <div class="w-16 h-10 rounded">
+                            <a th:href="@{/}">
+                                <img src="https://cdn3.vectorstock.com/i/thumb-large/59/77/quiz-logo-icon-symbol-flat-cartoon-color-vector-27965977.jpg"
+                                    alt="Tailwind-CSS-Avatar-component">
+                            </a>
+                        </div>
+                    </div>
+                </li>
+                <li
+                    class=" z-50 flex flex-col items-center justify-center text-white text-center py-3 rounded-md text-lg cursor-pointer font-bold">
+                    <div class="dropdown dropdown-end w-full px-2">
+                        <div tabindex="0" id="clickdrop" class="w-full text-white hover:text-blue-600">Categories</div>
+                        <ul id="dropdown" tabindex="0"
+                            class="p-2 mt-5 hidden w-full flex justify-center items-center text-white shadow menu dropdown-end rounded-box">
+                            <li th:each="category : ${session.categoriesSession}"
+                                class="w-full flex justify-center hover:text-blue-600">
+                                <a th:href="@{/quiz(category=${category.name})}" th:text="${category.name}"
+                                    class="w-full flex justify-center items-center">Item 1</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li
+                    class=" z-50 flex flex-col items-center justify-center text-white text-center py-3 rounded-md text-lg cursor-pointer font-bold hover:text-blue-600">
+                    <a href="">Become an instructor</a>
+                </li>
+                <th:block th:if="${session.account == null}">
+                    <li
+                        class=" z-50 flex flex-col items-center justify-center text-white text-center py-3 rounded-md text-lg cursor-pointer font-bold hover:text-blue-600">
+                        <a th:href="@{/auth/login}">Login</a>
+                    </li>
+                    <li
+                        class=" z-50 flex flex-col items-center justify-center text-white text-center py-3 rounded-md text-lg cursor-pointer font-bold hover:text-blue-600">
+                        <a href="">Sign in</a>
+                    </li>
+                </th:block>
+    
+                <th:block th:if="${session.account != null}">
+                    <li
+                        class=" z-50 flex flex-col items-center justify-center text-gray-700 text-center py-3 rounded-md text-lg cursor-pointer font-bold">
+                        <div class="dropdown dropdown-end w-full">
+                            <div tabindex="0" id="user" class="w-full text-white hover:text-blue-600">
+                                <img th:if="${session.account.user.image != null and !session.account.user.image.equals('')}"
+                                    th:src="${session.account.user.image}" class="w-7 mr-4 h-7 rounded"
+                                    alt="Tailwind-CSS-Avatar-component">
+                                <img th:if="${session.account.user.image == null or session.account.user.image.equals('')}"
+                                    src="https://icon-library.com/images/no-user-image-icon/no-user-image-icon-27.jpg"
+                                    class="w-7 mr-4 h-7 rounded" alt="Tailwind-CSS-Avatar-component">
+                                [[${session.account.user.fullName}]]
+                            </div>
+                            <ul id="profile" tabindex="0"
+                                class="p-2 mt-5 hidden w-full text-white flex justify-center items-center shadow menu dropdown-end rounded-box">
+                                <li class="w-full flex justify-center" th:if="${session.account.user.roleName != null}">
+                                    <a th:href="@{/admin}"
+                                        class="w-full flex justify-center items-center hover:text-blue-600">[[${session.account.user.roleName}]]</a>
+                                </li>
+                                <li class="w-full flex justify-center ">
+                                    <a th:href="@{/auth/profile}"
+                                        class="w-full flex justify-center items-center hover:text-blue-600">Profile</a>
+                                </li>
+                                <li class="w-full flex justify-center">
+                                    <a th:href="@{/auth/logout}"
+                                        class="w-full flex justify-center items-center hover:text-blue-600">Logout</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </th:block>
+                <li
+                    class=" z-50 flex flex-col items-center justify-center text-white text-center py-3 rounded-md text-lg cursor-pointer font-bold hover:text-blue-600">
+                    <a href=""><i style="font-size:25px;" class="fas fa-globe"></i></a>
+                </li>
+    
+            </ul>
+        </nav>
+    </div>
+
+    <div class=" shadow bg-base-200 drawer drawer-mobile " style="height: 91vh;">
+        <input id="my-drawer-2" type="checkbox" class="drawer-toggle">
+
+        <div class="flex flex-col items-center drawer-content">
+            <label for="my-drawer-2"
+                class="mb-4 btn btn-primary drawer-button lg:hidden w-10 rounded-full right-5 top-16 md:top-28 fixed"><i
+                    class="fas fa-angle-right"></i></label>
+            <!-- STRART MAIN -->
+            <main class="my-4 w-11/12 mt-10 mx-auto">
+                <!-- START Welcome text-->
+                <p th:if="${quizInfo != null}" class="text-2xl font-semibold text-center mb-4 uppercase ">Edit Candidate ID</p>
+                <!-- END welcome text -->
+                <!-- START TABLE -->
+                <div class="card text-center shadow-lg my-4 py-5 px-16">
+                    <!-- START FORM -->
+                    <form id="quiz-form" th:action="@{/hr/update-potential-candidate}"
+                        enctype="multipart/form-data" th:object="${candidate}" method="post">
+
+                        <div class="flex justify-start">
+                            <div class="form-control mt-2">
+                                <div class="preview">
+                                    <img id="preview-image" src="https://mntech.com.vn/common/images/noimg64.png"
+                                        class="mx-auto bg-gray-200 rounded-btn w-52 h-52 bg-cover bg-center">
+                                </div>
+                                <label for="file-ip-1" class="btn w-52 mx-auto mt-4">Upload Image</label>
+                                <input type="file" class="input input-bordered hidden" id="file-ip-1" accept="image/*"
+                                    onchange="showPreviewImage(event);" th:field="*{imageFile}">
+                            </div>
+
+                            <div>
+                                <input type="hidden" th:field="*{candidateId}">
+                            </div>
+
+                            <div class="w-full ml-4">
+                                <div class="form-control input-group">
+                                    <div class="flex">
+                                        <div class="w-1/2 flex flex-col">
+                                            <label class="label">
+                                                <span class="label-text">Full Name:</span>
+                                            </label>
+                                            <input type="text" th:field="*{candidateName}" class="input input-bordered"
+                                                rules="required|minlength:10|maxlength:255">
+                                        </div>
+                                        <div class="w-1/2 ml-5 flex flex-col">
+                                            <label class="label">
+                                                <span class="label-text">Phone:</span>
+                                            </label>
+                                            <input type="text" th:field="*{phone}" class="input input-bordered"
+                                                rules="required|minlength:10|maxlength:255">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-control input-group">
+                                    <div class="flex">
+                                    <div class="w-1/2 flex flex-col">
+                                        <label class="label">
+                                            <span class="label-text">Card ID:</span>
+                                        </label>
+                                        <input type="text" class="input input-bordered"
+                                               rules="required|minlength:10|maxlength:255">
+                                    </div>
+                                    <div class="w-1/2 ml-5 flex flex-col">
+                                        <label class="label">
+                                            <span class="label-text">Email:</span>
+                                        </label>
+                                        <input type="text" th:field="*{email}" class="input input-bordered"
+                                               rules="required|minlength:10|maxlength:255">
+                                    </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-control input-group">
+                                    <label class="label">
+                                        <span class="label-text">Experiences:</span>
+                                    </label>
+                                    <textarea th:field="*{experience}" class="textarea h-20 textarea-bordered"
+                                        rules="required"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-control input-group">
+                            <div class="flex">
+                                <div class="flex flex-col w-52">
+                                    <label class="label">
+                                        <span class="label-text">Gender:</span>
+                                    </label>
+                                    <select th:field="*{gender}" class="select select-bordered w-full" rules="required">
+                                        <option disabled="disabled" selected="selected" value="">Choose gender</option>
+                                        <option value="">Male</option>
+                                        <option value="">Female</option>
+                                        <option value="">Other</option>
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="flex flex-col ml-7 w-10/12">
+                                    <label class="label">
+                                        <span class="label-text">Skills:</span>
+                                    </label>
+                    
+                                    <div class="w-full">
+                                        <script type="module" src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
+                                        <script nomodule src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine-ie11.min.js" defer></script>
+                                    
+                                        <style>
+                                            [x-cloak] {
+                                                display: none;
+                                            }
+                                        </style>
+                                        <select x-cloak id="select" >
+                                            <th:block th:each="skill : ${listSkill}">
+                                                <th:block th:if="${candidate.listOfSkill.contains(skill.skillId)}">
+                                                    <option
+                                                            th:value="${skill.skillId}"
+                                                            th:utext="${skill.skillName}"
+                                                            selected
+                                                    ></option>
+                                                </th:block>
+                                                <th:block th:unless="${candidate.listOfSkill.contains(skill.skillId)}">
+                                                    <option
+                                                            th:value="${skill.skillId}"
+                                                            th:utext="${skill.skillName}"
+                                                    ></option>
+                                                </th:block>
+                                            </th:block>
+                                        </select>
+
+                                        <div id="skills"></div>
+                                    
+                                        <div x-data="dropdownX()" x-init="loadOptions()" class="w-full flex justify-start items-center">
+                                            <form>
+                                                <input name="values" type="hidden" x-bind:value="selectedValues()">
+                                                <div class="inline-block relative w-full">
+                                                    <div class="flex flex-col items-center relative">
+                                                        <div class="w-full  svelte-1l8159u">
+                                                            <div class="w-full p-1 pb-2 flex border border-gray-200 bg-white rounded svelte-1l8159u">
+                                                                <div class="flex flex-auto flex-wrap">
+                                                                    <template x-for="(option,index) in selected" :key="options[option].value">
+                                                                        <div
+                                                                            class="flex justify-center items-center m-1 font-medium py-1 px-2 bg-white rounded-full text-teal-700 bg-teal-100 border border-teal-300">
+                                                                            <div class="text-xs font-normal leading-none max-w-full flex-initial x-model="
+                                                                                options[option] x-text="options[option].text"></div>
+                                                                            <div class="flex flex-auto flex-row-reverse">
+                                                                                <div x-on:click="remove(index,option)">
+                                                                                    <svg class="fill-current h-6 w-6 " role="button" viewBox="0 0 20 20">
+                                                                                        <path d="M14.348,14.849c-0.469,0.469-1.229,0.469-1.697,0L10,11.819l-2.651,3.029c-0.469,0.469-1.229,0.469-1.697,0
+                                                                                                             c-0.469-0.469-0.469-1.229,0-1.697l2.758-3.15L5.651,6.849c-0.469-0.469-0.469-1.228,0-1.697s1.228-0.469,1.697,0L10,8.183
+                                                                                                             l2.651-3.031c0.469-0.469,1.228-0.469,1.697,0s0.469,1.229,0,1.697l-2.758,3.152l2.758,3.15
+                                                                                                             C14.817,13.62,14.817,14.38,14.348,14.849z" />
+                                                                                    </svg>
+                                    
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </template>
+                                                                    <div x-show="selected.length == 0" class="flex-1">
+                                                                        <input placeholder="Select a option"
+                                                                            class="bg-transparent p-1 px-2 appearance-none outline-none h-full w-full text-gray-800"
+                                                                            x-bind:value="selectedValues()">
+                                                                    </div>
+                                                                </div>
+                                                                <div x-on:click="open"
+                                                                    class="text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-200 svelte-1l8159u">
+                                    
+                                                                    <button type="button" x-show="isOpen() === true" x-on:click="open"
+                                                                        class="cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none">
+                                                                        <svg version="1.1" class="fill-current h-4 w-4" viewBox="0 0 20 20">
+                                                                            <path d="M17.418,6.109c0.272-0.268,0.709-0.268,0.979,0s0.271,0.701,0,0.969l-7.908,7.83
+                                                                    c-0.27,0.268-0.707,0.268-0.979,0l-7.908-7.83c-0.27-0.268-0.27-0.701,0-0.969c0.271-0.268,0.709-0.268,0.979,0L10,13.25
+                                                                    L17.418,6.109z" />
+                                                                        </svg>
+                                    
+                                                                    </button>
+                                                                    <button type="button" x-show="isOpen() === false" @click="close"
+                                                                        class="cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none">
+                                                                        <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
+                                                                            <path d="M2.582,13.891c-0.272,0.268-0.709,0.268-0.979,0s-0.271-0.701,0-0.969l7.908-7.83
+                                                                    c0.27-0.268,0.707-0.268,0.979,0l7.908,7.83c0.27,0.268,0.27,0.701,0,0.969c-0.271,0.268-0.709,0.268-0.978,0L10,6.75L2.582,13.891z
+                                                                    " />
+                                                                        </svg>
+                                    
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="w-full">
+                                                            <div x-show.transition.origin.top="isOpen()"
+                                                                class="absolute shadow top-100 bg-white z-40 w-full lef-0 rounded max-h-select overflow-y-auto svelte-5uyqqj"
+                                                                x-on:click.away="close">
+                                                                <div class="flex flex-col w-full overflow-y-auto h-32">
+                                                                    <template x-for="(option,index) in options" :key="option">
+                                                                        <div>
+                                                                            <div class="cursor-pointer w-full border-gray-100 rounded-t border-b hover:bg-teal-100"
+                                                                                @click="select(index,$event)">
+                                                                                <div x-bind:class="option.selected ? 'border-teal-600' : ''"
+                                                                                    class="flex w-full items-center p-2 pl-2 border-transparent border-l-2 relative">
+                                                                                    <div class="w-full items-center flex">
+                                                                                        <div class="mx-2 leading-6" x-model="option" x-text="option.text">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </template>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- on tailwind components page will no work  -->
+                                            </form>
+                                        </div>
+                                        </div>
+                                </div>
+                                <div class="flex flex-col">
+                                    <label class="label">
+                                        <span class="label-text">Status:</span>
+                                    </label>
+                                    <select th:field="*{status}" class="select select-bordered w-full" rules="required">
+                                        <option disabled="disabled" selected="selected" value="">Choose status</option>
+                                        <option value="">Pending</option>
+                                        <option value="">Process</option>
+                                        <option value="">Open</option>
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <!--Footer-->
+                        <div class="flex justify-center pt-2 mt-10 mb-5">
+                            <button type="submit"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3">
+                                Edit Candidate
+                            </button>
+                            <button type="button"
+                                class="bg-transparent hover:bg-gray-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                                Back to list
+                            </button>
+                        </div>
+                    </form>
+
+            
+                    <!-- END FORM -->
+
+                </div>
+                <!-- END TABLE -->
+
+            </main>
+            <!-- END MAIN -->
+        </div>
+
+        <!-- Slide bar-->
+        <div class="drawer-side">
+            <label for="my-drawer-2" class="drawer-overlay"></label>
+            <ul class="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
+                <li class="bordered">
+                    <a>Dashboard</a>
+                </li>
+                <li class="hover-bordered">
+                    <a>Candidate management</a>
+                </li>
+                <li class="hover-bordered">
+                    <a>Job management</a>
+                </li>
+                <li class="hover-bordered">
+                    <a>Vacancies management</a>
+                </li>
+                <li class="hover-bordered">
+                    <a>Skill management</a>
+                </li>
+                <li class="hover-bordered">
+                    <a>Recruitment management</a>
+                </li>
+                <li class="hover-bordered">
+                    <a>Statistics</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script th:src="@{/resources/js/validator.js}"></script>
+
+    <script>
+        function showPreviewImage(event) {
+                if (event.target.files.length > 0) {
+                    var preview = document.getElementById("preview-image");
+                    var src = URL.createObjectURL(event.target.files[0]);
+                    preview.src = src;
+                }
+            }
+
+        function dropdownX() {
+            return {
+                options: [],
+                selected: [],
+                show: false,
+                open() { this.show = true },
+                close() { this.show = false },
+                isOpen() { return this.show === true },
+                select(index, event) {
+
+                    if (!this.options[index].selected) {
+
+                        this.options[index].selected = true;
+                        this.options[index].element = event.target;
+                        this.selected.push(index);
+                        let addInput = `<input hidden name="listOfSkill" id="${this.options[index].text}" value="${this.options[index].value}"/>`
+                        document.querySelector("#skills").insertAdjacentHTML('beforeend', addInput);
+                    } else {
+                        this.selected.splice(this.selected.lastIndexOf(index), 1);
+                        this.options[index].selected = false
+                        document.getElementById(this.options[index].text).remove();
+                    }
+
+                },
+                remove(index, option) {
+                    this.options[option].selected = false;
+                    this.selected.splice(index, 1);
+                    document.getElementById(this.options[index].text).remove();
+                },
+                loadOptions() {
+                    const options = document.getElementById('select').options;
+                    for (let i = 0; i < options.length; i++) {
+                        this.options.push({
+                            value: options[i].value,
+                            text: options[i].innerText,
+                            selected: options[i].getAttribute('selected') != null ? options[i].getAttribute('selected') : false
+                        });
+                        if (options[i].getAttribute('selected') === '') {
+                            this.selected.push(i);
+                            let addInput = `<input hidden name="listOfSkill" id="${this.options[i].text}" value="${this.options[i].value}"/>`
+                            document.querySelector("#skills").insertAdjacentHTML('beforeend', addInput);
+                        }
+                    }
+
+                },
+                selectedValues() {
+                    return this.selected.map((option) => {
+                        return this.options[option].value;
+                    })
+                }
+            }
+        }
+    </script>
+
+    <script th:src="@{/resources/js/common.js}"></script>
+
+</body>
+
+</html>
