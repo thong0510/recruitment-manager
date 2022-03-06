@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -19,6 +21,8 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @ToString
+@SQLDelete(sql = "UPDATE candidates SET deleted = true WHERE candidate_id=?")
+@Where(clause = "deleted=false")
 public class Candidates extends BaseEntity {
 
     @Id
@@ -37,6 +41,8 @@ public class Candidates extends BaseEntity {
     @Column
     private String gender;
 
+    private Boolean deleted = false;
+
     @Email(regexp = RegexConst.REGEX_EMAIL, message = MessageConst.INVALID_EMAIL)
     @Column(nullable = false, unique = true)
     private String email;
@@ -45,14 +51,13 @@ public class Candidates extends BaseEntity {
     @Column(nullable = false)
     private String experience;
 
-    @NotBlank(message = MessageConst.INVALID_PHOTO)
     @Column(nullable = true)
     private String photo;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "candidates", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "candidates")
     private Set<Report> reports;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "candidates", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "candidates")
     private Set<Interview> interviews;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "candidates")

@@ -200,7 +200,7 @@
                                                 <div class="flex justify-start items-center">
                                                     <a th:href="@{'/hr/update-potential-candidate?id=' + ${candidate.candidateId}}"><i class="fas fa-edit mr-3 cursor-pointer"></i></a>
 
-                                                    <i class="fas fa-trash-alt cursor-pointer" onclick="openModal('delete-modal')"></i>
+                                                    <i class="fas fa-trash-alt cursor-pointer" th:attr="onclick=|openModal('delete-modal', '${candidate.candidateId}')|"></i>
                                                 </div>
                                                 
                                             </td>
@@ -282,7 +282,7 @@
     
                         <!--Footer-->
                         <div class="flex justify-center pt-2 mt-3 mb-5">
-                            <button type="submit" onclick="exits();"
+                            <button type="submit" onclick="deleteCandidate()"
                                 class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3">
                                 Yes
                             </button>
@@ -518,22 +518,32 @@
     
 
     <script>
-        function openModal(key) {
+        let candidateId;
+
+        function deleteCandidate() {
+            let uri = new URL(document.baseURI);
+            uri.pathname = '/hr/delete-potential-candidate';
+            uri.searchParams.set('id', candidateId);
+            window.location.href = uri.href;
+        }
+
+        function openModal(key, id) {
+                if (id !== null) candidateId = id;
                 document.getElementById(key).showModal();
                 document.body.setAttribute('style', 'overflow: hidden;');
                 document.getElementById(key).children[0].scrollTop = 0;
                 document.getElementById(key).children[0].classList.remove('opacity-0');
                 document.getElementById(key).children[0].classList.add('opacity-100')
-            }
+        }
 
-            function modalClose(key) {
+        function modalClose(key) {
                 document.getElementById(key).children[0].classList.remove('opacity-100');
                 document.getElementById(key).children[0].classList.add('opacity-0');
                 setTimeout(function () {
                     document.getElementById(key).close();
                     document.body.removeAttribute('style');
                 }, 100);
-            }
+        }
 
             function showPreviewImage(event) {
                     if (event.target.files.length > 0) {

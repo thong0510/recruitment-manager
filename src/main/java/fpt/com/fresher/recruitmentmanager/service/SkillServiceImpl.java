@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 public class SkillServiceImpl implements SkillService{
 
     private final SkillRepository skillRepository;
-    private final SkillMapper skillMapper;
 
     @Override
     public Page<Skills> getAllSkills(SkillFilter filter) {

@@ -21,6 +21,7 @@ import org.springframework.util.ObjectUtils;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -43,17 +44,14 @@ public class CandidateServiceImpl implements CandidateService {
 
     @Override
     public CandidateResponse findOne(Long id) {
-        Candidates candidates = candidateRepository.getById(id);
-        CandidateResponse candidateResponse = candidateMapper.entityToCandidateResponse(candidates);
-        return candidateResponse;
+        Optional<Candidates> candidates = candidateRepository.findById(id);
+        return candidates.map(candidateMapper::entityToCandidateResponse).orElse(null);
     }
 
     @Override
     public void deleteCandidate(Long id) {
-
-        Candidates candidates = candidateRepository.getById(id);
-        candidateRepository.delete(candidates);
-
+        Optional<Candidates> candidates = candidateRepository.findById(id);
+        candidates.ifPresent(candidateRepository::delete);
     }
 
     @Override
@@ -74,10 +72,16 @@ public class CandidateServiceImpl implements CandidateService {
 
             if (!listOfSkillIdUpdate.contains(id)) {
 
-                SkillCandidate skillCandidate = listOfSkillCandidate.stream()
-                            .filter(e -> e.getSkills().getSkillId().equals(id)).collect(Collectors.toList()).get(0);
+                listOfSkillCandidate = listOfSkillCandidate.stream()
+                            .filter(e -> {
+                                if (!e.getSkills().getSkillId().equals(id)) {
+                                    return true;
+                                } else {
+                                    skillCandidateRepository.delete(e);
+                                    return false;
+                                }
+                            }).collect(Collectors.toSet());
 
-                skillCandidateRepository.delete(skillCandidate);
             }
 
         }
@@ -92,10 +96,13 @@ public class CandidateServiceImpl implements CandidateService {
                         .skills(skillService.findOne(id))
                         .build();
 
-                skillCandidateRepository.save(skillCandidate);
+                listOfSkillCandidate.add(skillCandidate);
+
             }
 
         }
+
+        candidates.setSkillCandidates(listOfSkillCandidate);
 
         candidateRepository.save(candidates);
 
