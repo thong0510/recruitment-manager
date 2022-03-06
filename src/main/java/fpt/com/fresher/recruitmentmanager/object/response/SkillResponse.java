@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 public class SkillResponse {
 
-    private int skillId;
+    private Long skillId;
 
     private String skillName;
 

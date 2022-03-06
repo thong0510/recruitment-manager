@@ -45,7 +45,6 @@ public class Candidates extends BaseEntity {
     @Column(nullable = false)
     private String experience;
 
-    @NotBlank(message = MessageConst.INVALID_PHOTO)
     @Column(nullable = true)
     private String photo;
 

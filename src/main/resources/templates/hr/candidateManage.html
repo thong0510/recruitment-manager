@@ -188,7 +188,8 @@
                                             <td th:text="${candidate.phone}" >12356688</td>
                                             <td th:text="${candidate.email}">haitt23@gmail.com</td>
                                             <td>
-                                                <i class="fas fa-info-circle fa-lg cursor-pointer"></i>
+                                                <a th:href="@{'/hr/update-potential-candidate?id=' + ${candidate.candidateId}}"><i class="fas fa-info-circle fa-lg cursor-pointer"></i></a>
+
                                             </td>
                                             <td>
                                                 <div class="flex justify-start items-center">
@@ -197,7 +198,8 @@
                                             </td>
                                             <td>
                                                 <div class="flex justify-start items-center">
-                                                    <i class="fas fa-edit mr-3 cursor-pointer"></i>
+                                                    <a th:href="@{'/hr/update-potential-candidate?id=' + ${candidate.candidateId}}"><i class="fas fa-edit mr-3 cursor-pointer"></i></a>
+
                                                     <i class="fas fa-trash-alt cursor-pointer" onclick="openModal('delete-modal')"></i>
                                                 </div>
                                                 
@@ -330,19 +332,23 @@
                                                                <img id="preview-image" class="h-48 w-screen" src="https://mntech.com.vn/common/images/noimg64.png">
                                                             </span>
                                                     </div>
-                                                </div> <input type="file" class="opacity-0"
+                                                </div> <input type="file" class="opacity-0 z-20"
                                                               onchange="showPreviewImage(event);" name=""
-                                                              th:field="*{imageFile}">
+                                                              th:field="*{imageFile}"/>
                                             </div>
                                 </div>
                                 <!-- <img th:if="${category.image != null}" th:src="${category.image}" th:id="'image' + ${category.id}"> -->
                             </div>
+
+
 
                             <div class="form-control">
                                 <label class="label">
                                     <span class="label-text font-bold">Full Name:</span>
                                 </label>
                                 <input type="text" th:field="*{candidateName}" class="input input-bordered">
+                                <input type="file"
+                                       th:field="*{imageFile}"/>
                             </div>
     
                             <div class="flex">

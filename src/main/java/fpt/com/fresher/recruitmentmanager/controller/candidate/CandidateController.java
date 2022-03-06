@@ -77,7 +77,7 @@ public class CandidateController {
         CandidateResponse candidateResponse = candidateService.findOne(id);
         model.addAttribute("candidate", candidateResponse);
 
-        return "/hr/potential-candidate-edit";
+        return "/hr/EditCandidate";
     }
 
     @PostMapping("/hr/update-potential-candidate")
