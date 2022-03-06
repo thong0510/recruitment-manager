@@ -1,17 +1,17 @@
 package fpt.com.fresher.recruitmentmanager.object.entity;
 
+import fpt.com.fresher.recruitmentmanager.object.contant.CommonConst;
 import fpt.com.fresher.recruitmentmanager.object.contant.MessageConst;
 import fpt.com.fresher.recruitmentmanager.object.contant.RegexConst;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -33,6 +33,10 @@ public class Candidates extends BaseEntity {
     @Pattern(regexp = RegexConst.REGEX_PHONE, message = MessageConst.INVALID_PHONE)
     @Column(nullable = false, unique = true)
     private String phone;
+
+    @Size(min = 9, max = 12, message = MessageConst.INVALID_CARD)
+    @Column(name = "card_id", unique = true)
+    private int cardId;
 
     @Column
     private String gender;

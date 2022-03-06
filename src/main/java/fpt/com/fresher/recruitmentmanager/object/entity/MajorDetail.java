@@ -14,7 +14,7 @@ public class MajorDetail extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "major_detail_id")
-    private int majorDetailId;
+    private Long majorDetailId;
 
     @NotBlank(message = MessageConst.INVALID_NAME)
     @Column(name = "major_detail_name", nullable = false)

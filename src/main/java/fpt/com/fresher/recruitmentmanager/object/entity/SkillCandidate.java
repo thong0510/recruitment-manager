@@ -4,10 +4,12 @@ package fpt.com.fresher.recruitmentmanager.object.entity;
 import fpt.com.fresher.recruitmentmanager.object.contant.MessageConst;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(
         uniqueConstraints = {@UniqueConstraint(columnNames = {"skill_id", "candidate_id"})}
@@ -19,7 +21,7 @@ public class SkillCandidate extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "skill_candidate_id")
-    private int skillCandidateId;
+    private Long skillCandidateId;
 
     @NotNull(message = MessageConst.INVALID_SKILL_NULL)
     @ManyToOne(cascade = CascadeType.MERGE)
@@ -31,4 +33,13 @@ public class SkillCandidate extends BaseEntity {
     @JoinColumn(name = "candidate_id", referencedColumnName = "candidate_id")
     private Candidates candidates;
 
+    public SkillCandidate() {
+
+    }
+
+    public SkillCandidate(Long skillCandidateId, Skills skills, Candidates candidates) {
+        this.skillCandidateId = skillCandidateId;
+        this.skills = skills;
+        this.candidates = candidates;
+    }
 }

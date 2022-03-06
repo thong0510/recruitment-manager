@@ -16,7 +16,7 @@ public class Vacancies extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "vacancies_id")
-    private int vacanciesId;
+    private Long vacanciesId;
 
     @Min(value = 1, message = MessageConst.INVALID_QUANTITY)
     @Column(nullable = false)

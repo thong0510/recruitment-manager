@@ -15,7 +15,7 @@ public class EntryTest extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "entry_test_id")
-    private int entryTestId;
+    private Long entryTestId;
 
     @NotNull(message = MessageConst.INVALID_CANDIDATE_NULL)
     @OneToOne

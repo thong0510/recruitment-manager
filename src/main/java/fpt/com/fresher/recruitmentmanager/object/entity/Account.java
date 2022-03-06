@@ -16,7 +16,7 @@ public class Account extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
-    private int accountId;
+    private Long accountId;
 
     @NotNull(message = MessageConst.INVALID_ROLES_NULL)
     @ManyToOne

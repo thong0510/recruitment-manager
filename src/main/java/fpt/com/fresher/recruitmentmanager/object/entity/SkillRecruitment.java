@@ -17,7 +17,7 @@ public class SkillRecruitment extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "skill_recruitment_id")
-    private int skillRecruitmentId;
+    private Long skillRecruitmentId;
 
     @NotNull(message = MessageConst.INVALID_SKILL_NULL)
     @ManyToOne

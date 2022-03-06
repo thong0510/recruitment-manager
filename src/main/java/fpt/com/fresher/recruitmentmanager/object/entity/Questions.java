@@ -14,7 +14,7 @@ public class Questions extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")
-    private int questionId;
+    private Long questionId;
 
     @NotBlank(message = MessageConst.INVALID_NAME)
     @Column(name = "question_name", nullable = false)

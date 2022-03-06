@@ -21,7 +21,7 @@ public class Interview extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "interview_id")
-    private int interviewId;
+    private Long interviewId;
 
     @Column(nullable = false)
     @DateTimeFormat(pattern = CommonConst.FORMAT_DATE)

@@ -12,8 +12,9 @@ import java.util.Set;
 public class Major extends BaseEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "major_id")
-    private String majorId;
+    private Long majorId;
 
     @NotBlank(message = MessageConst.INVALID_NAME)
     @Column(name = "major_name", nullable = false)

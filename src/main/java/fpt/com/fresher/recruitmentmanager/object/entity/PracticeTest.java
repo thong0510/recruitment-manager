@@ -19,7 +19,7 @@ public class PracticeTest extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "test_id")
-    private int testId;
+    private Long testId;
 
     @NotBlank(message = MessageConst.INVALID_NAME)
     @Column(name = "test_name", nullable = false)
