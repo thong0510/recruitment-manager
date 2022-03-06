@@ -1,17 +1,24 @@
 package fpt.com.fresher.recruitmentmanager.service;
 
 import fpt.com.fresher.recruitmentmanager.object.entity.Candidates;
+import fpt.com.fresher.recruitmentmanager.object.entity.SkillCandidate;
+import fpt.com.fresher.recruitmentmanager.object.entity.Skills;
 import fpt.com.fresher.recruitmentmanager.object.filter.CandidateFilter;
 import fpt.com.fresher.recruitmentmanager.object.request.CandidateRequest;
 import fpt.com.fresher.recruitmentmanager.object.response.CandidateResponse;
 import fpt.com.fresher.recruitmentmanager.object.mapper.CandidateMapper;
 import fpt.com.fresher.recruitmentmanager.repository.CandidateRepository;
+import fpt.com.fresher.recruitmentmanager.repository.SkillCandidateRepository;
 import fpt.com.fresher.recruitmentmanager.repository.spec.CandidateSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +27,8 @@ public class CandidateServiceImpl implements CandidateService {
     private final CandidateRepository candidateRepository;
     private final CandidateMapper candidateMapper;
     private final CloudinaryService cloudinaryService;
+    private final SkillService skillService;
+    private final SkillCandidateRepository skillCandidateRepository;
 
     @Override
     public Page<Candidates> getAllCandidates(CandidateFilter filter) {
@@ -45,7 +54,10 @@ public class CandidateServiceImpl implements CandidateService {
     @Override
     public void updateCandidate(CandidateRequest request) {
 
-        Candidates candidates = candidateMapper.candidateRequestToEntity(request);
+        Candidates candidates = candidateRepository.getById(request.getCandidateId());
+
+        candidateMapper.updateEntity(candidates, request);
+
         candidateRepository.save(candidates);
 
     }
@@ -55,10 +67,25 @@ public class CandidateServiceImpl implements CandidateService {
 
         Candidates candidate = candidateMapper.candidateRequestToEntity(requestBody);
 
+        Set<SkillCandidate> listOfSkillCandidate = new HashSet<>();
+
+        for (Long id : requestBody.getListOfSkill()) {
+            Skills skills = skillService.findOne(id);
+            SkillCandidate skillCandidate = SkillCandidate
+                                                        .builder()
+                                                        .candidates(candidate)
+                                                        .skills(skills)
+                                                        .build();
+            listOfSkillCandidate.add(skillCandidate);
+        }
+
+        candidate.setSkillCandidates(listOfSkillCandidate);
+
         if (!ObjectUtils.isEmpty(requestBody.getImageFile())) {
             String image = cloudinaryService.uploadImage(null, requestBody.getImageFile());
             if (image != null) candidate.setPhoto(image);
         }
+
         candidateRepository.save(candidate);
 
     }

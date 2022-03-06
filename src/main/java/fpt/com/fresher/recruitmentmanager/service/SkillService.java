@@ -14,9 +14,9 @@ public interface SkillService {
 
     Page<Skills> getAllSkills(SkillFilter filter);
 
-    SkillResponse findOne(int id);
+    Skills findOne(Long id);
 
-    void deleteSkill(int id);
+    void deleteSkill(Long id);
 
     void updateSkill(SkillRequest request);
 
