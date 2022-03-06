@@ -11,11 +11,4 @@ public class SkillCandidateService {
 
     private final SkillCandidateRepository skillCandidateRepository;
 
-    public void updateSkill(SkillRequest request) {
-
-    }
-
-    public void createSkillCandidate(SkillRequest request) {
-
-    }
 }

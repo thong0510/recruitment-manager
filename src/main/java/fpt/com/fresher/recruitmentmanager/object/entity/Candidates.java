@@ -49,10 +49,10 @@ public class Candidates extends BaseEntity {
     @Column(nullable = true)
     private String photo;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "candidates")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "candidates", fetch = FetchType.LAZY)
     private Set<Report> reports;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "candidates")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "candidates", fetch = FetchType.LAZY)
     private Set<Interview> interviews;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "candidates")

@@ -1,5 +1,6 @@
 package fpt.com.fresher.recruitmentmanager.object.response;
 
+import fpt.com.fresher.recruitmentmanager.object.entity.Skills;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,6 +8,8 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Getter
@@ -28,5 +31,7 @@ public class CandidateResponse {
     private String photo;
 
     private String status;
+
+    private Set<Skills> listOfSkill;
 
 }

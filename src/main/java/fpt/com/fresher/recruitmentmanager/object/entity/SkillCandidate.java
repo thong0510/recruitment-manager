@@ -2,8 +2,7 @@ package fpt.com.fresher.recruitmentmanager.object.entity;
 
 
 import fpt.com.fresher.recruitmentmanager.object.contant.MessageConst;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,14 +11,17 @@ import javax.validation.constraints.NotNull;
 @Table(
         uniqueConstraints = {@UniqueConstraint(columnNames = {"skill_id", "candidate_id"})}
 )
-@Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
 public class SkillCandidate extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "skill_candidate_id")
-    private int skillCandidateId;
+    private Long skillCandidateId;
 
     @NotNull(message = MessageConst.INVALID_SKILL_NULL)
     @ManyToOne(cascade = CascadeType.MERGE)

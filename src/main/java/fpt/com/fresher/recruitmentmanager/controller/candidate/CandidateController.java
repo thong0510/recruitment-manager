@@ -38,11 +38,12 @@ public class CandidateController {
 
         CandidateFilter filter = new CandidateFilter();
         Page<Candidates> listOfCandidate = candidateService.getAllCandidates(filter);
-        List<CandidateResponse> listOfCandidateResponse = listOfCandidate.getContent().stream().map(candidateMapper::entityToCandidateResponse).collect(Collectors.toList());
+        List<CandidateResponse> listOfCandidateResponse = listOfCandidate.getContent()
+                .stream().map(candidateMapper::entityToCandidateResponse).collect(Collectors.toList());
 
         SkillFilter skillFilter = new SkillFilter();
-        Page<Skills> listSkill = skillService.getAllSkills(skillFilter);
-        List<SkillResponse> listSkillResponse = listSkill.getContent().stream().map(skillMapper::entityToSkillResponse).collect(Collectors.toList());
+        List<SkillResponse> listSkillResponse = skillService.getAllSkills(skillFilter)
+                .getContent().stream().map(skillMapper::entityToSkillResponse).collect(Collectors.toList());
 
         model.addAttribute("listSkill", listSkillResponse);
         model.addAttribute("listC", listOfCandidateResponse);
@@ -76,7 +77,13 @@ public class CandidateController {
     @GetMapping("/hr/update-potential-candidate")
     public String updateCandidates(Model model, @RequestParam(name = "id") Long id) {
         CandidateResponse candidateResponse = candidateService.findOne(id);
+
+        SkillFilter skillFilter = new SkillFilter();
+        List<SkillResponse> listSkillResponse = skillService.getAllSkills(skillFilter)
+                .getContent().stream().map(skillMapper::entityToSkillResponse).collect(Collectors.toList());
+
         model.addAttribute("candidate", candidateResponse);
+        model.addAttribute("listSkill", listSkillResponse);
 
         return "/hr/potential-candidate-edit";
     }
