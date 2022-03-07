@@ -231,8 +231,8 @@
                         <div class="flex justify-start">
                             <div class="form-control mt-2">
                                 <div class="preview">
-                                    <img id="preview-image" src="https://mntech.com.vn/common/images/noimg64.png"
-                                        class="mx-auto bg-gray-200 rounded-btn w-52 h-52 bg-cover bg-center">
+                                    <img th:if="${candidate.photo == null}" id="preview-image" class="mx-auto bg-gray-200 rounded-btn w-52 h-52 bg-cover bg-center" src="https://mntech.com.vn/common/images/noimg64.png">
+                                    <img th:unless="${candidate.photo == null}" id="preview-image" class="mx-auto bg-gray-200 rounded-btn w-52 h-52 bg-cover bg-center" th:src="${candidate.photo}">
                                 </div>
                                 <label for="file-ip-1" class="btn w-52 mx-auto mt-4">Upload Image</label>
                                 <input type="file" class="input input-bordered hidden" id="file-ip-1" accept="image/*"
@@ -299,11 +299,10 @@
                                         <span class="label-text">Gender:</span>
                                     </label>
                                     <select th:field="*{gender}" class="select select-bordered w-full" rules="required">
-                                        <option disabled="disabled" selected="selected" value="">Choose gender</option>
-                                        <option value="">Male</option>
-                                        <option value="">Female</option>
-                                        <option value="">Other</option>
-                                        </option>
+                                        <option selected="selected" value="">Choose gender</option>
+                                        <option th:each="gender : ${T(fpt.com.fresher.recruitmentmanager.object.contant.enums.Gender).values()}"
+                                                th:value="${gender}" th:text="${gender}"
+                                        ></option>
                                     </select>
                                 </div>
 
@@ -430,10 +429,10 @@
                                         <span class="label-text">Status:</span>
                                     </label>
                                     <select th:field="*{status}" class="select select-bordered w-full" rules="required">
-                                        <option disabled="disabled" selected="selected" value="">Choose status</option>
-                                        <option value="">Pending</option>
-                                        <option value="">Process</option>
-                                        <option value="">Open</option>
+                                        <option selected="selected" value="">Choose status</option>
+                                        <option th:each="status : ${T(fpt.com.fresher.recruitmentmanager.object.contant.enums.CandidateStatus).values()}"
+                                                th:value="${status}" th:text="${status}"
+                                        ></option>
                                         </option>
                                     </select>
                                 </div>
@@ -492,7 +491,7 @@
         </div>
     </div>
 
-    <script th:src="@{/resources/js/validator.js}"></script>
+    <script th:src="@{/js/validator.js}"></script>
 
     <script>
         function showPreviewImage(event) {
@@ -557,7 +556,7 @@
         }
     </script>
 
-    <script th:src="@{/resources/js/common.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
 
 </body>
 

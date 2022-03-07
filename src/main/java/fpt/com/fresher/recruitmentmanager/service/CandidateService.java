@@ -6,15 +6,17 @@ import fpt.com.fresher.recruitmentmanager.object.request.CandidateRequest;
 import fpt.com.fresher.recruitmentmanager.object.response.CandidateResponse;
 import org.springframework.data.domain.Page;
 
+import java.io.IOException;
+
 public interface CandidateService {
 
-    Page<Candidates> getAllCandidates(CandidateFilter filter);
+    Page<CandidateResponse> getAllCandidates(CandidateFilter filter);
 
     CandidateResponse findOne(Long id);
 
     void deleteCandidate(Long id);
 
-    void updateCandidate(CandidateRequest request);
+    void updateCandidate(CandidateRequest request) throws IOException;
 
     void createCandidate(CandidateRequest request);
 

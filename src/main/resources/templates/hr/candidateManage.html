@@ -62,10 +62,10 @@
 
     <span
         class="w-screen lg:w-1/3 h-10 bg-gray-200 ml-5 cursor-pointer border border-gray-300 text-sm rounded-full flex">
-        <input type="search" name="serch" placeholder="Search"
+        <input type="search" name="search" placeholder="Search" id="search"
             class="flex-grow px-4 rounded-l-full rounded-r-full text-sm focus:outline-none rounded-full"
             style="border: 0px;">
-        <i class="fas fa-search m-3 mr-5 text-lg text-gray-700 w-4 h-4">
+        <i class="fas fa-search m-3 mr-5 text-lg text-gray-700 w-4 h-4" th:onclick="|paramFilters('search', document.getElementById('search').value, true)|">
         </i>
     </span>
     <div id="toggle" class="cursor-pointer flex flex-row-reverse mr-4 ml-4 lg:hidden">
@@ -143,17 +143,26 @@
                 <div class="flex justify-between">
                 <button onclick="openModal('main-modal')" class="btn btn-sm w-42 h-10 btn-primary">Add Candidate</button>
 
-                <div class="flex justify-between">
-                    <select class="select select-bordered select-sm select-info w-36 max-w-xs my-4 ml-4 mr-5">
-                        <option disabled="disabled" selected="selected">Choose Status</option>
-                        <option>Pending</option>
-                        <option>Process</option>
-                        <option>Close</option>
-                        <option>Open</option>
-                        <option>...</option>
-                    </select>
-                    
-                </div>
+                    <div class="flex justify-between" th:object="${filter}">
+                        <div class="flex justify-between">
+                            <select class="select select-bordered select-sm select-info w-36 max-w-xs my-4 ml-4 mr-5" th:field="*{gender}" th:onchange="|paramFilters('gender', this.value, true)|">
+                                <option value="">Choose Gender</option>
+                                <option th:each="gender : ${T(fpt.com.fresher.recruitmentmanager.object.contant.enums.Gender).values()}"
+                                        th:value="${gender}" th:text="${gender}"
+                                ></option>
+                            </select>
+
+                        </div>
+                        <div class="flex justify-between">
+                            <select class="select select-bordered select-sm select-info w-36 max-w-xs my-4 ml-4 mr-5" th:field="*{status}" th:onchange="|paramFilters('status', this.value, true)|">
+                                <option value="">Choose Status</option>
+                                <option th:each="status : ${T(fpt.com.fresher.recruitmentmanager.object.contant.enums.CandidateStatus).values()}"
+                                        th:value="${status}" th:text="${status}"
+                                ></option>
+                            </select>
+
+                        </div>
+                    </div>
                     
                 </div>
                 <!-- START TABLE -->
@@ -175,16 +184,21 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr th:each="candidate : ${listC}">
+                                        <tr th:each="candidate : ${listC.getContent()}">
                                             <td>
                                                 <div class="avatar">
                                                     <div class="rounded-btn w-10 h-10">
-                                                        <img src="http://daisyui.com/tailwind-css-component-profile-1@40w.png">
+                                                        <img th:if="${candidate.photo == null}" src="https://mntech.com.vn/common/images/noimg64.png">
+                                                        <img th:unless="${candidate.photo == null}" th:src="${candidate.photo}">
                                                     </div>
                                                 </div>
                                             </td>
                                             <td th:text="${candidate.candidateName}">Tran Thanh Hai</td>
-                                            <td th:text="${candidate.gender}" >12356688</td>
+                                            <td style="overflow-y: hidden">
+                                                <div th:if="${candidate.gender == 'MALE'}"><i style="transform:scale(1.6)" class="fas fa-male"></i></div>
+                                                <div th:if="${candidate.gender == 'FEMALE'}"><i style="transform:scale(1.6)" class="fas fa-female"></i></div>
+                                                <div th:if="${candidate.gender == 'OTHER'}"><i style="transform:scale(1.6)" class="fas fa-venus-mars"></i></div>
+                                            </td>
                                             <td th:text="${candidate.phone}" >12356688</td>
                                             <td th:text="${candidate.email}">haitt23@gmail.com</td>
                                             <td>
@@ -192,8 +206,20 @@
 
                                             </td>
                                             <td>
-                                                <div class="flex justify-start items-center">
-                                                <input type="radio" name="radio-3" class="radio radio-secondary mr-2" checked> Pending
+                                                <div th:if="${candidate.status == 'PENDING'}" class="flex justify-start items-center" style="color: rgb(241, 27, 237);">
+                                                <input type="checkbox" style="background-color: rgb(241, 27, 237);" name="radio-3" class="radio mr-2" th:utext="${candidate.status}" onClick="return false;" checked>
+                                                </div>
+
+                                                <div th:if="${candidate.status == 'PROCESS'}" class="flex justify-start items-center" style="color: rgb(236,199,31);">
+                                                    <input type="checkbox" style="background-color: rgb(236,199,31);" name="radio-3" class="radio mr-2" th:utext="${candidate.status}" onClick="return false;" checked>
+                                                </div>
+
+                                                <div th:if="${candidate.status == 'CLOSE'}" class="flex justify-start items-center" style="color: rgb(211,27,91);">
+                                                    <input type="checkbox" style="background-color: rgb(208,19,86);" name="radio-3" class="radio mr-2" th:utext="${candidate.status}" onClick="return false;" checked>
+                                                </div>
+
+                                                <div th:if="${candidate.status == 'OPEN'}" class="flex justify-start items-center" style="color: rgb(71, 158, 45);">
+                                                    <input type="checkbox" name="radio-3" style="background-color: rgb(71, 158, 45);" class="radio mr-2" th:utext="${candidate.status}" onClick="return false;" checked>
                                                 </div>
                                             </td>
                                             <td>
@@ -210,15 +236,23 @@
                                 </table>
 
                                 <div class="flex justify-center">
-                                    
-                                    <div class="btn-group my-4 mr-4">
-                                        <button class="btn btn-sm btn-outline ">Previous</button>
-                                        <button class="btn btn-sm btn-outline ">1</button>
-                                        <button class="btn btn-sm btn-outline ">2</button>
-                                        <button class="btn btn-sm btn-outline btn-disabled">...</button>
-                                        <button class="btn btn-sm btn-outline ">99</button>
-                                        <button class="btn btn-sm btn-outline ">100</button>
-                                        <button class="btn btn-sm btn-outline ">Next</button>
+                                    <div th:if="${listC.getNumberOfElements() > 0}" th:with="currentPage=${listC.getNumber()+1}, totalPages=${listC.getTotalPages()}"
+                                         class="btn-group my-4 mr-4">
+
+                                        <button class="btn btn-sm btn-outline " th:if="${currentPage > 1}" th:onclick="|paramFilters('page','${currentPage - 1}')|">Previous</button>
+                                        <span class="btn btn-sm btn-outline disabled" th:unless="${currentPage > 1}">Previous</span>
+
+                                        <th:block th:each="i : ${#numbers.sequence(1, totalPages)}">
+                                            <button class="btn btn-sm btn-outline " th:if="${currentPage != i}" th:onclick="|paramFilters('page','${i}')|">[[${i}]]</button>
+                                            <span class="btn btn-sm btn-outline bg-blue-500 text-white border-black" th:if="${listC.getNumberOfElements() > 0}" th:unless="${currentPage != i}">[[${i}]]</span>
+                                        </th:block>
+
+                                        <button class="btn btn-sm btn-outline " th:if="${currentPage < totalPages}" th:onclick="|paramFilters('page','${currentPage + 1}')|">Next</button>
+                                        <span class="btn btn-sm btn-outline disabled"  th:unless="${currentPage < totalPages}">Next</span>
+
+                                    </div>
+                                    <div th:if="${listC.getNumberOfElements() <= 0}">
+                                        <a class="btn btn-sm btn-outline mb-4" th:href="@{'/admin/quiz'}">Back to list</a>
                                     </div>
                                 </div>
 
@@ -369,10 +403,10 @@
                                     <span class="label-text font-bold">Gender:</span>
                                 </label>
                                 <select class="select select-bordered select-primary w-full" th:field="*{gender}">
-                                    <option value="" disabled="disabled" selected="selected">Choose gender</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Other">Other</option>
+                                    <option value="" selected="selected">Choose gender</option>
+                                    <option th:each="gender : ${T(fpt.com.fresher.recruitmentmanager.object.contant.enums.Gender).values()}"
+                                            th:value="${gender}" th:text="${gender}"
+                                    ></option>
                                 </select>
                             </div>
     
@@ -502,6 +536,7 @@
                                     Close
                                 </button>
                             </div>
+                            </div>
                         </form>
                         <!-- END FORM -->
     
@@ -515,7 +550,7 @@
 
     <!-- Delete -->
 
-    
+    <script th:src="@{/js/common.js}"></script>
 
     <script>
         let candidateId;
@@ -524,6 +559,16 @@
             let uri = new URL(document.baseURI);
             uri.pathname = '/hr/delete-potential-candidate';
             uri.searchParams.set('id', candidateId);
+            window.location.href = uri.href;
+        }
+
+        function paramFilters(param, value, firstSearch = false){
+            let uri = new URL(document.baseURI);
+            uri.searchParams.set(param, value);
+            if(uri.searchParams.has("gender") && firstSearch === true) uri.searchParams.set("page", 1);
+            if(uri.searchParams.has("status") && firstSearch === true) uri.searchParams.set("page", 1);
+            if(uri.searchParams.has("search") && firstSearch === true) uri.searchParams.set("page", 1);
+            if(value.length == 0) uri.searchParams.delete(param);
             window.location.href = uri.href;
         }
 

@@ -1,5 +1,6 @@
 package fpt.com.fresher.recruitmentmanager.object.request;
 
+import fpt.com.fresher.recruitmentmanager.object.contant.enums.Gender;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;

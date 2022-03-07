@@ -1,11 +1,14 @@
 package fpt.com.fresher.recruitmentmanager.controller;
 
+import fpt.com.fresher.recruitmentmanager.object.contant.enums.CandidateStatus;
 import fpt.com.fresher.recruitmentmanager.object.entity.Candidates;
 import fpt.com.fresher.recruitmentmanager.object.entity.Skills;
 import fpt.com.fresher.recruitmentmanager.object.filter.CandidateFilter;
 import fpt.com.fresher.recruitmentmanager.object.filter.SkillFilter;
 import fpt.com.fresher.recruitmentmanager.object.mapper.CandidateMapper;
 import fpt.com.fresher.recruitmentmanager.object.mapper.SkillMapper;
+import fpt.com.fresher.recruitmentmanager.object.model.Pagination;
+import fpt.com.fresher.recruitmentmanager.object.model.Sorting;
 import fpt.com.fresher.recruitmentmanager.object.request.CandidateRequest;
 import fpt.com.fresher.recruitmentmanager.object.response.CandidateResponse;
 import fpt.com.fresher.recruitmentmanager.object.response.SkillResponse;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,12 +38,26 @@ public class CandidateController {
     private final SkillMapper skillMapper;
 
     @GetMapping("/hr/list-potential-candidate")
-    public String getCandidatesList(Model model) {
+    public String getCandidatesList(Model model,
+                                    @RequestParam(defaultValue = "1") Integer page,
+                                    @RequestParam(defaultValue = "") String status,
+                                    @RequestParam(defaultValue = "") String gender,
+                                    @RequestParam(defaultValue = "") String search) {
 
-        CandidateFilter filter = new CandidateFilter();
-        Page<Candidates> listOfCandidate = candidateService.getAllCandidates(filter);
-        List<CandidateResponse> listOfCandidateResponse = listOfCandidate.getContent()
-                .stream().map(candidateMapper::entityToCandidateResponse).collect(Collectors.toList());
+        Sorting sorting = new Sorting("candidateId", true);
+        Pagination pagination = new Pagination(page - 1, 4, sorting);
+
+        CandidateFilter filter = CandidateFilter.builder()
+                                                .pagination(pagination)
+                                                .status(status)
+                                                .gender(gender)
+                                                .candidateName(search.trim())
+                                                .email(search.trim())
+                                                .phone(search.trim())
+                                                .experience(search.trim())
+                                                .build();
+
+        Page<CandidateResponse> listOfCandidateResponse = candidateService.getAllCandidates(filter);
 
         SkillFilter skillFilter = new SkillFilter();
         List<SkillResponse> listSkillResponse = skillService.getAllSkills(skillFilter)
@@ -48,6 +66,7 @@ public class CandidateController {
         model.addAttribute("listSkill", listSkillResponse);
         model.addAttribute("listC", listOfCandidateResponse);
         model.addAttribute("candidate", new CandidateRequest());
+        model.addAttribute("filter", filter);
 
         return "hr/candidateManage";
     }
@@ -89,7 +108,7 @@ public class CandidateController {
     }
 
     @PostMapping("/hr/update-potential-candidate")
-    public String updateCandidates(@ModelAttribute(name = "candidate") CandidateRequest candidateRequest) {
+    public String updateCandidates(@ModelAttribute(name = "candidate") CandidateRequest candidateRequest) throws IOException {
         candidateService.updateCandidate(candidateRequest);
         return "redirect:/hr/list-potential-candidate";
     }

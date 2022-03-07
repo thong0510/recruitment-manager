@@ -1,6 +1,7 @@
 package fpt.com.fresher.recruitmentmanager.object.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -10,6 +11,7 @@ import org.springframework.util.ObjectUtils;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Pagination {
 
     @JsonProperty("page")

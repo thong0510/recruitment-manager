@@ -4,11 +4,9 @@ import fpt.com.fresher.recruitmentmanager.object.entity.Candidates;
 import fpt.com.fresher.recruitmentmanager.object.entity.SkillCandidate;
 import fpt.com.fresher.recruitmentmanager.object.entity.Skills;
 import fpt.com.fresher.recruitmentmanager.object.filter.CandidateFilter;
-import fpt.com.fresher.recruitmentmanager.object.mapper.SkillMapper;
 import fpt.com.fresher.recruitmentmanager.object.request.CandidateRequest;
 import fpt.com.fresher.recruitmentmanager.object.response.CandidateResponse;
 import fpt.com.fresher.recruitmentmanager.object.mapper.CandidateMapper;
-import fpt.com.fresher.recruitmentmanager.object.response.SkillResponse;
 import fpt.com.fresher.recruitmentmanager.repository.CandidateRepository;
 import fpt.com.fresher.recruitmentmanager.repository.SkillCandidateRepository;
 import fpt.com.fresher.recruitmentmanager.repository.spec.CandidateSpecification;
@@ -19,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -37,9 +36,9 @@ public class CandidateServiceImpl implements CandidateService {
     private final SkillCandidateRepository skillCandidateRepository;
 
     @Override
-    public Page<Candidates> getAllCandidates(CandidateFilter filter) {
+    public Page<CandidateResponse> getAllCandidates(CandidateFilter filter) {
         Specification<Candidates> specification = CandidateSpecification.getSpecification(filter);
-        return candidateRepository.findAll(specification, filter.getPagination().getPageAndSort());
+        return candidateRepository.findAll(specification, filter.getPagination().getPageAndSort()).map(candidateMapper::entityToCandidateResponse);
     }
 
     @Override
@@ -55,24 +54,26 @@ public class CandidateServiceImpl implements CandidateService {
     }
 
     @Override
-    public void updateCandidate(CandidateRequest request) {
+    public void updateCandidate(CandidateRequest request) throws IOException {
 
-        Candidates candidates = candidateRepository.getById(request.getCandidateId());
+        Optional<Candidates> candidates = candidateRepository.findById(request.getCandidateId());
 
-        Set<SkillCandidate> listOfSkillCandidate = candidates.getSkillCandidates();
+        if (candidates.isPresent()) {
 
-        List<Long> listOfSkillId = candidates.getSkillCandidates().stream()
-                .map(e -> e.getSkills().getSkillId()).collect(Collectors.toList());
+            Set<SkillCandidate> listOfSkillCandidate = candidates.get().getSkillCandidates();
 
-        List<Long> listOfSkillIdUpdate = request.getListOfSkill();
+            List<Long> listOfSkillId = candidates.get().getSkillCandidates().stream()
+                    .map(e -> e.getSkills().getSkillId()).collect(Collectors.toList());
 
-        candidateMapper.updateEntity(candidates, request);
+            List<Long> listOfSkillIdUpdate = request.getListOfSkill();
 
-        for (Long id : listOfSkillId) {
+            candidateMapper.updateEntity(candidates.get(), request);
 
-            if (!listOfSkillIdUpdate.contains(id)) {
+            for (Long id : listOfSkillId) {
 
-                listOfSkillCandidate = listOfSkillCandidate.stream()
+                if (!listOfSkillIdUpdate.contains(id)) {
+
+                    listOfSkillCandidate = listOfSkillCandidate.stream()
                             .filter(e -> {
                                 if (!e.getSkills().getSkillId().equals(id)) {
                                     return true;
@@ -82,29 +83,35 @@ public class CandidateServiceImpl implements CandidateService {
                                 }
                             }).collect(Collectors.toSet());
 
-            }
-
-        }
-
-        for (Long id : listOfSkillIdUpdate) {
-
-            if (!listOfSkillId.contains(id)) {
-
-                SkillCandidate skillCandidate = SkillCandidate
-                        .builder()
-                        .candidates(candidates)
-                        .skills(skillService.findOne(id))
-                        .build();
-
-                listOfSkillCandidate.add(skillCandidate);
+                }
 
             }
 
+            for (Long id : listOfSkillIdUpdate) {
+
+                if (!listOfSkillId.contains(id)) {
+
+                    SkillCandidate skillCandidate = SkillCandidate
+                            .builder()
+                            .candidates(candidates.get())
+                            .skills(skillService.findOne(id))
+                            .build();
+
+                    listOfSkillCandidate.add(skillCandidate);
+
+                }
+
+            }
+
+            if (!ObjectUtils.isEmpty(request.getImageFile().getBytes())) {
+                String image = cloudinaryService.uploadImage(candidates.get().getPhoto(), request.getImageFile());
+                if (image != null) candidates.get().setPhoto(image);
+            }
+
+            candidates.get().setSkillCandidates(listOfSkillCandidate);
+
+            candidateRepository.save(candidates.get());
         }
-
-        candidates.setSkillCandidates(listOfSkillCandidate);
-
-        candidateRepository.save(candidates);
 
     }
 
