@@ -14,15 +14,18 @@ import fpt.com.fresher.recruitmentmanager.object.response.CandidateResponse;
 import fpt.com.fresher.recruitmentmanager.object.response.SkillResponse;
 import fpt.com.fresher.recruitmentmanager.service.CandidateService;
 import fpt.com.fresher.recruitmentmanager.service.SkillService;
+import fpt.com.fresher.recruitmentmanager.utils.SessionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
@@ -72,9 +75,12 @@ public class CandidateController {
     }
 
     @PostMapping("/hr/create-candidate")
-    public String createCandidate(@ModelAttribute(name = "candidate") @Valid CandidateRequest candidateRequest) {
+    public String createCandidate(@ModelAttribute(name = "candidate") @Valid CandidateRequest candidateRequest,
+                                  HttpServletRequest request) {
+        String targetUrl = request.getHeader("Referer");
+
         candidateService.createCandidate(candidateRequest);
-        return "redirect:/hr/list-potential-candidate";
+        return "redirect:" + targetUrl;
     }
 
     @GetMapping("/hr/info-potential-candidate")
@@ -94,7 +100,9 @@ public class CandidateController {
     }
 
     @GetMapping("/hr/update-potential-candidate")
-    public String updateCandidates(Model model, @RequestParam(name = "id") Long id) {
+    public String updateCandidates(Model model,
+                                   @RequestParam(name = "id") Long id,
+                                   HttpServletRequest request) {
         CandidateResponse candidateResponse = candidateService.findOne(id);
 
         SkillFilter skillFilter = new SkillFilter();
@@ -104,13 +112,20 @@ public class CandidateController {
         model.addAttribute("candidate", candidateResponse);
         model.addAttribute("listSkill", listSkillResponse);
 
+        String targetUrl = request.getHeader("Referer");
+
+        if (!ObjectUtils.isEmpty(targetUrl))
+            SessionUtils.putValue(request, "Referer", targetUrl, 3600);
+
         return "/hr/EditCandidate";
     }
 
     @PostMapping("/hr/update-potential-candidate")
-    public String updateCandidates(@ModelAttribute(name = "candidate") CandidateRequest candidateRequest) throws IOException {
+    public String updateCandidates(@ModelAttribute(name = "candidate") @Valid CandidateRequest candidateRequest,
+                                   HttpServletRequest request) throws IOException {
         candidateService.updateCandidate(candidateRequest);
-        return "redirect:/hr/list-potential-candidate";
+
+        return "redirect:" + SessionUtils.getValue(request, "Referer");
     }
 
 }

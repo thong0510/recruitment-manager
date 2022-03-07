@@ -18,10 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,10 +59,10 @@ public class CandidateServiceImpl implements CandidateService {
 
             Set<SkillCandidate> listOfSkillCandidate = candidates.get().getSkillCandidates();
 
-            List<Long> listOfSkillId = candidates.get().getSkillCandidates().stream()
-                    .map(e -> e.getSkills().getSkillId()).collect(Collectors.toList());
+            Set<Long> listOfSkillId = candidates.get().getSkillCandidates().stream()
+                    .map(e -> e.getSkills().getSkillId()).collect(Collectors.toCollection(HashSet::new));
 
-            List<Long> listOfSkillIdUpdate = request.getListOfSkill();
+            Set<Long> listOfSkillIdUpdate = new HashSet<>(request.getListOfSkill());
 
             candidateMapper.updateEntity(candidates.get(), request);
 

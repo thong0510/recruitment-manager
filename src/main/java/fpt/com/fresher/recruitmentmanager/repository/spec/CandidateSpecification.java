@@ -13,13 +13,13 @@ import java.util.Locale;
 public final class CandidateSpecification {
 
     public static Specification<Candidates> getSpecification(CandidateFilter filter) {
-        return Specification.where(hasGender(filter.getGender()))
-                .and(hasStatus(filter.getStatus()))
-                .and(hasCandidateId(filter.getCandidateId()))
+        return Specification.where(hasCandidateId(filter.getCandidateId()))
                 .and(hasCandidateName(filter.getCandidateName()))
                 .or(hasEmail(filter.getEmail()))
                 .or(hasExperience(filter.getExperience()))
-                .or(hasPhone(filter.getPhone()));
+                .or(hasPhone(filter.getPhone()))
+                .and(hasStatus(filter.getStatus()))
+                .and(hasGender(filter.getGender()));
     }
 
     private static Specification<Candidates> hasCandidateId(Long candidateId) {
