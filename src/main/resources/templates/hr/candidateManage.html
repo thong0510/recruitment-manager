@@ -384,11 +384,22 @@
                             </div>
     
                             <div class="form-control">
-                                    <label class="label">
-                                        <span class="label-text font-bold">Email:</span>
-                                    </label>
-                                    <input type="text" th:field="*{email}" class="input input-bordered">
 
+                                <div class="flex">
+                                    <div class="w-1/2 mr-5 flex flex-col">
+                                        <label class="label">
+                                            <span class="label-text font-bold">Card ID:</span>
+                                        </label>
+                                        <input type="text" th:field="*{cardId}" class="input input-bordered">
+                                    </div>
+                                    <div class="w-1/2 flex flex-col">
+                                        <label class="label">
+                                            <span class="label-text font-bold">Email:</span>
+                                        </label>
+                                        <input type="text" th:field="*{email}" class="input input-bordered">
+                                    </div>
+
+                                </div>
                             </div>
 
                             <div class="form-control">
@@ -466,7 +477,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </template>
-                                                                <div x-show="selected.length    == 0" class="flex-1">
+                                                                <div x-show="selected.length== 0" class="flex-1">
                                                                     <input placeholder="Select a option"
                                                                         class="bg-transparent p-1 px-2 appearance-none outline-none h-full w-full text-gray-800"
                                                                         x-bind:value="selectedValues()">
@@ -550,7 +561,8 @@
 
     <!-- Delete -->
 
-    <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/static/js/common.js}"></script>
+    <script th:src="@{/static/js/dropdown.js}"></script>
 
     <script>
         let candidateId;
@@ -561,95 +573,6 @@
             uri.searchParams.set('id', candidateId);
             window.location.href = uri.href;
         }
-
-        function paramFilters(param, value, firstSearch = false){
-            let uri = new URL(document.baseURI);
-            uri.searchParams.set(param, value);
-            if(uri.searchParams.has("gender") && firstSearch === true) uri.searchParams.set("page", 1);
-            if(uri.searchParams.has("status") && firstSearch === true) uri.searchParams.set("page", 1);
-            if(uri.searchParams.has("search") && firstSearch === true) uri.searchParams.set("page", 1);
-            if(value.length == 0) uri.searchParams.delete(param);
-            window.location.href = uri.href;
-        }
-
-        function openModal(key, id) {
-                if (id !== null) candidateId = id;
-                document.getElementById(key).showModal();
-                document.body.setAttribute('style', 'overflow: hidden;');
-                document.getElementById(key).children[0].scrollTop = 0;
-                document.getElementById(key).children[0].classList.remove('opacity-0');
-                document.getElementById(key).children[0].classList.add('opacity-100')
-        }
-
-        function modalClose(key) {
-                document.getElementById(key).children[0].classList.remove('opacity-100');
-                document.getElementById(key).children[0].classList.add('opacity-0');
-                setTimeout(function () {
-                    document.getElementById(key).close();
-                    document.body.removeAttribute('style');
-                }, 100);
-        }
-
-            function showPreviewImage(event) {
-                    if (event.target.files.length > 0) {
-                        var preview = document.getElementById("preview-image");
-                        var src = URL.createObjectURL(event.target.files[0]);
-                        preview.src = src;
-                    }
-                }
-
-            function dropdownX() {
-                    return {
-                        options: [],
-                        selected: [],
-                        show: false,
-                        open() { this.show = true },
-                        close() { this.show = false },
-                        isOpen() { return this.show === true },
-                        select(index, event) {
-
-                            if (!this.options[index].selected) {
-
-                                this.options[index].selected = true;
-                                this.options[index].element = event.target;
-                                this.selected.push(index);
-                                let addInput = `<input hidden name="listOfSkill" id="${this.options[index].text}" value="${this.options[index].value}"/>`
-                                document.querySelector("#skills").insertAdjacentHTML('beforeend', addInput);
-                            } else {
-                                this.selected.splice(this.selected.lastIndexOf(index), 1);
-                                this.options[index].selected = false
-                                document.getElementById(this.options[index].text).remove();
-                            }
-
-                        },
-                        remove(index, option) {
-                            this.options[option].selected = false;
-                            this.selected.splice(index, 1);
-                            document.getElementById(this.options[index].text).remove();
-                        },
-                        loadOptions() {
-                            const options = document.getElementById('select').options;
-                            for (let i = 0; i < options.length; i++) {
-                                this.options.push({
-                                    value: options[i].value,
-                                    text: options[i].innerText,
-                                    selected: options[i].getAttribute('selected') != null ? options[i].getAttribute('selected') : false
-                                });
-                                if (options[i].getAttribute('selected') === '') {
-                                    this.selected.push(i);
-                                    let addInput = `<input hidden name="listOfSkill" id="${this.options[i].text}" value="${this.options[i].value}"/>`
-                                    document.querySelector("#skills").insertAdjacentHTML('beforeend', addInput);
-                                }
-                            }
-
-                        },
-                        selectedValues() {
-                            return this.selected.map((option) => {
-                                return this.options[option].value;
-                            })
-                        }
-                    }
-                }
     </script>
 </body>
 

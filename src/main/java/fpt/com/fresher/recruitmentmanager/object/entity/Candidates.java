@@ -39,6 +39,9 @@ public class Candidates extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String phone;
 
+    @Column(nullable = false, unique = true)
+    private String cardId;
+
     @Column
     @Enumerated(EnumType.STRING)
     private Gender gender;

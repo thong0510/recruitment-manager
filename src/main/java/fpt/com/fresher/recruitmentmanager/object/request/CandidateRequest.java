@@ -28,6 +28,9 @@ public class CandidateRequest {
     @NotBlank
     private String gender;
 
+    @NotBlank
+    private String cardId;
+
     @Email
     @NotBlank
     private String email;

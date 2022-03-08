@@ -6,6 +6,7 @@ import fpt.com.fresher.recruitmentmanager.object.mapper.SkillMapper;
 import fpt.com.fresher.recruitmentmanager.object.request.SkillRequest;
 import fpt.com.fresher.recruitmentmanager.object.response.SkillResponse;
 import fpt.com.fresher.recruitmentmanager.service.SkillService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -16,20 +17,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
+@RequiredArgsConstructor
 public class SkillController {
 
-    @Autowired
-    SkillService skillService;
-
-    @Autowired
-    SkillMapper skillMapper;
+    private final SkillService skillService;
+    private final SkillMapper skillMapper;
 
     @GetMapping("/hr/list-skill")
     public String listSkill(Model model) {
 
         SkillFilter skillFilter = new SkillFilter();
-        Page<Skills> listSkill = skillService.getAllSkills(skillFilter);
-        List<SkillResponse> listSkillResponse = listSkill.getContent().stream().map(skillMapper::entityToSkillResponse).collect(Collectors.toList());
+        List<SkillResponse> listSkillResponse = skillService.getAllSkills(skillFilter).getContent();
 
         model.addAttribute("skills", listSkillResponse);
         return "hr/listSkill";

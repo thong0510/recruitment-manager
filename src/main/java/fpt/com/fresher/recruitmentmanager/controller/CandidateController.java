@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +37,6 @@ import java.util.stream.Collectors;
 public class CandidateController {
 
     private final CandidateService candidateService;
-    private final CandidateMapper candidateMapper;
     private final SkillService skillService;
     private final SkillMapper skillMapper;
 
@@ -50,21 +50,21 @@ public class CandidateController {
         Sorting sorting = new Sorting("candidateId", true);
         Pagination pagination = new Pagination(page - 1, 4, sorting);
 
+        search = search.trim();
         CandidateFilter filter = CandidateFilter.builder()
                                                 .pagination(pagination)
                                                 .status(status)
                                                 .gender(gender)
-                                                .candidateName(search.trim())
-                                                .email(search.trim())
-                                                .phone(search.trim())
-                                                .experience(search.trim())
+                                                .candidateName(search)
+                                                .email(search)
+                                                .phone(search)
+                                                .experience(search)
                                                 .build();
 
         Page<CandidateResponse> listOfCandidateResponse = candidateService.getAllCandidates(filter);
 
         SkillFilter skillFilter = new SkillFilter();
-        List<SkillResponse> listSkillResponse = skillService.getAllSkills(skillFilter)
-                .getContent().stream().map(skillMapper::entityToSkillResponse).collect(Collectors.toList());
+        List<SkillResponse> listSkillResponse = skillService.getAllSkills(skillFilter).getContent();
 
         model.addAttribute("listSkill", listSkillResponse);
         model.addAttribute("listC", listOfCandidateResponse);
@@ -106,8 +106,7 @@ public class CandidateController {
         CandidateResponse candidateResponse = candidateService.findOne(id);
 
         SkillFilter skillFilter = new SkillFilter();
-        List<SkillResponse> listSkillResponse = skillService.getAllSkills(skillFilter)
-                .getContent().stream().map(skillMapper::entityToSkillResponse).collect(Collectors.toList());
+        List<SkillResponse> listSkillResponse = skillService.getAllSkills(skillFilter).getContent();
 
         model.addAttribute("candidate", candidateResponse);
         model.addAttribute("listSkill", listSkillResponse);

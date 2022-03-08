@@ -269,8 +269,7 @@
                                         <label class="label">
                                             <span class="label-text">Card ID:</span>
                                         </label>
-                                        <input type="text" class="input input-bordered"
-                                               rules="required|minlength:10|maxlength:255">
+                                        <input type="text" class="input input-bordered" th:field="*{cardId}">
                                     </div>
                                     <div class="w-1/2 ml-5 flex flex-col">
                                         <label class="label">
@@ -491,72 +490,8 @@
         </div>
     </div>
 
-    <script th:src="@{/js/validator.js}"></script>
-
-    <script>
-        function showPreviewImage(event) {
-                if (event.target.files.length > 0) {
-                    var preview = document.getElementById("preview-image");
-                    var src = URL.createObjectURL(event.target.files[0]);
-                    preview.src = src;
-                }
-            }
-
-        function dropdownX() {
-            return {
-                options: [],
-                selected: [],
-                show: false,
-                open() { this.show = true },
-                close() { this.show = false },
-                isOpen() { return this.show === true },
-                select(index, event) {
-
-                    if (!this.options[index].selected) {
-
-                        this.options[index].selected = true;
-                        this.options[index].element = event.target;
-                        this.selected.push(index);
-                        let addInput = `<input hidden name="listOfSkill" id="${this.options[index].text}" value="${this.options[index].value}"/>`
-                        document.querySelector("#skills").insertAdjacentHTML('beforeend', addInput);
-                    } else {
-                        this.selected.splice(this.selected.lastIndexOf(index), 1);
-                        this.options[index].selected = false
-                        document.getElementById(this.options[index].text).remove();
-                    }
-
-                },
-                remove(index, option) {
-                    this.options[option].selected = false;
-                    this.selected.splice(index, 1);
-                    document.getElementById(this.options[index].text).remove();
-                },
-                loadOptions() {
-                    const options = document.getElementById('select').options;
-                    for (let i = 0; i < options.length; i++) {
-                        this.options.push({
-                            value: options[i].value,
-                            text: options[i].innerText,
-                            selected: options[i].getAttribute('selected') != null ? options[i].getAttribute('selected') : false
-                        });
-                        if (options[i].getAttribute('selected') === '') {
-                            this.selected.push(i);
-                            let addInput = `<input hidden name="listOfSkill" id="${this.options[i].text}" value="${this.options[i].value}"/>`
-                            document.querySelector("#skills").insertAdjacentHTML('beforeend', addInput);
-                        }
-                    }
-
-                },
-                selectedValues() {
-                    return this.selected.map((option) => {
-                        return this.options[option].value;
-                    })
-                }
-            }
-        }
-    </script>
-
-    <script th:src="@{/js/common.js}"></script>
+    <script th:src="@{/static/js/common.js}"></script>
+    <script th:src="@{/static/js/dropdown.js}"></script>
 
 </body>
 
