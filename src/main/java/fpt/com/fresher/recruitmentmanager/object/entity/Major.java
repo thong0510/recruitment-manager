@@ -13,7 +13,6 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 @SQLDelete(sql = "UPDATE major SET deleted = true WHERE major_id=?")
 @Where(clause = "deleted=false")
 public class Major extends BaseEntity {
