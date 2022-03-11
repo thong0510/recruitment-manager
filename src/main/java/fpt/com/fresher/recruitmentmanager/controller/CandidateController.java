@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -87,8 +88,14 @@ public class CandidateController {
     public String detailCandidates(Model model, @RequestParam(name = "id") Long id) {
         CandidateResponse candidateResponse = candidateService.findOne(id);
         model.addAttribute("candidate", candidateResponse);
+        List<Long> list = candidateResponse.getListOfSkill();
+        List<String> listSkill = new ArrayList<>();
+        for (Long a: list) {
+            listSkill.add(skillService.findOne(a).getSkillName());
+        }
+        model.addAttribute("list", listSkill);
 
-        return "/hr/potential-candidate";
+        return "/hr/DetailCandidate";
     }
 
     @GetMapping("/hr/delete-potential-candidate")

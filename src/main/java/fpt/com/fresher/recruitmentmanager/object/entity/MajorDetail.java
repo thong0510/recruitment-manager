@@ -10,6 +10,8 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Data
 public class MajorDetail extends BaseEntity {
+    // chi tiết ngành tuyển dụng
+    // Ví dụ : ngành IT thì ntn
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

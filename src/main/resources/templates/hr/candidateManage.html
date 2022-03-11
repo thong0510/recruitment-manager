@@ -188,7 +188,7 @@
                                             <td>
                                                 <div class="avatar">
                                                     <div class="rounded-btn w-10 h-10">
-                                                        <img th:if="${candidate.photo == null}" src="https://mntech.com.vn/common/images/noimg64.png">
+                                                        <img th:if="${candidate.photo == null}" src="https://mntech.com.vn/common/images/noimg64.png" alt="">
                                                         <img th:unless="${candidate.photo == null}" th:src="${candidate.photo}">
                                                     </div>
                                                 </div>
@@ -202,7 +202,7 @@
                                             <td th:text="${candidate.phone}" >12356688</td>
                                             <td th:text="${candidate.email}">haitt23@gmail.com</td>
                                             <td>
-                                                <a th:href="@{'/hr/update-potential-candidate?id=' + ${candidate.candidateId}}"><i class="fas fa-info-circle fa-lg cursor-pointer"></i></a>
+                                                <a th:href="@{'/hr/info-potential-candidate?id=' + ${candidate.candidateId}}"><i class="fas fa-info-circle fa-lg cursor-pointer"></i></a>
 
                                             </td>
                                             <td>
@@ -239,8 +239,8 @@
                                     <div th:if="${listC.getNumberOfElements() > 0}" th:with="currentPage=${listC.getNumber()+1}, totalPages=${listC.getTotalPages()}"
                                          class="btn-group my-4 mr-4">
 
-                                        <button class="btn btn-sm btn-outline " th:if="${currentPage > 1}" th:onclick="|paramFilters('page','${currentPage - 1}')|">Previous</button>
-                                        <span class="btn btn-sm btn-outline disabled" th:unless="${currentPage > 1}">Previous</span>
+                                        <button class="btn btn-sm btn-outline " th:if="${currentPage > 1}" th:onclick="|paramFilters('page','${currentPage - 1}')|">Prev</button>
+                                        <span class="btn btn-sm btn-outline disabled" th:unless="${currentPage > 1}">Prev</span>
 
                                         <th:block th:each="i : ${#numbers.sequence(1, totalPages)}">
                                             <button class="btn btn-sm btn-outline " th:if="${currentPage != i}" th:onclick="|paramFilters('page','${i}')|">[[${i}]]</button>

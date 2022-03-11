@@ -10,6 +10,7 @@ import java.util.Set;
 @Entity
 @Data
 public class Major extends BaseEntity {
+//    Ngành tuyển dụng
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

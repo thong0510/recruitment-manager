@@ -18,10 +18,8 @@ public class Account extends BaseEntity {
     @Column(name = "account_id")
     private Long accountId;
 
-    @NotNull(message = MessageConst.INVALID_ROLES_NULL)
-    @ManyToOne
-    @JoinColumn(name = "role_id", referencedColumnName = "role_id")
-    private Roles roles;
+    @Column
+    private String roles;
 
     @NotNull(message = MessageConst.INVALID_USER_NULL)
     @ManyToOne
