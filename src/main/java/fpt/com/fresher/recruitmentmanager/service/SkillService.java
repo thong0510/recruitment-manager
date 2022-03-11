@@ -10,7 +10,7 @@ public interface SkillService {
 
     Page<SkillResponse> getAllSkills(SkillFilter filter);
 
-    Skills findOne(Long id);
+    SkillResponse findOne(Long id);
 
     void deleteSkill(Long id);
 

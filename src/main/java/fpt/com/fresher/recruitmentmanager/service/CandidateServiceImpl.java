@@ -4,9 +4,11 @@ import fpt.com.fresher.recruitmentmanager.object.entity.Candidates;
 import fpt.com.fresher.recruitmentmanager.object.entity.SkillCandidate;
 import fpt.com.fresher.recruitmentmanager.object.entity.Skills;
 import fpt.com.fresher.recruitmentmanager.object.filter.CandidateFilter;
+import fpt.com.fresher.recruitmentmanager.object.mapper.SkillMapper;
 import fpt.com.fresher.recruitmentmanager.object.request.CandidateRequest;
 import fpt.com.fresher.recruitmentmanager.object.response.CandidateResponse;
 import fpt.com.fresher.recruitmentmanager.object.mapper.CandidateMapper;
+import fpt.com.fresher.recruitmentmanager.object.response.SkillResponse;
 import fpt.com.fresher.recruitmentmanager.repository.CandidateRepository;
 import fpt.com.fresher.recruitmentmanager.repository.SkillCandidateRepository;
 import fpt.com.fresher.recruitmentmanager.repository.spec.CandidateSpecification;
@@ -31,6 +33,7 @@ public class CandidateServiceImpl implements CandidateService {
     private final CloudinaryService cloudinaryService;
     private final SkillService skillService;
     private final SkillCandidateRepository skillCandidateRepository;
+    private final SkillMapper skillMapper;
 
     @Override
     public Page<CandidateResponse> getAllCandidates(CandidateFilter filter) {
@@ -87,11 +90,13 @@ public class CandidateServiceImpl implements CandidateService {
             for (Long id : listOfSkillIdUpdate) {
 
                 if (!listOfSkillId.contains(id)) {
+                    SkillResponse skillResponse = skillService.findOne(id);
+
 
                     SkillCandidate skillCandidate = SkillCandidate
                             .builder()
                             .candidates(candidates.get())
-                            .skills(skillService.findOne(id))
+                            //.skills(skillService.findOne(id))
                             .build();
 
                     listOfSkillCandidate.add(skillCandidate);
@@ -120,11 +125,12 @@ public class CandidateServiceImpl implements CandidateService {
         Set<SkillCandidate> listOfSkillCandidate = new HashSet<>();
 
         for (Long id : requestBody.getListOfSkill()) {
-            Skills skills = skillService.findOne(id);
+            SkillResponse skillResponse = skillService.findOne(id);
+
             SkillCandidate skillCandidate = SkillCandidate
                                                         .builder()
                                                         .candidates(candidate)
-                                                        .skills(skills)
+                                                        .skills(skillMapper.skillResponseToEntity(skillResponse))
                                                         .build();
             listOfSkillCandidate.add(skillCandidate);
         }
