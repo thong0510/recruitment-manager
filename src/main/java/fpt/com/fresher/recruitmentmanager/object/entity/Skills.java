@@ -2,6 +2,11 @@ package fpt.com.fresher.recruitmentmanager.object.entity;
 
 import fpt.com.fresher.recruitmentmanager.object.contant.MessageConst;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -9,7 +14,11 @@ import java.io.Serializable;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@SQLDelete(sql = "UPDATE skills SET deleted = true WHERE skill_id=?")
+@Where(clause = "deleted=false")
 public class Skills extends BaseEntity implements Serializable {
 
     @Id
@@ -29,5 +38,7 @@ public class Skills extends BaseEntity implements Serializable {
 
     @OneToMany(cascade = CascadeType.PERSIST, mappedBy = "skills")
     private Set<SkillCandidate> skillCandidates;
+
+    private Boolean deleted = false;
 
 }

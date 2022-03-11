@@ -51,3 +51,13 @@ function openModal2(key, id) {
   document.getElementById(key).children[0].classList.remove('opacity-0');
   document.getElementById(key).children[0].classList.add('opacity-100')
 }
+
+
+function openModal3(key, id) {
+  if (id !== null) skillId = id;
+  document.getElementById(key).showModal();
+  document.body.setAttribute('style', 'overflow: hidden;');
+  document.getElementById(key).children[0].scrollTop = 0;
+  document.getElementById(key).children[0].classList.remove('opacity-0');
+  document.getElementById(key).children[0].classList.add('opacity-100')
+}
