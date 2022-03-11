@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"user_name", "role_id"})}
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"user_name"})}
 )
 @Data
 public class Account extends BaseEntity {
