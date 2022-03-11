@@ -141,7 +141,7 @@
                 <p>User management: Welcome to user management</p>
                 <!-- END welcome text -->
                 <div class="flex justify-between">
-                <button onclick="openModal1('main-modal')" class="btn btn-sm w-42 h-10 btn-primary">ADD MAJOR</button>
+                <button onclick="openModal2('main-modal')" class="btn btn-sm w-42 h-10 btn-primary">ADD MAJOR DETAIL</button>
 
                     <div class="flex justify-between" th:object="${filter}">
 
@@ -158,20 +158,23 @@
                                         <tr>
                                             <th>Major ID</th>
                                             <th>Major name</th>
+                                            <th>Major</th>
                                             <th>Activity</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr th:each="major : ${listMajor.getContent()}">
-                                            <td th:text="${major.majorId}">1</td>
+                                        <tr th:each="majorDetail : ${listMajorDetail.getContent()}">
+                                            <td th:text="${majorDetail.majorDetailId}">1</td>
 
-                                            <td th:text="${major.majorName}" >12356688</td>
+                                            <td th:text="${majorDetail.majorDetailName}" >MajorDetailName</td>
+
+                                            <td th:text="${majorDetail.major.majorName}" >MajorName</td>
 
                                             <td>
                                                 <div class="flex justify-start items-center">
-                                                    <a th:href="@{'/hr/update-major?id=' + ${major.majorId}}"><i class="fas fa-edit mr-3 cursor-pointer"></i></a>
+                                                    <a th:href="@{'/hr/update-majorDetail?id=' + ${majorDetail.majorDetailId}}"><i class="fas fa-edit mr-3 cursor-pointer"></i></a>
 
-                                                    <i class="fas fa-trash-alt cursor-pointer" th:attr="onclick=|openModal1('delete-modal', '${major.majorId}')|"></i>
+                                                    <i class="fas fa-trash-alt cursor-pointer" th:attr="onclick=|openModal2('delete-modal', '${majorDetail.majorDetailId}')|"></i>
                                                 </div>
                                                 
                                             </td>
@@ -181,7 +184,7 @@
                                 </table>
 
                                 <div class="flex justify-center">
-                                    <div th:if="${listMajor.getNumberOfElements() > 0}" th:with="currentPage=${listMajor.getNumber()+1}, totalPages=${listMajor.getTotalPages()}"
+                                    <div th:if="${listMajorDetail.getNumberOfElements() > 0}" th:with="currentPage=${listMajorDetail.getNumber()+1}, totalPages=${listMajorDetail.getTotalPages()}"
                                          class="btn-group my-4 mr-4">
 
                                         <button class="btn btn-sm btn-outline " th:if="${currentPage > 1}" th:onclick="|paramFilters('page','${currentPage - 1}')|">Prev</button>
@@ -189,14 +192,14 @@
 
                                         <th:block th:each="i : ${#numbers.sequence(1, totalPages)}">
                                             <button class="btn btn-sm btn-outline " th:if="${currentPage != i}" th:onclick="|paramFilters('page','${i}')|">[[${i}]]</button>
-                                            <span class="btn btn-sm btn-outline bg-blue-500 text-white border-black" th:if="${listMajor.getNumberOfElements() > 0}" th:unless="${currentPage != i}">[[${i}]]</span>
+                                            <span class="btn btn-sm btn-outline bg-blue-500 text-white border-black" th:if="${listMajorDetail.getNumberOfElements() > 0}" th:unless="${currentPage != i}">[[${i}]]</span>
                                         </th:block>
 
                                         <button class="btn btn-sm btn-outline " th:if="${currentPage < totalPages}" th:onclick="|paramFilters('page','${currentPage + 1}')|">Next</button>
                                         <span class="btn btn-sm btn-outline disabled"  th:unless="${currentPage < totalPages}">Next</span>
 
                                     </div>
-                                    <div th:if="${listMajor.getNumberOfElements() <= 0}">
+                                    <div th:if="${listMajorDetail.getNumberOfElements() <= 0}">
                                         <a class="btn btn-sm btn-outline mb-4" th:href="@{'/admin/quiz'}">Back to list</a>
                                     </div>
                                 </div>
@@ -239,7 +242,7 @@
         </div>
     </div>
 
-    <!-- Delete Major -->
+    <!-- Delete Candidate -->
     <dialog id="delete-modal" class="bg-transparent z-0 relative w-screen h-screen fadeIn">
         <div
             class="p-7 pt-52 flex justify-center items-start overflow-x-hidden overflow-y-auto fixed left-0 top-0 w-full h-full bg-gray-900 bg-opacity-50 z-50 transition-opacity duration-300 opacity-0">
@@ -261,7 +264,7 @@
     
                         <!--Footer-->
                         <div class="flex justify-center pt-2 mt-3 mb-5">
-                            <button type="submit" onclick="deleteMajor()"
+                            <button type="submit" onclick="deleteMajorDetail()"
                                 class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3">
                                 Yes
                             </button>
@@ -281,14 +284,14 @@
         </div>
     </dialog>
 
-    <!-- Add Major -->
+    <!-- Add Major Detail -->
     <dialog id="main-modal" class="bg-transparent z-0 relative w-screen h-screen fadeIn">
         <div
             class="p-7 flex justify-center items-start overflow-x-hidden overflow-y-auto fixed left-0 top-0 w-full h-full bg-gray-900 bg-opacity-50 z-50 transition-opacity duration-300 opacity-0">
             <div class="bg-white flex rounded-lg md:w-1/2 w-full relative mb-20">
                 <div class="flex flex-col items-start w-full">
                     <div class="p-7 flex items-center w-full">
-                        <div class="text-gray-900 font-bold text-lg">Add Major</div>
+                        <div class="text-gray-900 font-bold text-lg">Add Major Detail</div>
                         <svg onclick="modalClose('main-modal')"
                             class="ml-auto fill-current text-gray-700 w-5 h-5 cursor-pointer"
                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
@@ -299,14 +302,23 @@
     
                     <div class="px-7 w-full">
                         <!-- START FORM -->
-                        <form id="question-form" method="post" th:object="${major}" th:action="@{/hr/create-major}" >
+                        <form id="question-form" method="post" th:object="${majorDetail}" th:action="@{/hr/create-majorDetail}" >
 
                             <div class="form-control">
                                 <label class="label">
-                                    <span class="label-text font-bold">Full Name:</span>
+                                    <span class="label-text font-bold">Major Detail Name:</span>
                                 </label>
-                                <input type="text" th:field="*{majorName}" class="input input-bordered">
+                                <input type="text" th:field="*{majorDetailName}" class="input input-bordered">
                             </div>
+
+
+                            <select x-cloak id="select" th:field="*{major}">
+                                <option th:each="major : ${listMajor}"
+                                        th:value="${major.majorId}"
+                                        th:utext="${major.majorName}">
+                                </option>
+                            </select>
+                            <div id="skills"></div>
 
                             <!--Footer-->
                             <div class="flex justify-end pt-2 mt-3 mb-5">
@@ -337,12 +349,12 @@
     <script th:src="@{/static/js/dropdown.js}"></script>
 
     <script>
-        let majorId;
+        let majorDetailId;
 
-        function deleteMajor() {
+        function deleteMajorDetail() {
             let uri = new URL(document.baseURI);
-            uri.pathname = '/hr/delete-major';
-            uri.searchParams.set('id', majorId);
+            uri.pathname = '/hr/delete-majorDetail';
+            uri.searchParams.set('id', majorDetailId);
             window.location.href = uri.href;
         }
     </script>
