@@ -39,6 +39,12 @@ public class SkillServiceImpl implements SkillService{
     }
 
     @Override
+    public Skills findOneSkills(Long id) {
+        Optional<Skills> skill = skillRepository.findById(id);
+        return skill.orElse(null);
+    }
+
+    @Override
     public void deleteSkill(Long id) {
         Optional<Skills> skill = skillRepository.findById(id);
         skill.ifPresent(skillRepository::delete);

@@ -14,6 +14,8 @@ public class MajorDetailFilter {
 
     private Long majorDetailId;
 
+    private Long majorId;
+
     private String majorDetailName;
 
     private Pagination pagination = new Pagination(10);

@@ -329,7 +329,7 @@
                                     <span class="label-text font-bold">Major</span>
                                 </label>
 
-                                <select x-cloak  th:field="*{major}">
+                                <select x-cloak  th:field="*{major}" onchange="loadDataByMajorId(this.value)">
                                     <option th:each="major : ${listMajor}"
                                             th:value="${major.majorId}"
                                             th:utext="${major.majorName}">
@@ -342,7 +342,7 @@
                                     <span class="label-text font-bold">Major Detail</span>
                                 </label>
 
-                                <select x-cloak th:field="*{majorDetail}">
+                                <select id="loadDataById" x-cloak>
                                     <option th:each="majorDetail : ${listMajorDetail}"
                                             th:value="${majorDetail.majorDetailId}"
                                             th:utext="${majorDetail.majorDetailName}">
@@ -387,6 +387,58 @@
             uri.pathname = '/hr/delete-vacancies';
             uri.searchParams.set('id', vacanciesId);
             window.location.href = uri.href;
+        }
+
+        const loadDataByMajorId = async (value) => {
+
+            try {
+                let BASE_URL = 'http://localhost:8080/api/hr/list-major-detail'
+
+                const response = await axios({
+                    method: "POST",
+                    url: BASE_URL,
+                    headers: {
+                        "Access-Control-Allow-Origin": "*",
+                        "Content-Type": "application/json",
+                    },
+                    data: {
+                        majorId: value,
+                        pagination: {
+                            page: 0,
+                            limit: 10,
+                            sort: {
+                                criteria: 'majorDetailId',
+                                asc: true
+                            } },
+                    },
+                })
+
+                const data = response.data
+
+                console.log(data)
+
+                if (data != null) {
+                    const listMajorDetail = data.map((item) => (
+                        `<option value="${item.majorDetailId}">
+                            ${item.majorDetailName}
+                        </option>`
+                    ))
+                    document.getElementById("loadDataById").innerHTML = listMajorDetail.join('')
+                }
+
+            } catch (error) {
+                if (error.response) {
+                    console.log(error.response.data)
+                    console.log(error.response.status)
+                    console.log(error.response.headers)
+                } else if (error.request) {
+                    console.log(error.request)
+                } else {
+                    console.log("Error", error.message)
+                }
+                console.log(error.config)
+            }
+
         }
     </script>
 </body>

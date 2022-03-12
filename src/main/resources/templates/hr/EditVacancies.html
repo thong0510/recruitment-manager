@@ -252,7 +252,7 @@
                                             <label class="label">
                                                 <span class="label-text">Major</span>
                                             </label>
-                                            <select x-cloak id="select" th:field="*{major}">
+                                            <select x-cloak id="select" th:field="*{major}" onchange="loadDataByMajorId(this.value)">
                                                 <option th:each="major : ${listMajor}"
                                                         th:value="${major.majorId}"
                                                         th:utext="${major.majorName}">
@@ -332,7 +332,11 @@
             </ul>
         </div>
     </div>
-
+    <script>
+        function loadDataByMajorId(value) {
+            console.log(value)
+        }
+    </script>
     <script th:src="@{/static/js/common.js}"></script>
     <script th:src="@{/static/js/dropdown.js}"></script>
 

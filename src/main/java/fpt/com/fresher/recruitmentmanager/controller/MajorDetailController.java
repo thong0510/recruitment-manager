@@ -38,6 +38,7 @@ public class MajorDetailController {
     public String listMajorDetail(Model model,
                             @RequestParam(defaultValue = "1") Integer page,
                             @RequestParam(defaultValue = "") String search) {
+
         Sorting sorting = new Sorting("majorDetailId", true);
         Pagination pagination = new Pagination(page - 1, 10, sorting);
 

@@ -1,17 +1,13 @@
 package fpt.com.fresher.recruitmentmanager.controller;
 
-import fpt.com.fresher.recruitmentmanager.object.filter.CandidateFilter;
 import fpt.com.fresher.recruitmentmanager.object.filter.MajorFilter;
-import fpt.com.fresher.recruitmentmanager.object.filter.SkillFilter;
 import fpt.com.fresher.recruitmentmanager.object.model.Pagination;
 import fpt.com.fresher.recruitmentmanager.object.model.Sorting;
-import fpt.com.fresher.recruitmentmanager.object.request.CandidateRequest;
 import fpt.com.fresher.recruitmentmanager.object.request.MajorRequest;
-import fpt.com.fresher.recruitmentmanager.object.response.CandidateResponse;
 import fpt.com.fresher.recruitmentmanager.object.response.MajorResponse;
-import fpt.com.fresher.recruitmentmanager.object.response.SkillResponse;
 import fpt.com.fresher.recruitmentmanager.service.MajorService;
 import fpt.com.fresher.recruitmentmanager.utils.SessionUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -25,15 +21,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.sql.Date;
-import java.time.LocalDate;
-import java.util.List;
 
 @Controller
+@RequiredArgsConstructor
 public class MajorController {
 
-    @Autowired
-    private MajorService majorService;
+    private final MajorService majorService;
 
     @GetMapping("/hr/list-major")
     public String listMajor(Model model,

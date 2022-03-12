@@ -90,13 +90,12 @@ public class CandidateServiceImpl implements CandidateService {
             for (Long id : listOfSkillIdUpdate) {
 
                 if (!listOfSkillId.contains(id)) {
-                    SkillResponse skillResponse = skillService.findOne(id);
-
+                    Skills skills = skillService.findOneSkills(id);
 
                     SkillCandidate skillCandidate = SkillCandidate
                             .builder()
                             .candidates(candidates.get())
-                            //.skills(skillService.findOne(id))
+                            .skills(skills)
                             .build();
 
                     listOfSkillCandidate.add(skillCandidate);

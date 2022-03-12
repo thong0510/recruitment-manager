@@ -12,6 +12,8 @@ public interface SkillService {
 
     SkillResponse findOne(Long id);
 
+    Skills findOneSkills(Long id);
+
     void deleteSkill(Long id);
 
     void updateSkill(SkillRequest request);
