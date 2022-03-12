@@ -96,7 +96,7 @@ public class CandidateServiceImpl implements CandidateService {
                     SkillCandidate skillCandidate = SkillCandidate
                             .builder()
                             .candidates(candidates.get())
-                            //.skills(skillService.findOne(id))
+                            .skills(skillMapper.skillResponseToEntity(skillResponse))
                             .build();
 
                     listOfSkillCandidate.add(skillCandidate);
