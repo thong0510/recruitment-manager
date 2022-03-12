@@ -342,11 +342,8 @@
                                     <span class="label-text font-bold">Major Detail</span>
                                 </label>
 
-                                <select id="loadDataById" x-cloak>
-                                    <option th:each="majorDetail : ${listMajorDetail}"
-                                            th:value="${majorDetail.majorDetailId}"
-                                            th:utext="${majorDetail.majorDetailName}">
-                                    </option>
+                                <select id="loadDataById" x-cloak disabled>
+                                    <option > Select Major Detail</option>
                                 </select>
                             </div>
 
@@ -423,6 +420,7 @@
                             ${item.majorDetailName}
                         </option>`
                     ))
+                    document.getElementById("loadDataById").disabled = false
                     document.getElementById("loadDataById").innerHTML = listMajorDetail.join('')
                 }
 
