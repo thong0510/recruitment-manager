@@ -52,8 +52,8 @@ public class Users extends BaseEntity {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
     private Set<Report> reports;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
-    private Set<Account> accounts;
+    @ManyToOne @JoinColumn(name = "role_id")
+    private Role role;
 
     private Boolean deleted = false;
 
