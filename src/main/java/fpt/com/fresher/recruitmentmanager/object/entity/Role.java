@@ -18,7 +18,7 @@ import java.io.Serializable;
 public class Role implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id", nullable = false)
+    @Column(name = "role_id", nullable = false)
     private Long id;
 
     @Column(nullable = false)
