@@ -1,7 +1,9 @@
 package fpt.com.fresher.recruitmentmanager.object.entity;
 
 import fpt.com.fresher.recruitmentmanager.object.contant.MessageConst;
-import lombok.Data;
+import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -10,7 +12,11 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@SQLDelete(sql = "UPDATE vacancies SET deleted = true WHERE vacancies_id=?")
+@Where(clause = "deleted=false")
 public class Vacancies extends BaseEntity {
 
     @Id
@@ -37,5 +43,7 @@ public class Vacancies extends BaseEntity {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "vacancies")
     private Set<Recruitment> recruitments;
+
+    private Boolean deleted = false;
 
 }
