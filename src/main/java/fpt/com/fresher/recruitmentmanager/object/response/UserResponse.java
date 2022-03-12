@@ -1,9 +1,13 @@
 package fpt.com.fresher.recruitmentmanager.object.response;
 
+import fpt.com.fresher.recruitmentmanager.object.entity.Role;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
+import java.util.Set;
 
 @Data
 @Getter
@@ -20,6 +24,8 @@ public class UserResponse {
     private String email;
 
     private String password;
+
+    private Set<Role> roles;
 
 
 

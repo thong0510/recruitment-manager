@@ -8,6 +8,8 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -22,10 +24,12 @@ public class Role implements Serializable {
     private Long id;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private SystemRole name;
+    private String name;
 
-    public Role(SystemRole name) {
+    @ManyToMany(mappedBy = "roles")
+    private Set<Users> users;
+
+    public Role(String name) {
         this.name = name;
     }
 }

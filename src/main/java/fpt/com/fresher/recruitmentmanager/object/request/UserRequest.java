@@ -1,10 +1,12 @@
 package fpt.com.fresher.recruitmentmanager.object.request;
 
+import fpt.com.fresher.recruitmentmanager.object.entity.Role;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import java.util.Set;
 
 @Data
 @Getter
@@ -20,6 +22,8 @@ public class UserRequest {
     private String email;
 
     private String password;
+
+    private Set<Role> roles;
 
 
 }

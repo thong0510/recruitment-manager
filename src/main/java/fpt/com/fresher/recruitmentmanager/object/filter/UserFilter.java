@@ -20,8 +20,6 @@ public class UserFilter {
 
     private String email;
 
-    private String password;
-
     private Pagination pagination = new Pagination(10);
 
 }
