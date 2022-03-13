@@ -1,13 +1,16 @@
 package fpt.com.fresher.recruitmentmanager.controller;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HelloController {
 
-    @GetMapping("/hello")
+    @GetMapping("/")
     public String hello() {
-        return "hello";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return "common/Home";
     }
 }

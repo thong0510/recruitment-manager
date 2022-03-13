@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@1.24.3/dist/full.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css" />
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+</head>
+<body>
+<!-- Header -->
+<div th:replace="fragments/_Header :: header"></div>
+
+<!-- Form Login -->
+<!-- Form Login -->
+<div class="bg-white flex">
+    <div class="flex-col flex ml-auto mr-auto items-center lg:w-2/3 md:w-3/5 lg:mx-auto" style="min-width: 540px; max-width: 800px;">
+        <h1 class="font-bold text-2xl my-4 text-white"> Login </h1>
+
+        <form id="login-form" th:action="@{/auth/login}" method="post" class="mt-2 flex flex-col lg:w-1/2 w-8/12">
+
+            <div>
+                <h1 class="text-3xl justify-left border-b-2 pb-6 flex flex-wrap items-stretch w-full mb-4 relative h-15 bg-white items-center rounded mb-6 pr-10">Login to your account !</h1>
+            </div>
+
+            <th:block th:if="${info != null}">
+                <div class="alert shadow-lg alert-info my-2">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current flex-shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span class="ml-5" th:utext="${info}"></span>
+                    </div>
+                </div>
+            </th:block>
+
+            <th:block th:if="${error != null}">
+                <div class="alert shadow-lg alert-error my-2">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span class="ml-5" th:utext="${error}"></span>
+                    </div>
+                </div>
+            </th:block>
+
+            <div
+                    class="flex flex-wrap items-stretch w-full mb-4 relative h-15 bg-white items-center rounded mb-6 pr-10 border border-b-2">
+                <div class="flex -mr-px justify-center w-15 p-4">
+                        <span
+                                class="flex items-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
+                                <img width="30px" style="margin-bottom:3px; margin-right:0px" alt="Google sign-in"
+                                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+
+                        </span>
+                </div>
+                <a class="flex -mr-px justify-center w-15 pt-4 pb-4 text-xl font-semibold" th:href="@{http://localhost:8080/oauth2/authorization/google}">Continue with Google</a>
+            </div>
+
+            <div
+                    class="flex flex-wrap items-stretch w-full mb-4 relative h-15 bg-white items-center rounded mb-6 pr-10 border border-b-2 input-group">
+                <div class="flex -mr-px justify-center w-15 p-4">
+                        <span
+                                class="flex items-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
+                            <i class="fas fa-user"></i>
+                        </span>
+                </div>
+                <input type="text"
+                       class="flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                       placeholder="Username" name="username" rules="required|minlength:2|maxlength:50"/>
+            </div>
+
+            <div class="flex flex-wrap items-stretch w-full mb-4 relative h-15 bg-white items-center rounded mb-6 pr-10 border  border-b-2 input-group">
+                <div class="flex -mr-px justify-center w-15 p-4">
+                        <span
+                                class="flex items-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                </div>
+                <input type="password"
+                       class="flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                       placeholder="Password" name="password" rules="required|minlength:6|maxlength:80" />
+            </div>
+
+            <div
+                    class="flex flex-wrap items-stretch w-full mb-4 relative h-15 bg-white items-center rounded pr-10">
+                <div class="flex -mr-px justify-center w-15 p-4">
+                    <input type="checkbox" style="width: 30px; height: 30px;">
+                </div>
+                <span class="flex -mr-px justify-center w-15 p-4 text-2xl">Remember me</span>
+            </div>
+
+
+            <button type="submit"
+                    class="bg-blue-400 py-4 text-center px-17 md:px-12 md:py-4 text-white rounded leading-tight text-xl md:text-base font-sans mt-4 mb-5
+                    hover:bg-blue-700 focus:outline-none duration-100 ease-in-out">
+                Login
+            </button>
+
+            <div class="flex -mr-px justify-center w-15 text-2xl mb-3" >Or <a th:href="@{/auth/forgot-password}" class="pl-2" style="text-decoration: underline; color: rgb(21, 167, 224); cursor: pointer;">Forgot Password ?</a></div>
+            <div class="flex -mr-px justify-center w-15 text-2xl" >Don't have an account ? <a th:href="@{/auth/signup}" class="pl-2" style="text-decoration: underline; color: rgb(21, 167, 224); cursor: pointer;">Sign up</a></div>
+        </form>
+    </div>
+</div>
+
+<!-- Footer -->
+<div th:replace="fragments/_FooterFix"></div>
+
+<script th:src="@{/resources/js/validator.js}"></script>
+<script>
+    const formValidator = new FormValidator("#login-form", {
+        formGroup: "input-group",
+        errorMessages: {
+            "username": {
+                required: "Username must not be blank",
+                minlength: "Username must be at least 2 characters long",
+                maxlength: "Username must be at most 50 characters long",
+            },
+            "password" : {
+                required: "Password must not be blank",
+                minlength: "Password must be at least 6 characters long",
+                maxlength: "Password must be at most 80 characters long",
+            }
+        },
+    });
+</script>
+
+</body>
+</html>

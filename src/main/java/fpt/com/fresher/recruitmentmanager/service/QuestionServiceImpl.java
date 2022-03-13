@@ -1,20 +1,19 @@
 package fpt.com.fresher.recruitmentmanager.service;
 
 import fpt.com.fresher.recruitmentmanager.object.entity.Questions;
-import fpt.com.fresher.recruitmentmanager.object.entity.Skills;
 import fpt.com.fresher.recruitmentmanager.object.filter.QuestionFilter;
 import fpt.com.fresher.recruitmentmanager.object.mapper.QuestionMapper;
 import fpt.com.fresher.recruitmentmanager.object.request.QuestionRequest;
 import fpt.com.fresher.recruitmentmanager.repository.QuestionRepository;
 import fpt.com.fresher.recruitmentmanager.repository.spec.QuestionSpecification;
-import fpt.com.fresher.recruitmentmanager.repository.spec.SkillSpecification;
+import fpt.com.fresher.recruitmentmanager.service.interfaces.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
-public class QuestionServiceImpl implements QuestionService{
+public class QuestionServiceImpl implements QuestionService {
 
     @Autowired
     QuestionRepository questionRepository;

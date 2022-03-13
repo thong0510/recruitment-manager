@@ -8,10 +8,11 @@ import fpt.com.fresher.recruitmentmanager.object.mapper.SkillMapper;
 import fpt.com.fresher.recruitmentmanager.object.request.CandidateRequest;
 import fpt.com.fresher.recruitmentmanager.object.response.CandidateResponse;
 import fpt.com.fresher.recruitmentmanager.object.mapper.CandidateMapper;
-import fpt.com.fresher.recruitmentmanager.object.response.SkillResponse;
 import fpt.com.fresher.recruitmentmanager.repository.CandidateRepository;
 import fpt.com.fresher.recruitmentmanager.repository.SkillCandidateRepository;
 import fpt.com.fresher.recruitmentmanager.repository.spec.CandidateSpecification;
+import fpt.com.fresher.recruitmentmanager.service.interfaces.CandidateService;
+import fpt.com.fresher.recruitmentmanager.service.interfaces.SkillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -124,12 +125,12 @@ public class CandidateServiceImpl implements CandidateService {
         Set<SkillCandidate> listOfSkillCandidate = new HashSet<>();
 
         for (Long id : requestBody.getListOfSkill()) {
-            SkillResponse skillResponse = skillService.findOne(id);
+            Skills skills = skillService.findOneSkills(id);
 
             SkillCandidate skillCandidate = SkillCandidate
                                                         .builder()
                                                         .candidates(candidate)
-                                                        .skills(skillMapper.skillResponseToEntity(skillResponse))
+                                                        .skills(skills)
                                                         .build();
             listOfSkillCandidate.add(skillCandidate);
         }

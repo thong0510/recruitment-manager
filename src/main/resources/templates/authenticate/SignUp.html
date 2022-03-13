@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@1.24.3/dist/full.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css" />
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/_Header :: header"></div>
+<!-- Form Login -->
+<div class="bg-white flex" style="margin-bottom: 70px">
+    <div class="flex-col flex ml-auto mr-auto items-center lg:w-2/3 md:w-3/5">
+        <h1 class="font-bold text-2xl my-4 text-white"> Login </h1>
+        <form id="signup-form" th:action="@{/auth/signup}" method="post" class="mt-2 flex flex-col lg:w-1/2 w-8/12" th:object="${user}">
+
+            <div>
+                <h1
+                        class="text-4xl justify-left border-b-2 pb-6 flex flex-wrap items-stretch w-full mb-4 relative h-15 bg-white items-center rounded mb-6 pr-10">
+                    Sign Up And Start !</h1>
+            </div>
+            <th:block th:if="${info != null}">
+                <div class="alert shadow-lg alert-info my-2">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current flex-shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span class="ml-5" th:utext="${info}"></span>
+                    </div>
+                </div>
+            </th:block>
+
+            <th:block th:if="${error != null}">
+                <div class="alert shadow-lg alert-error my-2">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span class="ml-5" th:utext="${error}"></span>
+                    </div>
+                </div>
+            </th:block>
+
+            <div
+                    class="flex flex-wrap items-stretch w-full mb-4 relative h-15 bg-white items-center rounded mb-6 pr-10 border border-b-2 input-group">
+                <div class="flex -mr-px justify-center w-15 p-4">
+                        <span
+                                class="flex items-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
+                            <i class="far fa-user"></i>
+                        </span>
+                </div>
+                <input type="text"
+                       class="flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                       placeholder="User Name" th:field="*{userName}" rules="required|minlength:2|maxlength:50" />
+            </div>
+
+            <div
+                    class="flex flex-wrap items-stretch w-full mb-4 relative h-15 bg-white items-center rounded mb-6 pr-10 border border-b-2 input-group">
+                <div class="flex -mr-px justify-center w-15 p-4">
+                        <span
+                                class="flex items-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
+                            <i class="far fa-user"></i>
+                        </span>
+                </div>
+                <input type="text"
+                       class="flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                       placeholder="Full Name" th:field="*{fullName}" rules="required|minlength:2|maxlength:50|fullname"/>
+            </div>
+
+            <div
+                    class="flex flex-wrap items-stretch w-full mb-4 relative h-15 bg-white items-center rounded mb-6 pr-10 border border-b-2 input-group">
+                <div class="flex -mr-px justify-center w-15 p-4">
+                        <span
+                                class="flex items-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
+                            <i class="far fa-envelope"></i>
+                        </span>
+                </div>
+                <input type="text"
+                       class="flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                       placeholder="Email" th:field="*{email}" rules="required|minlength:2|maxlength:100|email"/>
+            </div>
+
+            <div
+                    class="flex flex-wrap items-stretch w-full mb-4 relative h-15 bg-white items-center rounded mb-6 pr-10 border border-b-2 input-group">
+                <div class="flex -mr-px justify-center w-15 p-4">
+                        <span
+                                class="flex items-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
+                            <i class="fa fa-phone"></i>
+                        </span>
+                </div>
+                <input type="text"
+                       class="flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                       placeholder="Phone" th:field="*{phone}" rules="required|minlength:2|maxlength:100|email"/>
+            </div>
+
+            <div
+                    class="flex flex-wrap items-stretch w-full mb-4 relative h-15 bg-white items-center rounded mb-6 pr-10 border  border-b-2 input-group">
+                <div class="flex -mr-px justify-center w-15 p-4">
+                        <span
+                                class="flex items-center leading-normal bg-white px-3 border-0 rounded rounded-r-none text-2xl text-gray-600">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                </div>
+                <input type="password"
+                       class="flex-shrink flex-grow flex-auto leading-normal w-px flex-1 border-0 h-10 border-grey-light rounded rounded-l-none px-3 self-center relative  font-roboto text-xl outline-none"
+                       placeholder="Password" th:field="*{password}" rules="required|minlength:6|maxlength:80"/>
+            </div>
+
+            <div class="flex flex-wrap items-stretch w-full relative h-15 bg-white items-center rounded pr-10">
+                <div class="flex -mr-px justify-center items-center p-4 w-full">
+                    <input type="checkbox" style="width: 30px; height: 30px; ">
+                    <span class="flex -mr-px justify-center pl-5 text-md">Yes, I want to get the most out of Brand by receiving emails
+                                                with quiz results!</span>
+
+                </div>
+            </div>
+
+
+            <button type="submit" class="bg-blue-400 py-4 text-center px-17 md:px-12 md:py-4 text-white rounded leading-tight text-xl md:text-base font-sans mt-4 mb-5
+                    hover:bg-blue-700 focus:outline-none duration-100 ease-in-out">
+                SIGN UP
+            </button>
+
+            <div class="flex -mr-px justify-center w-15 text-xl">Already have an account ? <a th:href="@{/auth/login}" class="pl-2"
+                                                                                              style="text-decoration: underline; color: rgb(21, 167, 224); cursor: pointer;">Login</a></div>
+        </form>
+    </div>
+</div>
+<!-- Footer -->
+<div th:replace="fragments/_Footer"></div>
+
+<script th:src="@{/resources/js/validator.js}"></script>
+<script>
+    const formValidator = new FormValidator("#signup-form", {
+        formGroup: "input-group",
+        errorMessages: {
+            "textFullName": {
+                required: "Fullname must not be blank",
+                minlength: "Fullname must be at least 2 characters long",
+                maxlength: "Fullname must be at most 50 characters long",
+                fullname: "Please enter your correct fullname (must have at least 2 words)"
+            },
+            "username": {
+                required: "Username must not be blank",
+                minlength: "Username must be at least 2 characters long",
+                maxlength: "Username must be at most 50 characters long",
+            },
+            "email": {
+                required: "Email must not be blank",
+                minlength: "Email must be at least 2 characters long",
+                maxlength: "Email must be at most 100 characters long",
+                email: "Please input your correct email address"
+            },
+            "password" : {
+                required: "Password must not be blank",
+                minlength: "Password must be at least 6 characters long",
+                maxlength: "Password must be at most 80 characters long",
+            }
+        },
+    });
+</script>
+
+</body>
+</html>

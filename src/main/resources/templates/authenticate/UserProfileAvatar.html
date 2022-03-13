@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Avatar</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@1.24.3/dist/full.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
+
+    <style>
+        .menu li>:where(a:active),
+        .menu li>:where(button:active) {
+            background-color: #d9f3fe;
+            color: black;
+        }
+    </style>
+</head>
+
+<body>
+<div th:replace="fragments/_Header :: header"></div>
+
+<main class="w-10/12 mx-auto">
+
+    <!-- START CARD -->
+    <div class="card text-center shadow-2xl my-10">
+        <div class="card-body">
+
+            <!-- START MENU -->
+            <div class="rounded-lg shadow bg-base-200 drawer drawer-mobile h-full">
+                <input id="my-drawer-2" type="checkbox" class="drawer-toggle">
+                <div class="drawer-content">
+                    <!-- START ALERT -->
+                    <div class="alert alert-info w-full rounded-none md:flex-col justify-center">
+                        <label for="my-drawer-2" class=" btn btn-sm btn-primary drawer-button lg:hidden w-3/12">open menu</label>
+                        <label class="font-semibold text-2xl">Photo</label>
+                        <label class="text-gray-400">Add a nice photo of yourself to your profile</label>
+                    </div>
+                    <!-- END ALERT -->
+
+                    <form id="profile-form" th:action="@{/auth/profile/update/avatar}" method="post" enctype="multipart/form-data">
+                        <div class="border-b-2 py-4 border-gray-200">
+                            <div class="md:w-8/12 w-10/12 mx-auto text-left">
+                                <p class="font-bold">Image preview</p>
+
+                                <div class="text-green-700" th:utext="${successMessage}"></div>
+                                <div class="text-red-700" th:utext="${errorMessage}"></div>
+
+                                <figure class="mt-3 mb-10">
+                                    <img id="preview-image" src="https://mntech.com.vn/common/images/noimg64.png" class="rounded-xl h-60">
+                                </figure>
+
+                                <p class="font-bold">Add/Change image:</p>
+
+                                <div class="form-control pt-2 input-group">
+                                    <div class="relative">
+                                        <input type="file" name="imageFile" id="inputFile" style="display: none;" accept="image/*"
+                                               onchange="showPreviewImage(event);" rules="required">
+                                        <input type="text" id="file-select" class="w-full pr-16 input input-primary input-bordered" value="No file selected" readonly>
+                                        <button type="button" class="absolute top-0 right-0 rounded-l-none btn btn-primary" onclick="document.getElementById('inputFile').click()">Upload</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="py-2 flex justify-center">
+                            <button class="btn bg-blue-400 border-0 text-white" type="submit">Save</button>
+                        </div>
+                    </form>
+
+                </div>
+
+                <div th:replace="fragments/_UserProfileMenu"></div>
+            </div>
+            <!-- END MENU -->
+
+        </div>
+    </div>
+
+    <!-- END CARD -->
+
+</main>
+
+<div th:replace="fragments/_FooterFix"></div>
+
+<script th:src="@{/resources/js/validator.js}"></script>
+
+<script>
+    function showPreviewImage(event) {
+        if (event.target.files.length > 0) {
+            var input = document.getElementById("file-select");
+            input.value = "Image selected";
+            var src = URL.createObjectURL(event.target.files[0]);
+            var preview = document.getElementById("preview-image");
+            preview.src = src;
+            preview.style.display = "block";
+        }
+    }
+
+    const formValidator = new FormValidator("#profile-form", {
+        formGroup: "input-group",
+        errorMessages: {
+            "imageFile": {
+                required: "Please select an image file",
+            }
+        },
+    });
+</script>
+</body>
+
+</html>

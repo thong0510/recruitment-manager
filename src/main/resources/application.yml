@@ -1,4 +1,48 @@
-cloudinary:
-  cloud-name: hieu2895
-  api-key: 483197334629634
-  api-secret: gzIZuUZlpeW0F7RjFoR1IT3Enag
+
+server:
+  servlet:
+    context-path: /
+  port: 8080
+springdoc:
+  api-docs:
+    path: /
+spring:
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  redis:
+    client-name: master
+    password: fpt@123456
+    url: redis://localhost:5003
+  data:
+    rest:
+      base-path: /api
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: matkhau1995
+    url: jdbc:mysql://localhost:3306/recruitmentManager?createDatabaseIfNotExist=true
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: 1011455872750-lnsck8sej8rbj7o39bohbotek1mpb7dp.apps.googleusercontent.com
+            clientSecret: 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
+            scope:
+              - email
+              - profile
+  email:
+    name: 13145087@student.hcmute.edu.vn
+    password: matKHAU1995@
+  cloudinary:
+    cloud-name: hieu2895
+    api-key: 483197334629634
+    api-secret: gzIZuUZlpeW0F7RjFoR1IT3Enag

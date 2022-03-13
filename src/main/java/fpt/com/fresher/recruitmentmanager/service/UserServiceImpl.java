@@ -1,35 +1,69 @@
 package fpt.com.fresher.recruitmentmanager.service;
 
-import fpt.com.fresher.recruitmentmanager.object.entity.Candidates;
+import fpt.com.fresher.recruitmentmanager.object.contant.enums.SystemRole;
 import fpt.com.fresher.recruitmentmanager.object.entity.Role;
-import fpt.com.fresher.recruitmentmanager.object.entity.SkillCandidate;
 import fpt.com.fresher.recruitmentmanager.object.entity.Users;
+import fpt.com.fresher.recruitmentmanager.object.exception.TokenExpiredException;
 import fpt.com.fresher.recruitmentmanager.object.filter.UserFilter;
 import fpt.com.fresher.recruitmentmanager.object.mapper.UserMapper;
+import fpt.com.fresher.recruitmentmanager.object.request.ResetPasswordRequest;
 import fpt.com.fresher.recruitmentmanager.object.request.UserRequest;
-import fpt.com.fresher.recruitmentmanager.object.response.SkillResponse;
 import fpt.com.fresher.recruitmentmanager.object.response.UserResponse;
 import fpt.com.fresher.recruitmentmanager.repository.RoleRepository;
 import fpt.com.fresher.recruitmentmanager.repository.UserRepository;
 import fpt.com.fresher.recruitmentmanager.repository.spec.UserSpecification;
+import fpt.com.fresher.recruitmentmanager.service.interfaces.UserService;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.redisson.api.RMapCache;
+import org.redisson.api.RedissonClient;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
-@RequiredArgsConstructor
 @Transactional
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final RoleRepository roleRepository;
+    private final RedissonClient redissonClient;
+    private final PasswordEncoder passwordEncoder;
+
+    public UserServiceImpl(UserRepository userRepository,
+                           UserMapper userMapper,
+                           RoleRepository roleRepository,
+                           RedissonClient redissonClient,
+                           @Lazy PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.userMapper = userMapper;
+        this.roleRepository = roleRepository;
+        this.redissonClient = redissonClient;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    private RMapCache<String, String> userEmailMap;
+    private final TimeUnit timeUnit = TimeUnit.MINUTES;
+
+    @PostConstruct
+    private void init() {
+        userEmailMap = redissonClient.getMapCache("USER_EMAIL_MAP");
+    }
 
     @Override
     public Page<UserResponse> getAllUser(UserFilter filter) {
@@ -62,7 +96,7 @@ public class UserServiceImpl implements UserService{
             Set<Role> roles1 = new HashSet<>();
 
             for (String r : request.getListRole()) {
-                Role role = roleRepository.findByName(r);
+                Role role = roleRepository.findByRole(SystemRole.valueOf(r));
                 roles1.add(role);
             }
 
@@ -87,15 +121,76 @@ public class UserServiceImpl implements UserService{
 
         Set<Role> roles = new HashSet<>();
 
-        for (String r : request.getListRole()) {
-            Role role = roleRepository.findByName(r);
-            roles.add(role);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
+            roles.add(roleRepository.findByRole(SystemRole.USER));
+        } else {
+            for (String r : request.getListRole()) {
+                Role role = roleRepository.findByRole(SystemRole.valueOf(r));
+                roles.add(role);
+            }
         }
-
-
 
         user.setRoles(roles);
 
         userRepository.save(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return null;
+    }
+
+    @Override
+    public boolean validateConcurrentUsername(String username) {
+        return !userRepository.existsByUserName(username);
+    }
+
+    @Override
+    public boolean validateConcurrentPhone(String phone) {
+        return !userRepository.existsByPhone(phone);
+    }
+
+    @Override
+    public boolean validateConcurrentEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Override
+    public String generateForgotPasswordToken(String email) {
+
+        if (validateConcurrentEmail(email)) {
+            String token = UUID.randomUUID().toString();
+            userEmailMap.fastPut(token, email, 15, timeUnit);
+            return token;
+        }
+        return "";
+
+    }
+
+    @Override
+    public Boolean resetPassword(ResetPasswordRequest request) throws TokenExpiredException {
+
+        String email = verifyExpirationResetPassword(request.getToken());
+        Optional<Users> user = userRepository.findByEmail(email);
+
+        if (user.isPresent()) {
+
+            user.get().setPassword(passwordEncoder.encode(request.getPassword()));
+            userRepository.save(user.get());
+
+            userEmailMap.remove(request.getToken());
+        }
+        return true;
+    }
+
+    private String verifyExpirationResetPassword(String token) throws TokenExpiredException {
+        if (userEmailMap.remainTimeToLive(token) > 0) {
+            return userEmailMap.get(token);
+        } else {
+            userEmailMap.remove(token);
+            throw new TokenExpiredException("Refresh token has been expired");
+        }
     }
 }

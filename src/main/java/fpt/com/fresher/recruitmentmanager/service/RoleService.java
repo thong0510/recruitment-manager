@@ -20,17 +20,16 @@ public class RoleService {
 
     @PostConstruct
     private void init() {
-        if (roleRepository.count()==0) {
-            List<Role> systemRoles = new ArrayList<>(Arrays.asList(
-                    new Role(SystemRole.ADMIN.getValue()),
-                    new Role(SystemRole.HR.getValue()),
-                    new Role(SystemRole.INTERVIEWER.getValue()),
-                    new Role(SystemRole.USER.getValue())
-            ));
+        if (roleRepository.count() == 0) {
 
+            List<Role> systemRoles = new ArrayList<>(Arrays.asList(
+                    new Role(SystemRole.ADMIN),
+                    new Role(SystemRole.HR),
+                    new Role(SystemRole.INTERVIEWER),
+                    new Role(SystemRole.USER)
+            ));
             roleRepository.saveAll(systemRoles);
         }
-
 
     }
 }

@@ -1,4 +1,4 @@
-package fpt.com.fresher.recruitmentmanager.service;
+package fpt.com.fresher.recruitmentmanager.service.interfaces;
 
 import fpt.com.fresher.recruitmentmanager.object.entity.Candidates;
 import fpt.com.fresher.recruitmentmanager.object.filter.CandidateFilter;

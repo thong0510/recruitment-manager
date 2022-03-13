@@ -1,26 +1,20 @@
 package fpt.com.fresher.recruitmentmanager.controller;
 
-import fpt.com.fresher.recruitmentmanager.object.contant.enums.CandidateStatus;
-import fpt.com.fresher.recruitmentmanager.object.entity.Candidates;
-import fpt.com.fresher.recruitmentmanager.object.entity.Skills;
 import fpt.com.fresher.recruitmentmanager.object.filter.CandidateFilter;
 import fpt.com.fresher.recruitmentmanager.object.filter.SkillFilter;
-import fpt.com.fresher.recruitmentmanager.object.mapper.CandidateMapper;
-import fpt.com.fresher.recruitmentmanager.object.mapper.SkillMapper;
 import fpt.com.fresher.recruitmentmanager.object.model.Pagination;
 import fpt.com.fresher.recruitmentmanager.object.model.Sorting;
 import fpt.com.fresher.recruitmentmanager.object.request.CandidateRequest;
 import fpt.com.fresher.recruitmentmanager.object.response.CandidateResponse;
 import fpt.com.fresher.recruitmentmanager.object.response.SkillResponse;
-import fpt.com.fresher.recruitmentmanager.service.CandidateService;
-import fpt.com.fresher.recruitmentmanager.service.SkillService;
+import fpt.com.fresher.recruitmentmanager.service.interfaces.CandidateService;
+import fpt.com.fresher.recruitmentmanager.service.interfaces.SkillService;
 import fpt.com.fresher.recruitmentmanager.utils.SessionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,7 +25,6 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -39,7 +32,6 @@ public class CandidateController {
 
     private final CandidateService candidateService;
     private final SkillService skillService;
-    private final SkillMapper skillMapper;
 
     @GetMapping("/hr/list-potential-candidate")
     public String getCandidatesList(Model model,
@@ -86,14 +78,17 @@ public class CandidateController {
 
     @GetMapping("/hr/info-potential-candidate")
     public String detailCandidates(Model model, @RequestParam(name = "id") Long id) {
+
         CandidateResponse candidateResponse = candidateService.findOne(id);
-        model.addAttribute("candidate", candidateResponse);
+
         List<Long> list = candidateResponse.getListOfSkill();
         List<String> listSkill = new ArrayList<>();
+
         for (Long a: list) {
             listSkill.add(skillService.findOne(a).getSkillName());
         }
         model.addAttribute("list", listSkill);
+        model.addAttribute("candidate", candidateResponse);
 
         return "/hr/DetailCandidate";
     }
