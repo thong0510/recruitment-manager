@@ -21,11 +21,18 @@ public class Recruitment extends BaseEntity {
     @Column(name = "recruitment_id")
     private Long recruitmentId;
 
+    @Column
+    private int quantity;
+
     @Min(value = 0, message = MessageConst.INVALID_SALARY)
     @Column
-    private float salary;
+    private float fromSalary;
 
-    @Column(name = "date_start", nullable = false)
+    @Min(value = 0, message = MessageConst.INVALID_SALARY)
+    @Column
+    private float toSalary;
+
+    @Column(name = "start_date", nullable = false)
     @DateTimeFormat(pattern = CommonConst.FORMAT_DATE)
     @Past(message = MessageConst.INVALID_DATE)
     private Date dateStart;
@@ -34,6 +41,10 @@ public class Recruitment extends BaseEntity {
     @DateTimeFormat(pattern = CommonConst.FORMAT_DATE)
     @Past(message = MessageConst.INVALID_DATE)
     private Date dateEnd;
+
+    @ManyToOne
+    @JoinColumn(name = "major_id", referencedColumnName = "major_id")
+    private Major major;
 
     @NotNull(message = MessageConst.INVALID_VACANCIES_NULL)
     @ManyToOne
