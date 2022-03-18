@@ -1,0 +1,37 @@
+<div th:fragment="slider-bar">
+    <div class="drawer-side">
+        <label for="my-drawer-2" class="drawer-overlay"></label>
+        <ul class="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
+            <li class="hover-bordered">
+                <a>Dashboard</a>
+            </li>
+            <li th:class="${#httpServletRequest.requestURI == '/hr/list-potential-candidate' ? 'bordered' : 'hover-bordered'}">
+                <a th:href="@{/hr/list-potential-candidate}">Candidate management</a>
+            </li>
+
+            <li th:class="${#httpServletRequest.requestURI == '/admin/list-user' ? 'bordered' : 'hover-bordered'}">
+                <a th:href="@{/admin/list-user}">User management</a>
+            </li>
+
+            <li th:class="${#httpServletRequest.requestURI == '/hr/list-major' ? 'bordered' : 'hover-bordered'}" class="hover-bordered">
+                <a th:href="@{/hr/list-major}">Major management</a>
+            </li>
+
+            <li th:class="${#httpServletRequest.requestURI == '/hr/list-vacancies' ? 'bordered' : 'hover-bordered'}" class="hover-bordered">
+                <a th:href="@{/hr/list-vacancies}">Vacancies management</a>
+            </li>
+
+            <li th:class="${#httpServletRequest.requestURI == '/hr/list-skill' ? 'bordered' : 'hover-bordered'}" class="hover-bordered">
+                <a th:href="@{/hr/list-skill}">Skill management</a>
+            </li>
+
+            <li th:class="${#httpServletRequest.requestURI == '/hr/list' ? 'bordered' : 'hover-bordered'}" class="hover-bordered">
+                <a >Recruitment management</a>
+            </li>
+
+            <li class="hover-bordered">
+                <a>Statistics</a>
+            </li>
+        </ul>
+    </div>
+</div>

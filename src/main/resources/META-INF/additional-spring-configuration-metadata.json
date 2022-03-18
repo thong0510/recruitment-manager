@@ -1,0 +1,28 @@
+{
+  "properties": [
+    {
+      "name": "spring.email.name",
+      "type": "java.lang.String",
+      "description": "Description for spring.email.name."
+    },
+    {
+      "name": "spring.email.password",
+      "type": "java.lang.String",
+      "description": "Description for spring.email.password."
+    },
+    {
+      "name": "spring.cloudinary.cloud-name",
+      "type": "java.lang.String",
+      "description": "Description for spring.cloudinary.cloud-name."
+    },
+    {
+      "name": "spring.cloudinary.api-key",
+      "type": "java.lang.String",
+      "description": "Description for spring.cloudinary.api-key."
+    },
+    {
+      "name": "spring.cloudinary.api-secret",
+      "type": "java.lang.String",
+      "description": "Description for spring.cloudinary.api-secret."
+    },
+  ] }

@@ -26,4 +26,7 @@ public class CommonConst {
 
     public static final String HR_STATUS_DELETE_URL = "/hr/status/status-delete";
 
+    public static final String RESET_PASSWORD ="http://localhost:8080/auth/reset-password";
+
+
 }

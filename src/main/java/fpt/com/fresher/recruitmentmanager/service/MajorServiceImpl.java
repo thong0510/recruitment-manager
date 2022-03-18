@@ -7,8 +7,8 @@ import fpt.com.fresher.recruitmentmanager.object.request.MajorRequest;
 import fpt.com.fresher.recruitmentmanager.object.response.MajorResponse;
 import fpt.com.fresher.recruitmentmanager.repository.MajorRepository;
 import fpt.com.fresher.recruitmentmanager.repository.spec.MajorSpecification;
+import fpt.com.fresher.recruitmentmanager.service.interfaces.MajorService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -16,15 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class MajorServiceImpl implements MajorService{
+public class MajorServiceImpl implements MajorService {
 
     private final MajorRepository majorRepository;
 

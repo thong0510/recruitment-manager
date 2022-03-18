@@ -2,20 +2,16 @@ package fpt.com.fresher.recruitmentmanager.controller;
 
 import fpt.com.fresher.recruitmentmanager.object.filter.MajorDetailFilter;
 import fpt.com.fresher.recruitmentmanager.object.filter.MajorFilter;
-import fpt.com.fresher.recruitmentmanager.object.filter.SkillFilter;
 import fpt.com.fresher.recruitmentmanager.object.filter.VacanciesFilter;
 import fpt.com.fresher.recruitmentmanager.object.model.Pagination;
 import fpt.com.fresher.recruitmentmanager.object.model.Sorting;
-import fpt.com.fresher.recruitmentmanager.object.request.SkillRequest;
 import fpt.com.fresher.recruitmentmanager.object.request.VacanciesRequest;
 import fpt.com.fresher.recruitmentmanager.object.response.MajorDetailResponse;
 import fpt.com.fresher.recruitmentmanager.object.response.MajorResponse;
-import fpt.com.fresher.recruitmentmanager.object.response.SkillResponse;
 import fpt.com.fresher.recruitmentmanager.object.response.VacanciesResponse;
-import fpt.com.fresher.recruitmentmanager.service.MajorDetailService;
-import fpt.com.fresher.recruitmentmanager.service.MajorService;
-import fpt.com.fresher.recruitmentmanager.service.SkillService;
-import fpt.com.fresher.recruitmentmanager.service.VacanciesService;
+import fpt.com.fresher.recruitmentmanager.service.interfaces.MajorDetailService;
+import fpt.com.fresher.recruitmentmanager.service.interfaces.MajorService;
+import fpt.com.fresher.recruitmentmanager.service.interfaces.VacanciesService;
 import fpt.com.fresher.recruitmentmanager.utils.SessionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor

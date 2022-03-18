@@ -1,26 +1,36 @@
 package fpt.com.fresher.recruitmentmanager.object.mapper;
 
-import fpt.com.fresher.recruitmentmanager.object.entity.Skills;
 import fpt.com.fresher.recruitmentmanager.object.entity.Users;
-import fpt.com.fresher.recruitmentmanager.object.request.SkillRequest;
 import fpt.com.fresher.recruitmentmanager.object.request.UserRequest;
-import fpt.com.fresher.recruitmentmanager.object.response.SkillResponse;
 import fpt.com.fresher.recruitmentmanager.object.response.UserResponse;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
         unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface UserMapper {
+public abstract class UserMapper {
 
-    UserResponse entityToUserResponse(Users user);
+    @Autowired
+    @Lazy
+    private PasswordEncoder passwordEncoder;
 
-    Users userRequestToEntity(UserRequest request);
+    public abstract UserResponse entityToUserResponse(Users user);
 
-    Users userResponseToEntity(UserResponse response);
+    public abstract Users userRequestToEntity(UserRequest request);
 
-    void updateEntity(@MappingTarget Users users, UserRequest request);
+    public abstract Users userResponseToEntity(UserResponse response);
+
+    public abstract void updateEntity(@MappingTarget Users users, UserRequest request);
+
+    @AfterMapping
+    public void mappingReqPropsToEntity(@MappingTarget Users users, UserRequest request) {
+        users.setPassword(passwordEncoder.encode(request.getPassword()));
+    }
+
 }

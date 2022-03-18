@@ -1,6 +1,5 @@
 package fpt.com.fresher.recruitmentmanager.service;
 
-import fpt.com.fresher.recruitmentmanager.object.entity.Major;
 import fpt.com.fresher.recruitmentmanager.object.entity.Skills;
 import fpt.com.fresher.recruitmentmanager.object.filter.SkillFilter;
 import fpt.com.fresher.recruitmentmanager.object.mapper.SkillMapper;
@@ -8,6 +7,7 @@ import fpt.com.fresher.recruitmentmanager.object.request.SkillRequest;
 import fpt.com.fresher.recruitmentmanager.object.response.SkillResponse;
 import fpt.com.fresher.recruitmentmanager.repository.SkillRepository;
 import fpt.com.fresher.recruitmentmanager.repository.spec.SkillSpecification;
+import fpt.com.fresher.recruitmentmanager.service.interfaces.SkillService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,7 +21,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class SkillServiceImpl implements SkillService{
+public class SkillServiceImpl implements SkillService {
 
     private final SkillRepository skillRepository;
     private final SkillMapper skillMapper;

@@ -1,15 +1,11 @@
 package fpt.com.fresher.recruitmentmanager.controller;
 
-import fpt.com.fresher.recruitmentmanager.object.filter.MajorFilter;
 import fpt.com.fresher.recruitmentmanager.object.filter.SkillFilter;
 import fpt.com.fresher.recruitmentmanager.object.model.Pagination;
 import fpt.com.fresher.recruitmentmanager.object.model.Sorting;
-import fpt.com.fresher.recruitmentmanager.object.request.MajorRequest;
 import fpt.com.fresher.recruitmentmanager.object.request.SkillRequest;
-import fpt.com.fresher.recruitmentmanager.object.response.MajorResponse;
 import fpt.com.fresher.recruitmentmanager.object.response.SkillResponse;
-import fpt.com.fresher.recruitmentmanager.service.MajorService;
-import fpt.com.fresher.recruitmentmanager.service.SkillService;
+import fpt.com.fresher.recruitmentmanager.service.interfaces.SkillService;
 import fpt.com.fresher.recruitmentmanager.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
