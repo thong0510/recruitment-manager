@@ -22,5 +22,4 @@ public interface MajorDetailService {
 
     void createMajorDetail(MajorDetailRequest request);
 
-
 }

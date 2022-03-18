@@ -14,5 +14,5 @@ public class MajorDetailResponse {
 
     private String majorDetailName;
 
-    private Major major;
+    private MajorResponse major;
 }

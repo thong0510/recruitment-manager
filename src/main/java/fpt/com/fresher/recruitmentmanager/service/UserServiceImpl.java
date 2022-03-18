@@ -22,6 +22,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,11 +31,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -139,7 +143,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+        Optional<Users> user = userRepository.findByUserName(username);
+
+        if (user.isEmpty()) {
+            throw new UsernameNotFoundException("UserName Is Not Exits");
+        }
+
+        Collection<? extends GrantedAuthority> grantedAuthorities =
+                !ObjectUtils.isEmpty(user.get().getRoles())
+                        ? user.get().getRoles().stream().map(o ->
+                          new SimpleGrantedAuthority(o.getRole().getValue())).collect(Collectors.toList())
+                        : null;
+
+        return new org.springframework.security.core.userdetails.User(
+                user.get().getUserName(), user.get().getPassword(), grantedAuthorities
+        );
     }
 
     @Override

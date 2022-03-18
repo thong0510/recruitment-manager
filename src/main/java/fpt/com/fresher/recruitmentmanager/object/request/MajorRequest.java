@@ -20,5 +20,4 @@ public class MajorRequest {
 
     private Date updateDate;
 
-
 }

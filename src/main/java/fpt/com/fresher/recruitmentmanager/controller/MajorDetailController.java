@@ -36,7 +36,8 @@ public class MajorDetailController {
     @GetMapping("/hr/list-majorDetail")
     public String listMajorDetail(Model model,
                             @RequestParam(defaultValue = "1") Integer page,
-                            @RequestParam(defaultValue = "") String search) {
+                            @RequestParam(defaultValue = "") String search,
+                            @RequestParam(defaultValue = "") Long majorId) {
 
         Sorting sorting = new Sorting("majorDetailId", true);
         Pagination pagination = new Pagination(page - 1, 10, sorting);
@@ -45,6 +46,7 @@ public class MajorDetailController {
         MajorDetailFilter filter = MajorDetailFilter.builder()
                 .pagination(pagination)
                 .majorDetailName(search)
+                .majorId(majorId)
                 .build();
 
         Page<MajorDetailResponse> majorDetailResponses = majorDetailService.getAllMajorDetail(filter);

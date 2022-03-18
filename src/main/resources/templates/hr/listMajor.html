@@ -52,6 +52,7 @@
                                         <tr>
                                             <th>Major ID</th>
                                             <th>Major name</th>
+                                            <th>Details</th>
                                             <th>Activity</th>
                                         </tr>
                                     </thead>
@@ -61,6 +62,11 @@
 
                                             <td th:text="${major.majorName}" >12356688</td>
 
+                                            <td >
+                                                <a th:href="@{'/hr/list-majorDetail?majorId=' + ${major.majorId}}">
+                                                    <i class="fas fa-info-circle fa-lg cursor-pointer"></i>
+                                                </a>
+                                            </td>
                                             <td>
                                                 <div class="flex justify-start items-center">
                                                     <a th:href="@{'/hr/update-major?id=' + ${major.majorId}}"><i class="fas fa-edit mr-3 cursor-pointer"></i></a>
