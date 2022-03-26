@@ -1,4 +1,4 @@
-<div th:fragment="slider-bar">
+<div th:fragment="side-bar">
     <div class="drawer-side">
         <label for="my-drawer-2" class="drawer-overlay"></label>
         <ul class="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content">
@@ -25,8 +25,8 @@
                 <a th:href="@{/hr/list-skill}">Skill management</a>
             </li>
 
-            <li th:class="${#httpServletRequest.requestURI == '/hr/list' ? 'bordered' : 'hover-bordered'}" class="hover-bordered">
-                <a >Recruitment management</a>
+            <li th:class="${#httpServletRequest.requestURI == '/hr/list-recruitment' ? 'bordered' : 'hover-bordered'}" class="hover-bordered">
+                <a th:href="@{/hr/list-recruitment}">Recruitment management</a>
             </li>
 
             <li th:class="${#httpServletRequest.requestURI == '/hr/list-question' ? 'bordered' : 'hover-bordered'}" class="hover-bordered">

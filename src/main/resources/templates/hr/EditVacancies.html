@@ -105,7 +105,7 @@
         </nav>
     </div>
 
-    <div class=" shadow bg-base-200 drawer drawer-mobile " style="height: 91vh;">
+    <div class=" shadow bg-base-200 drawer drawer-mobile " style="height: 87vh;">
         <input id="my-drawer-2" type="checkbox" class="drawer-toggle">
 
         <div class="flex flex-col items-center drawer-content">
@@ -200,9 +200,11 @@
         </div>
 
         <!-- Slide bar-->
-        <div th:replace="fragments/_SliderBar :: slider-bar"></div>
+        <div th:replace="fragments/_SideBar :: side-bar"></div>
 
     </div>
+
+    <div th:replace="fragments/_Footer"></div>
     <script>
         function loadDataByMajorId(value) {
             console.log(value)

@@ -105,7 +105,7 @@
         </nav>
     </div>
 
-    <div class=" shadow bg-base-200 drawer drawer-mobile " style="height: 91vh;">
+    <div class=" shadow bg-base-200 drawer drawer-mobile " style="height: 87vh;">
         <input id="my-drawer-2" type="checkbox" class="drawer-toggle">
 
         <div class="flex flex-col items-center drawer-content">
@@ -324,10 +324,12 @@
             <!-- END MAIN -->
         </div>
 
-        <!-- Slide bar-->
-        <div th:replace="fragments/_SliderBar :: slider-bar"></div>
+        <!-- Side bar-->
+        <div th:replace="fragments/_SideBar :: side-bar"></div>
 
     </div>
+
+    <div th:replace="fragments/_Footer"></div>
 
     <script th:src="@{/static/js/common.js}"></script>
     <script th:src="@{/static/js/dropdown1.js}"></script>
