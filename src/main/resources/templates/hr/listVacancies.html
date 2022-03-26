@@ -198,7 +198,7 @@
                                     <span class="label-text font-bold">Major</span>
                                 </label>
 
-                                <select x-cloak  th:field="*{major}" onchange="loadDataByMajorId(this.value)">
+                                <select x-cloak  th:field="*{majorId}" onchange="loadDataByMajorId(this.value)">
                                     <option th:each="major : ${listMajor}"
                                             th:value="${major.majorId}"
                                             th:utext="${major.majorName}">
@@ -211,8 +211,7 @@
                                     <span class="label-text font-bold">Major Detail</span>
                                 </label>
 
-                                <select id="loadDataById" x-cloak disabled>
-                                    <option > Select Major Detail</option>
+                                <select th:field="*{majorDetailId}" x-cloak disabled>
                                 </select>
                             </div>
 
@@ -291,8 +290,8 @@
                             ${item.majorDetailName}
                         </option>`
                     ))
-                    document.getElementById("loadDataById").disabled = false
-                    document.getElementById("loadDataById").innerHTML = listMajorDetail.join('')
+                    document.getElementById("majorDetailId").disabled = false
+                    document.getElementById("majorDetailId").innerHTML = listMajorDetail.join('')
                 }
 
             } catch (error) {

@@ -2,7 +2,7 @@ package fpt.com.fresher.recruitmentmanager.object.entity;
 
 
 import fpt.com.fresher.recruitmentmanager.object.contant.MessageConst;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -11,7 +11,11 @@ import javax.validation.constraints.NotNull;
 @Table(
         uniqueConstraints = {@UniqueConstraint(columnNames = {"skill_id", "recruitment_id"})}
 )
-@Data
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SkillRecruitment extends BaseEntity {
 
     @Id

@@ -123,21 +123,21 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr th:each="recruitment : ${listRecruitment.getContent()}">
+                                        <tr th:each="r : ${listRecruitment.getContent()}">
 
-                                            <td th:text="${recruitment.recruitmentId}">Id</td>
+                                            <td th:text="${r.recruitmentId}">Id</td>
 
-                                            <td th:text="${recruitment.major.majorName}" >Major Name</td>
-                                            <td th:text="${recruitment.vacancies.majorDetail}">Vacancies</td>
-                                            <td th:text="${recruitment.quantity}">Vacancies</td>
+                                            <td th:text="${r.major.majorName}" >Major Name</td>
+                                            <td th:text="${r.vacancies.majorDetail.majorDetailName}">Vacancies</td>
+                                            <td th:text="${r.quantity}">Vacancies</td>
                                             <td>
-                                                <a th:href="@{'/hr/info-recruitment=' + ${recruitment.recruitmentId}}"><i class="fas fa-info-circle fa-lg cursor-pointer"></i></a>
+                                                <a th:href="@{'/hr/info-recruitment=' + ${r.recruitmentId}}"><i class="fas fa-info-circle fa-lg cursor-pointer"></i></a>
 
                                             </td>
 
                                             <td>
                                                 <div class="flex justify-start items-center">
-                                                    <a th:href="@{'/hr/update-recruitment?id=' + ${recruitment.recruitmentId}}"><i class="fas fa-edit mr-3 cursor-pointer"></i></a>
+                                                    <a th:href="@{'/hr/update-recruitment?id=' + ${r.recruitmentId}}"><i class="fas fa-edit mr-3 cursor-pointer"></i></a>
 
                                                     <i class="fas fa-trash-alt cursor-pointer" th:attr="onclick=|openModal('delete-modal', '${recruitment.recruitmentId}')|"></i>
                                                 </div>
@@ -248,7 +248,7 @@
                              <label class="label">
                                  <span class="label-text font-bold">Major:</span>
                              </label>
-                             <select class="select select-bordered select-primary w-full" th:field="*{major}">
+                             <select class="select select-bordered select-primary w-full" th:field="*{majorId}">
                                  <option th:each="major : ${listMajor}"
                                          th:value="${major.majorId}"
                                          th:utext="${major.majorName}">
@@ -260,7 +260,7 @@
                              <label class="label">
                                  <span class="label-text font-bold">Vacancies:</span>
                              </label>
-                             <select class="select select-bordered select-primary w-full" th:field="*{vacancies}">
+                             <select class="select select-bordered select-primary w-full" th:field="*{vacanciesId}">
                                  <option th:each="vacancies : ${listVacancies}"
                                          th:value="${vacancies.vacanciesId}"
                                          th:utext="${vacancies.majorDetail.majorDetailName}">
@@ -272,7 +272,7 @@
                              <label class="label">
                                  <span class="label-text font-bold">Amount:</span>
                              </label>
-                             <input type="number" id="quizName" min="0" class="input input-bordered">
+                             <input th:field="*{quantity}" type="number" min="0" class="input input-bordered">
                          </div>
 
                          <div class="form-control mb-3 flex justify-between flex-row">
@@ -280,14 +280,14 @@
                                  <label class="label">
                                      <span class="label-text font-bold">Start:</span>
                                  </label>
-                                 <input id="start-day" onchange="validateTime()" type="date" class="input input-bordered cursor-pointer">
+                                 <input  onchange="validateTime()" type="date" class="input input-bordered cursor-pointer">
                              </div>
 
                              <div class="flex flex-col w-6/12 ml-5">
                                  <label class="label">
                                      <span class="label-text font-bold">End:</span>
                                  </label>
-                                 <input id="end-day" type="date" disabled class="input input-bordered cursor-pointer">
+                                 <input  type="date" class="input input-bordered cursor-pointer">
                              </div>
 
                          </div>
@@ -308,17 +308,11 @@
                                  </style>
 
                                  <select x-cloak id="select">
-                                     <option value="1">Option 2</option>
-                                     <option value="2">Option 3</option>
-                                     <option value="3">Option 4</option>
-                                     <option value="4">Option 5</option>
-                                     <option value="4">Option 5</option>
-                                     <option value="4">Option 5</option>
-                                     <option value="4">Option 5</option>
-                                     <option value="4">Option 5</option>
-                                     <option value="4">Option 5</option>
+                                     <option th:each="skill : ${listSkill}"
+                                             th:value="${skill.skillId}"
+                                             th:utext="${skill.skillName}">
+                                     </option>
                                  </select>
-
                                  <div id="skills"></div>
 
                                  <div x-data="dropdownX()" x-init="loadOptions()" class="w-full flex justify-start items-center">
@@ -337,12 +331,11 @@
                                                                      </div>
                                                                      <div class="flex flex-auto flex-row-reverse">
                                                                          <div x-on:click="remove(index,option)">
-                                                                             <svg class="fill-current h-6 w-6 " role="button"
-                                                                                  viewBox="0 0 20 20">
+                                                                             <svg class="fill-current h-6 w-6 " role="button" viewBox="0 0 20 20">
                                                                                  <path d="M14.348,14.849c-0.469,0.469-1.229,0.469-1.697,0L10,11.819l-2.651,3.029c-0.469,0.469-1.229,0.469-1.697,0
-                                                                                                     c-0.469-0.469-0.469-1.229,0-1.697l2.758-3.15L5.651,6.849c-0.469-0.469-0.469-1.228,0-1.697s1.228-0.469,1.697,0L10,8.183
-                                                                                                     l2.651-3.031c0.469-0.469,1.228-0.469,1.697,0s0.469,1.229,0,1.697l-2.758,3.152l2.758,3.15
-                                                                                                     C14.817,13.62,14.817,14.38,14.348,14.849z" />
+                                                                         c-0.469-0.469-0.469-1.229,0-1.697l2.758-3.15L5.651,6.849c-0.469-0.469-0.469-1.228,0-1.697s1.228-0.469,1.697,0L10,8.183
+                                                                         l2.651-3.031c0.469-0.469,1.228-0.469,1.697,0s0.469,1.229,0,1.697l-2.758,3.152l2.758,3.15
+                                                                         C14.817,13.62,14.817,14.38,14.348,14.849z" />
                                                                              </svg>
 
                                                                          </div>
@@ -355,7 +348,6 @@
                                                                         x-bind:value="selectedValues()">
                                                              </div>
                                                          </div>
-
                                                          <div x-on:click="open"
                                                               class="text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-200 svelte-1l8159u">
 
@@ -363,8 +355,8 @@
                                                                      class="cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none">
                                                                  <svg version="1.1" class="fill-current h-4 w-4" viewBox="0 0 20 20">
                                                                      <path d="M17.418,6.109c0.272-0.268,0.709-0.268,0.979,0s0.271,0.701,0,0.969l-7.908,7.83
-                                                            c-0.27,0.268-0.707,0.268-0.979,0l-7.908-7.83c-0.27-0.268-0.27-0.701,0-0.969c0.271-0.268,0.709-0.268,0.979,0L10,13.25
-                                                            L17.418,6.109z" />
+                                c-0.27,0.268-0.707,0.268-0.979,0l-7.908-7.83c-0.27-0.268-0.27-0.701,0-0.969c0.271-0.268,0.709-0.268,0.979,0L10,13.25
+                                L17.418,6.109z" />
                                                                  </svg>
 
                                                              </button>
@@ -372,29 +364,12 @@
                                                                      class="cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none">
                                                                  <svg class="fill-current h-4 w-4" viewBox="0 0 20 20">
                                                                      <path d="M2.582,13.891c-0.272,0.268-0.709,0.268-0.979,0s-0.271-0.701,0-0.969l7.908-7.83
-                                                            c0.27-0.268,0.707-0.268,0.979,0l7.908,7.83c0.27,0.268,0.27,0.701,0,0.969c-0.271,0.268-0.709,0.268-0.978,0L10,6.75L2.582,13.891z
-                                                            " />
+                                c0.27-0.268,0.707-0.268,0.979,0l7.908,7.83c0.27,0.268,0.27,0.701,0,0.969c-0.271,0.268-0.709,0.268-0.978,0L10,6.75L2.582,13.891z
+                                " />
                                                                  </svg>
 
                                                              </button>
-
                                                          </div>
-
-                                                         <div
-                                                                 class="text-gray-300 w-8 py-1 pl-2 pr-1 border-l flex items-center border-gray-200 svelte-1l8159u">
-
-                                                             <button type="button" onclick="addSkill()"
-                                                                     class="cursor-pointer w-6 h-6 text-gray-600 outline-none focus:outline-none">
-                                                                 <svg  class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                                                                     <path
-                                                                             d="M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z" />
-                                                                 </svg>
-
-                                                             </button>
-
-                                                         </div>
-
-
                                                      </div>
                                                  </div>
                                                  <div class="w-full">
@@ -409,8 +384,7 @@
                                                                          <div x-bind:class="option.selected ? 'border-teal-600' : ''"
                                                                               class="flex w-full items-center p-2 pl-2 border-transparent border-l-2 relative">
                                                                              <div class="w-full items-center flex">
-                                                                                 <div class="mx-2 leading-6" x-model="option"
-                                                                                      x-text="option.text">
+                                                                                 <div class="mx-2 leading-6" x-model="option" x-text="option.text">
                                                                                  </div>
                                                                              </div>
                                                                          </div>
@@ -444,11 +418,11 @@
                                  <div class="flex mt-3 justify-center items-center">
                                      <div x-data="range()" x-init="mintrigger(); maxtrigger()" class="relative max-w-xl w-full">
                                          <div>
-                                             <input type="range" step="100" x-bind:min="min" x-bind:max="max" x-on:input="mintrigger"
+                                             <input th:field="*{fromSalary}" type="range" step="100" x-bind:min="min" x-bind:max="max" x-on:input="mintrigger"
                                                     x-model="minprice"
                                                     class="absolute pointer-events-none appearance-none z-20 h-2 w-full opacity-0 cursor-pointer">
 
-                                             <input type="range" step="100" x-bind:min="min" x-bind:max="max" x-on:input="maxtrigger"
+                                             <input th:field="*{toSalary}" type="range" step="100" x-bind:min="min" x-bind:max="max" x-on:input="maxtrigger"
                                                     x-model="maxprice"
                                                     class="absolute pointer-events-none appearance-none z-20 h-2 w-full opacity-0 cursor-pointer">
 
@@ -518,6 +492,7 @@
                                      Close
                                  </button>
                              </div>
+                         </div>
                      </form>
                      <!-- END FORM -->
 

@@ -50,9 +50,9 @@ public class Users extends BaseEntity implements Serializable, UserDetails {
 
     @Column(name = "reset_password_token")
     private String resetPasswordToken;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
-    private Set<Recruitment> recruitments;
+//
+//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
+//    private Set<Recruitment> recruitments;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "users")
     private Set<Interview> interviews;

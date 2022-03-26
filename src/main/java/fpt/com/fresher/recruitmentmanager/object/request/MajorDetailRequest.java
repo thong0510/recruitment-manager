@@ -18,6 +18,5 @@ public class MajorDetailRequest {
     @NotBlank
     private String majorDetailName;
 
-    @NotBlank
     private Long majorId;
 }

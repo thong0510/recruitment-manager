@@ -79,20 +79,9 @@ public class VacanciesController {
     public String createVacancies(@ModelAttribute(name = "vacancies") @Valid VacanciesRequest vacanciesRequest,
                                   HttpServletRequest request) {
         String targetUrl = request.getHeader("Referer");
-        try {
-            Long majorDetailId1 = vacanciesRequest.getMajorDetail().getMajor().getMajorId();
-            Long mjId = vacanciesRequest.getMajor().getMajorId();
-            if (majorDetailId1.equals(mjId)) {
-                vacanciesService.createVacancies(vacanciesRequest);
-                return "redirect:" + targetUrl;
-            } else {
-                return null;
-            }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        vacanciesService.createVacancies(vacanciesRequest);
+        return "redirect:" + targetUrl;
 
     }
 
@@ -127,20 +116,10 @@ public class VacanciesController {
     public String updateVacancies(@ModelAttribute(name = "vacancies") @Valid VacanciesRequest vacanciesRequest,
                                   HttpServletRequest request) throws IOException {
 
-        try {
-            Long majorDetailId1 = vacanciesRequest.getMajorDetail().getMajor().getMajorId();
-            Long mjId = vacanciesRequest.getMajor().getMajorId();
-            if (majorDetailId1.equals(mjId)) {
+
                 vacanciesService.updateVacancies(vacanciesRequest);
                 return "redirect:" + SessionUtils.getValue(request, "Referer");
-            } else {
-                return null;
-            }
 
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @GetMapping("/hr/delete-vacancies")

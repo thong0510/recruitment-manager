@@ -1,10 +1,14 @@
 package fpt.com.fresher.recruitmentmanager.service;
 
+import fpt.com.fresher.recruitmentmanager.object.entity.Major;
+import fpt.com.fresher.recruitmentmanager.object.entity.MajorDetail;
 import fpt.com.fresher.recruitmentmanager.object.entity.Vacancies;
 import fpt.com.fresher.recruitmentmanager.object.filter.VacanciesFilter;
 import fpt.com.fresher.recruitmentmanager.object.mapper.VacanciesMapper;
 import fpt.com.fresher.recruitmentmanager.object.request.VacanciesRequest;
 import fpt.com.fresher.recruitmentmanager.object.response.VacanciesResponse;
+import fpt.com.fresher.recruitmentmanager.repository.MajorDetailRepository;
+import fpt.com.fresher.recruitmentmanager.repository.MajorRepository;
 import fpt.com.fresher.recruitmentmanager.repository.VacanciesRepository;
 import fpt.com.fresher.recruitmentmanager.repository.spec.VacanciesSpecification;
 import fpt.com.fresher.recruitmentmanager.service.interfaces.VacanciesService;
@@ -25,6 +29,8 @@ public class VacanciesServiceImpl implements VacanciesService {
 
     private final VacanciesRepository vacanciesRepository;
     private final VacanciesMapper vacanciesMapper;
+    private final MajorRepository majorRepository;
+    private final MajorDetailRepository majorDetailRepository;
 
 
     @Override
@@ -69,6 +75,12 @@ public class VacanciesServiceImpl implements VacanciesService {
         Date date = java.sql.Date.valueOf(localDate);
 
         Vacancies vacancies = vacanciesMapper.vacanciesRequestToEntity(request);
+        Major major = majorRepository.findById(request.getMajorId()).orElse(null);
+        MajorDetail majorDetail = majorDetailRepository.findById(request.getMajorDetailId()).orElse(null);
+
+        vacancies.setMajor(major);
+        vacancies.setMajorDetail(majorDetail);
+
         vacancies.setCreatedDate(date);
 
         vacanciesRepository.save(vacancies);

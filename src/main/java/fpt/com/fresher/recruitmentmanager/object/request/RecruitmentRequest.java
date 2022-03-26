@@ -28,11 +28,11 @@ public class RecruitmentRequest {
 
     private Date dateEnd;
 
-    private Major major;
+    private Long majorId;
 
-    private Vacancies vacancies;
+    private Long vacanciesId;
 
-    List<Long> listSkill;
+    List<Long> listOfSkill;
 
 
 }
