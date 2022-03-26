@@ -1,13 +1,18 @@
 package fpt.com.fresher.recruitmentmanager.service;
 
+import fpt.com.fresher.recruitmentmanager.object.entity.Major;
 import fpt.com.fresher.recruitmentmanager.object.entity.MajorDetail;
 import fpt.com.fresher.recruitmentmanager.object.filter.MajorDetailFilter;
 import fpt.com.fresher.recruitmentmanager.object.mapper.MajorDetailMapper;
+import fpt.com.fresher.recruitmentmanager.object.mapper.MajorMapper;
 import fpt.com.fresher.recruitmentmanager.object.request.MajorDetailRequest;
 import fpt.com.fresher.recruitmentmanager.object.response.MajorDetailResponse;
+import fpt.com.fresher.recruitmentmanager.object.response.MajorResponse;
 import fpt.com.fresher.recruitmentmanager.repository.MajorDetailRepository;
+import fpt.com.fresher.recruitmentmanager.repository.MajorRepository;
 import fpt.com.fresher.recruitmentmanager.repository.spec.MajorDetailSpecification;
 import fpt.com.fresher.recruitmentmanager.service.interfaces.MajorDetailService;
+import fpt.com.fresher.recruitmentmanager.service.interfaces.MajorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
@@ -25,7 +30,10 @@ import java.util.Optional;
 public class MajorDetailServiceImpl implements MajorDetailService {
 
     private final MajorDetailRepository majorDetailRepository;
+    private final MajorRepository majorRepository;
     private final MajorDetailMapper majorDetailMapper;
+    private final MajorService majorService;
+    private final MajorMapper majorMapper;
 
     @Override
     public Page<MajorDetailResponse> getAllMajorDetail(MajorDetailFilter filter) {
@@ -65,8 +73,11 @@ public class MajorDetailServiceImpl implements MajorDetailService {
         LocalDate localDate = LocalDate.now();
         Date date = java.sql.Date.valueOf(localDate);
 
+        Major major = majorRepository.findById(request.getMajorId()).orElse(null);
+
         MajorDetail majorDetail = majorDetailMapper.majorDetailRequestToEntity(request);
         majorDetail.setCreatedDate(date);
+        majorDetail.setMajor(major);
 
         majorDetailRepository.save(majorDetail);
     }

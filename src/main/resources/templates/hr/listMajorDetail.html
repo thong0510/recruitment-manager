@@ -181,7 +181,7 @@
                             </div>
 
 
-                            <select x-cloak id="select" th:field="*{major}">
+                            <select x-cloak id="select" th:field="*{majorId}">
                                 <option th:each="major : ${listMajor}"
                                         th:value="${major.majorId}"
                                         th:utext="${major.majorName}">
