@@ -60,20 +60,11 @@ public class Candidates extends BaseEntity {
     private String photo;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "candidates")
-    private Set<Report> reports;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "candidates")
-    private Set<Interview> interviews;
-
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "candidates")
     private Set<SkillCandidate> skillCandidates;
 
     @Column
     @Enumerated(EnumType.STRING)
     private CandidateStatus status;
-
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "candidates")
-    private EntryTest entryTest;
 
     @PostPersist
     public void postPersist() {

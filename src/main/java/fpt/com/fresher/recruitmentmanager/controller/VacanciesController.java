@@ -43,8 +43,8 @@ public class VacanciesController {
 
     @GetMapping("/hr/list-vacancies")
     public String listVacancies(Model model,
-                            @RequestParam(defaultValue = "1") Integer page,
-                            @RequestParam(defaultValue = "") String search) {
+                                @RequestParam(defaultValue = "1") Integer page,
+                                @RequestParam(defaultValue = "") String search) {
         Sorting sorting = new Sorting("vacanciesId", true);
         Pagination pagination = new Pagination(page - 1, 10, sorting);
 
@@ -85,7 +85,7 @@ public class VacanciesController {
             if (majorDetailId1.equals(mjId)) {
                 vacanciesService.createVacancies(vacanciesRequest);
                 return "redirect:" + targetUrl;
-            }else {
+            } else {
                 return null;
             }
 
@@ -98,8 +98,8 @@ public class VacanciesController {
 
     @GetMapping("/hr/update-vacancies")
     public String updateVacancies(Model model,
-                                   @RequestParam(name = "id") Long id,
-                                   HttpServletRequest request) {
+                                  @RequestParam(name = "id") Long id,
+                                  HttpServletRequest request) {
         VacanciesResponse vacanciesResponse = vacanciesService.findOne(id);
 
         model.addAttribute("vacancies", vacanciesResponse);
@@ -125,7 +125,7 @@ public class VacanciesController {
 
     @PostMapping("/hr/update-vacancies")
     public String updateVacancies(@ModelAttribute(name = "vacancies") @Valid VacanciesRequest vacanciesRequest,
-                                   HttpServletRequest request) throws IOException {
+                                  HttpServletRequest request) throws IOException {
 
         try {
             Long majorDetailId1 = vacanciesRequest.getMajorDetail().getMajor().getMajorId();
@@ -133,7 +133,7 @@ public class VacanciesController {
             if (majorDetailId1.equals(mjId)) {
                 vacanciesService.updateVacancies(vacanciesRequest);
                 return "redirect:" + SessionUtils.getValue(request, "Referer");
-            }else {
+            } else {
                 return null;
             }
 
@@ -150,8 +150,6 @@ public class VacanciesController {
 
         return "redirect:/hr/list-vacancies";
     }
-
-
 
 
 }

@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -61,13 +62,14 @@ public class UserServiceImpl implements UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    private RMapCache<String, String> userEmailMap;
-    private final TimeUnit timeUnit = TimeUnit.MINUTES;
-
     @PostConstruct
     private void init() {
         userEmailMap = redissonClient.getMapCache("USER_EMAIL_MAP");
+
     }
+
+    private RMapCache<String, String> userEmailMap;
+    private final TimeUnit timeUnit = TimeUnit.MINUTES;
 
     @Override
     public Page<UserResponse> getAllUser(UserFilter filter) {
@@ -85,6 +87,11 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(String userName) {
         Optional<Users> user = userRepository.findById(userName);
         user.ifPresent(userRepository::delete);
+    }
+
+    public Users findUserByUsername(String username) {
+        return userRepository.findByUserName(username).orElseThrow(
+                () -> new BadCredentialsException("User " + username + " not found"));
     }
 
     @Override
@@ -156,7 +163,7 @@ public class UserServiceImpl implements UserService {
                         : null;
 
         return new org.springframework.security.core.userdetails.User(
-                user.get().getUserName(), user.get().getPassword(), grantedAuthorities
+                user.get().getUsername(), user.get().getPassword(), grantedAuthorities
         );
     }
 

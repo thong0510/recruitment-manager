@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz form</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@1.20.1/dist/full.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/28a05ca2b4.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div th:replace="fragments/_Header"></div>
+
+    <div class=" shadow bg-base-200 drawer drawer-mobile " style="height: 91vh;">
+        <input id="my-drawer-2" type="checkbox" class="drawer-toggle">
+
+        <div class="flex flex-col items-center drawer-content">
+            <label for="my-drawer-2" class="mb-4 btn btn-primary drawer-button lg:hidden w-10 rounded-full right-5 top-16 md:top-28 fixed"><i class="fas fa-angle-right"></i></label>
+            <!-- STRART MAIN -->
+            <main class="my-4 w-11/12 mx-auto">
+                <!-- START Welcome text-->
+                <p th:if="${quizInfo == null}" class="text-xl font-semibold text-center mb-4 uppercase ">Create quiz</p>
+                <p th:if="${quizInfo != null}" class="text-xl font-semibold text-center mb-4 uppercase ">Edit quiz id [[${quizInfo.id}]]</p>
+                <!-- END welcome text -->
+                <!-- START TABLE -->
+                <div class="card text-center shadow-lg my-4 py-5 px-16">
+                    <!-- START FORM -->
+                    <form id="quiz-form" th:if="${quizInfo == null}" th:action="@{/admin/quiz/create}" enctype="multipart/form-data"
+                          th:object="${newQuiz}" method="post">
+
+                        <div class="flex justify-start">
+                            <div class="form-control mt-2">
+                                <div class="preview">
+                                    <img id="file-ip-1-preview" src="https://mntech.com.vn/common/images/noimg64.png"
+                                         class="mx-auto bg-gray-200 rounded-btn w-48 h-48 bg-cover bg-center">
+                                </div>
+                                <label for="file-ip-1" class="btn w-48 mx-auto mt-4">Upload Image</label>
+                                <input type="file" class="input input-bordered hidden" id="file-ip-1" accept="image/*"
+                                       onchange="showPreviewImage(event);"  th:field="*{imageFile}">
+                            </div>
+
+                            <div class="w-full ml-4">
+                                <div class="form-control input-group">
+                                    <label class="label">
+                                        <span class="label-text">Title:</span>
+                                    </label>
+                                    <input type="text" th:field="*{title}" id="quizName" class="input input-bordered" rules="required|minlength:10|maxlength:255">
+                                </div>
+
+                                <div class="form-control input-group">
+                                    <label class="label">
+                                        <span class="label-text">Description:</span>
+                                    </label>
+                                    <textarea th:field="*{description}" class="textarea h-36 textarea-bordered" rules="required"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-control input-group">
+                            <label class="label">
+                                <span  class="label-text">Category:</span>
+                            </label>
+                            <select th:field="*{categoryId}" class="select select-bordered w-full" rules="required">
+                                <option disabled="disabled" selected="selected" value="">Choose quiz categories</option>
+                                <option th:each="category : ${session.categoriesSession}"
+                                        th:utext="${category.name}"
+                                        th:value="${category.id}"></option>
+                            </select>
+                        </div>
+                        <!--Footer-->
+                        <div class="flex justify-center pt-2 mt-3 mb-5">
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3">
+                            Save quiz
+                        </button>
+                            <button type="button" class="bg-transparent hover:bg-gray-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                            Back to list
+                        </button>
+                        </div>
+                    </form>
+
+                    <form id="edit-quiz-form" th:if="${quizInfo != null}" th:action="@{/admin/quiz/__${quizInfo.id}__}" enctype="multipart/form-data"
+                          th:object="${quiz}" method="post">
+                        <div class="flex justify-start">
+                            <div class="form-control mt-2">
+                                <div class="preview">
+                                    <img th:if="${quizInfo.image == null}" id="file-ip-1-preview" src="https://mntech.com.vn/common/images/noimg64.png"
+                                         class="mx-auto bg-gray-200 rounded-btn w-48 h-48 bg-cover bg-center">
+                                    <img th:if="${quizInfo.image != null}" id="file-ip-1-preview" th:src="${quizInfo.image}"
+                                         class="mx-auto bg-gray-200 rounded-btn w-48 h-48 bg-cover bg-center">
+                                </div>
+                                <label for="file-ip-1" class="btn w-48 mx-auto mt-4">Upload Image</label>
+                                <input type="file" class="input input-bordered hidden" id="file-ip-1" accept="image/*"
+                                       onchange="showPreviewImage(event);"  th:field="*{imageFile}">
+                            </div>
+
+                            <div class="w-full ml-4">
+                                <div class="form-control input-group">
+                                    <label class="label">
+                                        <span class="label-text">Title:</span>
+                                    </label>
+                                    <input type="text" th:field="*{title}" id="quizName" class="input input-bordered" rules="required|minlength:10|maxlength:255">
+                                </div>
+
+                                <div class="form-control input-group">
+                                    <label class="label">
+                                        <span class="label-text">Description:</span>
+                                    </label>
+                                    <textarea th:field="*{description}" class="textarea h-36 textarea-bordered" rules="required"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-control input-group">
+                            <label class="label">
+                                <span  class="label-text">Category:</span>
+                            </label>
+                            <select th:field="*{categoryId}" class="select select-bordered w-full" rules="required">
+                                <option disabled="disabled" selected="selected" value="">Choose quiz categories</option>
+                                <option th:each="category : ${session.categoriesSession}"
+                                        th:utext="${category.name}"
+                                        th:value="${category.id}"></option>
+                            </select>
+                        </div>
+                        <!--Footer-->
+                        <div class="flex justify-center pt-2 mt-3 mb-5">
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3">
+                                Save quiz
+                            </button>
+                            <button type="button" class="bg-transparent hover:bg-gray-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                                Back to list
+                            </button>
+                        </div>
+                    </form>
+                    <!-- END FORM -->
+
+                </div>
+                <!-- END TABLE -->
+
+            </main>
+            <!-- END MAIN -->
+        </div>
+
+        <!-- Slide bar-->
+        <div th:replace="fragments/_SliderBar"></div>
+    </div>
+
+<!--    <script th:src="@{/resources/js/validator.js}"></script>-->
+
+    <script>
+        
+        const createAnswer = function() {
+            var inputGroup = document.createElement('div');
+            inputGroup.classList.add('relative', 'mt-3', 'w-11/12');
+
+            var input = document.createElement('input');
+            input.classList.add('w-full', 'pr-16', 'input', 'input-primary', 'input-bordered');
+            input.placeholder = 'Type the answer';
+            input.type = 'text';
+
+            var button = document.createElement('button');
+            button.classList.add('absolute', 'top-0', 'right-0', 'rounded-l-none', 'btn', 'btn-primary', 'add-answer-button');
+            button.type = 'button';
+            button.innerHTML = '<i class="fas fa-plus"></i>';
+
+            inputGroup.append(input, button);
+
+            var checkboxGroup = document.createElement('div');
+            checkboxGroup.classList.add('w-1/12', 'flex', 'justify-center', 'mt-4');
+
+            var tooltip = document.createElement('div');
+            tooltip.classList.add('tooltip');
+            tooltip.setAttribute('data-tip', 'Check if this is answer');
+
+            var checkbox = document.createElement('input');
+            checkbox.classList.add('checkbox', 'checkbox-primary');
+            checkbox.type = 'checkbox';
+
+            tooltip.appendChild(checkbox);
+            checkboxGroup.append(tooltip);
+
+            var answerGroup = document.createElement('div')
+            answerGroup.classList.add('answer', 'flex', 'items-center');
+
+            answerGroup.append(inputGroup, checkboxGroup);
+
+            return answerGroup;
+        };
+
+        const addAnswer = function(e) {
+            var answer = createAnswer();
+            e.target.closest('.form-control').appendChild(answer);
+            e.target.closest('button').style.visibility = "hidden";
+        };
+
+        const question = document.getElementById('question-form');
+        if (!!question) {
+            question.addEventListener('click', function(e) {
+                (e.target.classList.contains('add-answer-button') || e.target.nodeName === 'I') && addAnswer(e);
+            });
+        }
+
+        const formValidator1 = new FormValidator("#quiz-form", {
+            formGroup: "input-group",
+            errorMessages: {
+                "title": {
+                    required: "Title must not be blank",
+                    minlength: "Title must be at least 10 characters long",
+                    maxlength: "Title must be at most 255 characters long",
+                },
+                "description": {
+                    required: "Description must not be blank"
+                },
+                "categoryId": {
+                    required: "Category must not be blank"
+                }
+            },
+        });
+
+        const formValidator2 = new FormValidator("#edit-quiz-form", {
+            formGroup: "input-group",
+            errorMessages: {
+                "title": {
+                    required: "Title must not be blank",
+                    minlength: "Title must be at least 10 characters long",
+                    maxlength: "Title must be at most 255 characters long",
+                },
+                "description": {
+                    required: "Description must not be blank"
+                },
+                "categoryId": {
+                    required: "Category must not be blank"
+                }
+            },
+        });
+    </script>
+
+    <script th:src="@{/resources/static/js/common.js}"></script>
+
+</body>
+
+</html>

@@ -1,57 +1,92 @@
 package fpt.com.fresher.recruitmentmanager.service;
 
-import fpt.com.fresher.recruitmentmanager.object.entity.Questions;
+import fpt.com.fresher.recruitmentmanager.object.contant.DifficultyLevel;
+import fpt.com.fresher.recruitmentmanager.object.entity.*;
+import fpt.com.fresher.recruitmentmanager.object.exception.ResourceNotFoundException;
 import fpt.com.fresher.recruitmentmanager.object.filter.QuestionFilter;
+import fpt.com.fresher.recruitmentmanager.object.mapper.AnswerMapper;
 import fpt.com.fresher.recruitmentmanager.object.mapper.QuestionMapper;
 import fpt.com.fresher.recruitmentmanager.object.request.QuestionRequest;
 import fpt.com.fresher.recruitmentmanager.repository.QuestionRepository;
 import fpt.com.fresher.recruitmentmanager.repository.spec.QuestionSpecification;
-import fpt.com.fresher.recruitmentmanager.service.interfaces.QuestionService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
+
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
-public class QuestionServiceImpl implements QuestionService {
+@RequiredArgsConstructor
+public class QuestionServiceImpl {
 
-    @Autowired
-    QuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
+    private final QuestionMapper questionMapper;
+    private final AnswerMapper answerMapper;
 
-    @Autowired
-    QuestionMapper questionMapper;
+    private final QuizServiceImpl quizService;
+    private final TagServiceImpl tagService;
+    private final DifficultyServiceImpl difficultyService;
+    private final AnswerServiceImpl answerService;
 
-    @Override
-    public Page<Questions> getAllQuestion(QuestionFilter questionFilter) {
-        Specification<Questions> specification = QuestionSpecification.getSpecification(questionFilter);
-        return questionRepository.findAll(specification, questionFilter.getPagination().getPageAndSort());
-    }
+    public Page<Question> findAllQuestionsByQuizId(long quizId, QuestionFilter filter) {
 
-    @Override
-    public Questions findOne(Long id) {
-        return questionRepository.getById(id);
-    }
-
-    @Override
-    public void updateQuestion(QuestionRequest question) {
-        Questions ques = questionMapper.questionRequestToEntity(question);
-        questionRepository.save(ques);
-    }
-
-    @Override
-    public void createQuestion(QuestionRequest question) {
-        questionRepository.save(questionMapper.questionRequestToEntity(question));
-    }
-
-    @Override
-    public void deleteQuestion(Long id) {
-        try {
-            Questions question = questionRepository.getById(id);
-
-            questionRepository.delete(question);
-
-        }catch (Exception e) {
-            e.printStackTrace();
+        Specification<Question> specification;
+        if (!ObjectUtils.isEmpty(filter.getLevel()) && DifficultyLevel.RANDOM.equals(filter.getLevel())) {
+            filter.setLevel(null);
         }
+        specification = QuestionSpecification.getSpecification(quizId, filter);
+        return questionRepository.findAll(specification, filter.getPagination().getPageAndSort());
+    }
+
+    public Question findQuestionById(long id) {
+        return questionRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException("Not found any question with id " + id));
+    }
+
+    public Question createQuestion(QuestionRequest requestBody) {
+        Question question = questionMapper.questionRequestToEntity(requestBody);
+        updateRelationProperties(question, requestBody);
+
+        return question;
+    }
+
+    public Question updateQuestion(long id, QuestionRequest requestBody) {
+        Question question = this.findQuestionById(id);
+        questionMapper.updateEntity(question, requestBody);
+        updateRelationProperties(question, requestBody);
+
+        return question;
+    }
+
+    public void deleteQuestion(long id) {
+        Question question = this.findQuestionById(id);
+
+        questionRepository.delete(question);
+    }
+
+    private void updateRelationProperties(Question question, QuestionRequest requestBody) {
+        Quiz quiz = quizService.findQuizById(requestBody.getQuizId());
+        question.setQuiz(quiz);
+
+        Tag tag = tagService.findTagById(requestBody.getTagId());
+        question.setTag(tag);
+
+        Difficulty difficulty = difficultyService.findDifficultyById(requestBody.getDifficultyId());
+        question.setDifficulty(difficulty);
+
+        Set<Answer> answers = requestBody.getAnswers().stream()
+                .map(answerMapper::answerRequestToEntity)
+                .collect(Collectors.toSet());
+
+        if(question.getId() != null){
+            answers.forEach(answer -> answer.setQuestion(question));
+        }else{
+            Question question1 = questionRepository.save(question);
+            answers.forEach(answer -> answer.setQuestion(question1));
+        }
+        answerService.saveAllAnswer(answers);
     }
 }

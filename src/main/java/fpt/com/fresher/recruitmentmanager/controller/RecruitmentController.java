@@ -2,17 +2,14 @@ package fpt.com.fresher.recruitmentmanager.controller;
 
 import fpt.com.fresher.recruitmentmanager.object.filter.MajorFilter;
 import fpt.com.fresher.recruitmentmanager.object.filter.RecruitmentFilter;
-import fpt.com.fresher.recruitmentmanager.object.filter.SkillFilter;
 import fpt.com.fresher.recruitmentmanager.object.filter.VacanciesFilter;
 import fpt.com.fresher.recruitmentmanager.object.model.Pagination;
 import fpt.com.fresher.recruitmentmanager.object.model.Sorting;
 import fpt.com.fresher.recruitmentmanager.object.request.RecruitmentRequest;
-import fpt.com.fresher.recruitmentmanager.object.request.SkillRequest;
 import fpt.com.fresher.recruitmentmanager.object.response.MajorResponse;
 import fpt.com.fresher.recruitmentmanager.object.response.RecruitmentResponse;
-import fpt.com.fresher.recruitmentmanager.object.response.SkillResponse;
 import fpt.com.fresher.recruitmentmanager.object.response.VacanciesResponse;
-import fpt.com.fresher.recruitmentmanager.service.RecruitmentService;
+import fpt.com.fresher.recruitmentmanager.service.interfaces.RecruitmentService;
 import fpt.com.fresher.recruitmentmanager.service.interfaces.MajorService;
 import fpt.com.fresher.recruitmentmanager.service.interfaces.VacanciesService;
 import fpt.com.fresher.recruitmentmanager.utils.SessionUtils;

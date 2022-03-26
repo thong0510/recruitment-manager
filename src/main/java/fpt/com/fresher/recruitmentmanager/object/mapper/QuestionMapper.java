@@ -1,18 +1,20 @@
 package fpt.com.fresher.recruitmentmanager.object.mapper;
 
-import fpt.com.fresher.recruitmentmanager.object.entity.Questions;
+import fpt.com.fresher.recruitmentmanager.object.entity.Question;
 import fpt.com.fresher.recruitmentmanager.object.request.QuestionRequest;
 import fpt.com.fresher.recruitmentmanager.object.response.QuestionResponse;
-import org.mapstruct.Mapper;
-import org.mapstruct.NullValuePropertyMappingStrategy;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        unmappedTargetPolicy = ReportingPolicy.IGNORE)
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        uses = DifficultyMapper.class)
 public interface QuestionMapper {
 
-    QuestionResponse entityToQuestionResponse(Questions question);
+    Question questionRequestToEntity(QuestionRequest request);
 
-    Questions questionRequestToEntity(QuestionRequest request);
+    void updateEntity(@MappingTarget Question question, QuestionRequest request);
+
+    @Mapping(target = "quizId", source = "quiz.id")
+    QuestionResponse entityToQuestionResponse(Question question);
 }

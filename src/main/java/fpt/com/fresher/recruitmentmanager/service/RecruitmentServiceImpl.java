@@ -1,14 +1,13 @@
 package fpt.com.fresher.recruitmentmanager.service;
 
 import fpt.com.fresher.recruitmentmanager.object.entity.Recruitment;
-import fpt.com.fresher.recruitmentmanager.object.entity.Skills;
 import fpt.com.fresher.recruitmentmanager.object.filter.RecruitmentFilter;
 import fpt.com.fresher.recruitmentmanager.object.mapper.RecruitmentMapper;
 import fpt.com.fresher.recruitmentmanager.object.request.RecruitmentRequest;
 import fpt.com.fresher.recruitmentmanager.object.response.RecruitmentResponse;
 import fpt.com.fresher.recruitmentmanager.repository.RecruitmentRepository;
 import fpt.com.fresher.recruitmentmanager.repository.spec.RecruitmentSpecification;
-import fpt.com.fresher.recruitmentmanager.repository.spec.SkillSpecification;
+import fpt.com.fresher.recruitmentmanager.service.interfaces.RecruitmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.domain.Specification;

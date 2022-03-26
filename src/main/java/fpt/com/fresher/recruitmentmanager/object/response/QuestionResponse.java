@@ -1,18 +1,23 @@
 package fpt.com.fresher.recruitmentmanager.object.response;
 
-import fpt.com.fresher.recruitmentmanager.object.model.Pagination;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+
+import java.util.List;
 
 @Data
-@Getter
-@Setter
 public class QuestionResponse {
 
-    private Long questionId;
+    private Long id;
 
-    private String questionName;
+    private String title;
 
+    private TagResponse tag;
 
+    private DifficultyResponse difficulty;
+
+    private Boolean isMultiple;
+
+    private List<AnswerResponse> answers;
+
+    private long quizId;
 }

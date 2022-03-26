@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question list</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@1.20.1/dist/full.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/28a05ca2b4.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div th:replace="fragments/_Header"></div>
+
+    <div class=" shadow bg-base-200 drawer drawer-mobile " style="height: 91vh;">
+        <input id="my-drawer-2" type="checkbox" class="drawer-toggle">
+
+        <div class="flex flex-col items-center drawer-content">
+            <label for="my-drawer-2" class="mb-4 btn btn-primary drawer-button lg:hidden w-10 rounded-full right-5 top-16 md:top-28 fixed"><i class="fas fa-angle-right"></i></label>
+            <!-- STRART MAIN -->
+            <main class="my-4 w-11/12 mx-auto">
+                <!-- START Welcome text-->
+                <p class="text-xl font-semibold text-center mb-4 uppercase ">Question in quiz [[${quizId}]]</p>
+                <div th:replace="fragments/_Alert"></div>
+                <!-- END welcome text -->
+                <div class="flex justify-between">
+                    <a th:href="@{/admin/quiz/__${quizId}__/question/new}"
+                       class="btn btn-sm w-32 btn-primary my-4">Add Question</a>
+                    <div class="flex">
+                        <select th:onchange="|paramFilters('tagId', this.value)|"
+                                class="select select-bordered select-sm select-info max-w-xs my-4">
+                            <option selected="selected" value="">Choose tag</option>
+                            <option th:each="tag : ${listTags}"
+                                    th:selected="${tag.id == tagIdFilter}"
+                                    th:utext="${tag.name}"
+                                    th:value="${tag.id}"
+                            ></option>
+                        </select>
+                        <select th:onchange="|paramFilters('difficultyId', this.value)|"
+                                class="select select-bordered select-sm select-info max-w-xs my-4 ml-4">
+                            <option selected="selected" value="">Choose difficulty</option>
+                            <option th:each="difficulty : ${listDifficulties}"
+                                    th:selected="${difficulty.id == difficultyIdFilter}"
+                                    th:utext="${difficulty.level}"
+                                    th:value="${difficulty.id}"
+                            ></option>
+                        </select>
+                    </div>
+
+                </div>
+                
+
+                <!-- START TABLE -->
+                <div class="card text-center shadow-lg my-4">
+                    <div class="card-body p-0">
+                        <div class="overflow-x-auto ">
+                            <div class="overflow-x-auto">
+                                <table class="table w-full">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Multiple answer</th>
+                                            <th>Difficulty</th>
+                                            <th>Tag</th>
+                                            <th>Answer</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <tr th:each="question : ${listQuestion.getContent()}">
+                                            <td >
+                                                <div class="tooltip" th:data-tip="${question.title}" th:if="${question.title.length() > 17}">
+                                                    [[${#strings.substring(question.title, 0, 17)}]]...
+                                                </div>
+                                                <span th:if="${question.title.length() <= 17}"> [[${question.title}]] </span>
+                                            </td>
+                                            <td th:utext="${question.isMultiple == true? 'Yes':'No'}"></td>
+                                            <td th:utext="${question.difficulty.level}"></td>
+                                            <td th:utext="${question.tag.name}"></td>
+                                            <td class="flex">
+                                                <div class="tooltip" data-tip="Edit question">
+                                                    <a th:href="@{/admin/quiz/__${quizId}__/question/__${question.id}__}" class="ml-2 btn btn-circle btn-outline btn-xs"><i class="far fa-edit"></i></a>
+                                                </div>
+                                                <div class="tooltip" data-tip="Delete question">
+                                                    <a th:href="@{/admin/quiz/__${quizId}__/question/delete/__${question.id}__}" class="ml-2 btn btn-circle btn-outline btn-xs"><i class="far fa-trash-alt"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+
+                                <div class="flex justify-center">
+                                    <div th:if="${listQuestion.getNumberOfElements() > 0}" th:with="currentPage=${listQuestion.getNumber()+1}, totalPages=${listQuestion.getTotalPages()}"
+                                         class="btn-group my-4 mr-4">
+
+                                        <button class="btn btn-sm btn-outline " th:if="${currentPage > 1}" th:onclick="|paramFilters('page','${currentPage - 1}')|">Previous</button>
+                                        <span class="btn btn-sm btn-outline disabled" th:unless="${currentPage > 1}">Previous</span>
+
+                                        <th:block th:each="i : ${#numbers.sequence(1, totalPages)}">
+                                            <button class="btn btn-sm btn-outline " th:if="${currentPage != i}" th:onclick="|paramFilters('page','${i}')|">[[${i}]]</button>
+                                            <span class="btn btn-sm btn-outline bg-blue-500 text-white border-black" th:if="${listQuestion.getNumberOfElements() > 0}" th:unless="${currentPage != i}">[[${i}]]</span>
+                                        </th:block>
+
+                                        <button class="btn btn-sm btn-outline " th:if="${currentPage < totalPages}" th:onclick="|paramFilters('page','${currentPage + 1}')|">Next</button>
+                                        <span class="btn btn-sm btn-outline disabled"  th:unless="${currentPage < totalPages}">Next</span>
+
+                                    </div>
+                                    <div th:if="${listQuestion.getNumberOfElements() <= 0}">
+                                        <a class="btn btn-sm btn-outline mb-4" th:href="@{/admin/quiz/__${quizId}__/question}">Back to list</a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END TABLE -->
+
+            </main>
+            <!-- END MAIN -->
+        </div>
+
+        <!-- Slide bar-->
+        <div th:replace="fragments/_SliderBar"></div>
+    </div>
+
+    <script>
+
+        const createAnswer = function() {
+            var inputGroup = document.createElement('div');
+            inputGroup.classList.add('relative', 'mt-3', 'w-11/12');
+
+            var input = document.createElement('input');
+            input.classList.add('w-full', 'pr-16', 'input', 'input-primary', 'input-bordered');
+            input.placeholder = 'Type the answer';
+            input.type = 'text';
+
+            var button = document.createElement('button');
+            button.classList.add('absolute', 'top-0', 'right-0', 'rounded-l-none', 'btn', 'btn-primary', 'add-answer-button');
+            button.type = 'button';
+            button.innerHTML = '<i class="fas fa-plus"></i>';
+
+            inputGroup.append(input, button);
+
+            var checkboxGroup = document.createElement('div');
+            checkboxGroup.classList.add('w-1/12', 'flex', 'justify-end');
+
+            var tooltip = document.createElement('div');
+            tooltip.classList.add('tooltip');
+            tooltip.setAttribute('data-tip', 'Check if this is answer');
+
+            var checkbox = document.createElement('input');
+            checkbox.classList.add('checkbox', 'checkbox-primary');
+            checkbox.type = 'checkbox';
+
+            tooltip.appendChild(checkbox);
+            checkboxGroup.append(tooltip);
+
+            var answerGroup = document.createElement('div')
+            answerGroup.classList.add('answer', 'flex', 'items-center');
+
+            answerGroup.append(inputGroup, checkboxGroup);
+
+            return answerGroup;
+        };
+
+        const addAnswer = function(e) {
+            var answer = createAnswer();
+            e.target.closest('.form-control').appendChild(answer);
+            e.target.closest('button').style.visibility = "hidden";
+        };
+
+        const question = document.getElementById('question-form');
+        if (!!question) {
+            question.addEventListener('click', function(e) {
+                (e.target.classList.contains('add-answer-button') || e.target.nodeName === 'I') && addAnswer(e);
+            });
+        }
+    </script>
+
+    <script th:src="@{/resources/static/js/common.js}"></script>
+
+</body>
+
+</html>

@@ -29,6 +29,14 @@
                 <a >Recruitment management</a>
             </li>
 
+            <li th:class="${#httpServletRequest.requestURI == '/hr/list-question' ? 'bordered' : 'hover-bordered'}" class="hover-bordered">
+                <a th:href="@{/hr/list-question}">Question management</a>
+            </li>
+
+            <li th:class="${#httpServletRequest.requestURI == '/hr/list-quiz' ? 'bordered' : 'hover-bordered'}" class="hover-bordered">
+                <a th:href="@{/hr/list-quiz}">Quiz management</a>
+            </li>
+
             <li class="hover-bordered">
                 <a>Statistics</a>
             </li>

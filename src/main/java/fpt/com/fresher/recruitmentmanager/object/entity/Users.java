@@ -5,12 +5,17 @@ import fpt.com.fresher.recruitmentmanager.object.contant.RegexConst;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+import java.io.Serializable;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -21,7 +26,7 @@ import java.util.Set;
 @AllArgsConstructor
 @SQLDelete(sql = "UPDATE users SET deleted = true WHERE user_name=?")
 @Where(clause = "deleted=false")
-public class Users extends BaseEntity {
+public class Users extends BaseEntity implements Serializable, UserDetails {
 
     @Id
     @Column(name = "user_name", unique = true)
@@ -64,6 +69,47 @@ public class Users extends BaseEntity {
             inverseJoinColumns = { @JoinColumn(referencedColumnName = "role_id") })
     private Collection<Role> roles;
 
+    @OneToMany(mappedBy = "instructor") @ToString.Exclude
+    private Set<Quiz> quizSet;
+
+    private Boolean status = true;
+
     private Boolean deleted = false;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @ToString.Exclude
+    @JoinTable(name = "User_Category", joinColumns = { @JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "category_id")})
+    private Set<Category> categoryList = new HashSet<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return null;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return status;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return status;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return status;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return status;
+    }
 
 }
