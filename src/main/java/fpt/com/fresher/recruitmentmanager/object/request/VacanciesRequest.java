@@ -19,7 +19,7 @@ public class VacanciesRequest {
 
     private String description;
 
-    private Major major;
+    private Long majorId;
 
-    private MajorDetail majorDetail;
+    private Long majorDetailId;
 }

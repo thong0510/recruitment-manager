@@ -2,7 +2,7 @@ package fpt.com.fresher.recruitmentmanager.object.entity;
 
 import fpt.com.fresher.recruitmentmanager.object.contant.CommonConst;
 import fpt.com.fresher.recruitmentmanager.object.contant.MessageConst;
-import lombok.Data;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
@@ -13,7 +13,10 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Data
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Recruitment extends BaseEntity {
 
     @Id
@@ -32,15 +35,15 @@ public class Recruitment extends BaseEntity {
     @Column
     private float toSalary;
 
-    @Column(name = "start_date", nullable = false)
-    @DateTimeFormat(pattern = CommonConst.FORMAT_DATE)
-    @Past(message = MessageConst.INVALID_DATE)
-    private Date dateStart;
-
-    @Column(name = "date_end", nullable = false)
-    @DateTimeFormat(pattern = CommonConst.FORMAT_DATE)
-    @Past(message = MessageConst.INVALID_DATE)
-    private Date dateEnd;
+//    @Column(name = "start_date", nullable = false)
+//    @DateTimeFormat(pattern = CommonConst.FORMAT_DATE)
+//    @Past(message = MessageConst.INVALID_DATE)
+//    private Date dateStart;
+//
+//    @Column(name = "date_end", nullable = false)
+//    @DateTimeFormat(pattern = CommonConst.FORMAT_DATE)
+//    @Past(message = MessageConst.INVALID_DATE)
+//    private Date dateEnd;
 
     @ManyToOne
     @JoinColumn(name = "major_id", referencedColumnName = "major_id")
@@ -51,12 +54,12 @@ public class Recruitment extends BaseEntity {
     @JoinColumn(name = "vacancies_id", referencedColumnName = "vacancies_id")
     private Vacancies vacancies;
 
-    @NotNull(message = MessageConst.INVALID_USER_NULL)
-    @ManyToOne
-    @JoinColumn(name = "user_name", referencedColumnName = "user_name")
-    private Users users;
+//    @NotNull(message = MessageConst.INVALID_USER_NULL)
+//    @ManyToOne
+//    @JoinColumn(name = "user_name", referencedColumnName = "user_name")
+//    private Users users;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recruitment")
-    private Set<SkillRecruitment> skill_recruitments;
+    private Set<SkillRecruitment> skillRecruitment;
 
 }

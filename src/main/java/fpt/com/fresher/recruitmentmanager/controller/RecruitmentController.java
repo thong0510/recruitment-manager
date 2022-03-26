@@ -2,15 +2,18 @@ package fpt.com.fresher.recruitmentmanager.controller;
 
 import fpt.com.fresher.recruitmentmanager.object.filter.MajorFilter;
 import fpt.com.fresher.recruitmentmanager.object.filter.RecruitmentFilter;
+import fpt.com.fresher.recruitmentmanager.object.filter.SkillFilter;
 import fpt.com.fresher.recruitmentmanager.object.filter.VacanciesFilter;
 import fpt.com.fresher.recruitmentmanager.object.model.Pagination;
 import fpt.com.fresher.recruitmentmanager.object.model.Sorting;
 import fpt.com.fresher.recruitmentmanager.object.request.RecruitmentRequest;
 import fpt.com.fresher.recruitmentmanager.object.response.MajorResponse;
 import fpt.com.fresher.recruitmentmanager.object.response.RecruitmentResponse;
+import fpt.com.fresher.recruitmentmanager.object.response.SkillResponse;
 import fpt.com.fresher.recruitmentmanager.object.response.VacanciesResponse;
 import fpt.com.fresher.recruitmentmanager.service.interfaces.RecruitmentService;
 import fpt.com.fresher.recruitmentmanager.service.interfaces.MajorService;
+import fpt.com.fresher.recruitmentmanager.service.interfaces.SkillService;
 import fpt.com.fresher.recruitmentmanager.service.interfaces.VacanciesService;
 import fpt.com.fresher.recruitmentmanager.utils.SessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 @Controller
 public class RecruitmentController {
@@ -37,6 +41,9 @@ public class RecruitmentController {
     @Autowired
     private VacanciesService vacanciesService;
 
+    @Autowired
+    private SkillService skillService;
+
     @GetMapping("/hr/list-recruitment")
     public String listRecruitment(Model model,
                             @RequestParam(defaultValue = "1") Integer page,
@@ -47,8 +54,8 @@ public class RecruitmentController {
         search = search.trim();
         RecruitmentFilter filter = RecruitmentFilter.builder()
                 .pagination(pagination)
-                .dateEnd(search)
-                .dateStart(search)
+//                .dateEnd(search)
+//                .dateStart(search)
                 .vacanciesName(search)
                 .majorName(search)
                 .build();
@@ -67,6 +74,13 @@ public class RecruitmentController {
         VacanciesFilter vacanciesFilter = new VacanciesFilter();
         Page<VacanciesResponse> listVacancies = vacanciesService.getAllVacancies(vacanciesFilter);
         model.addAttribute("listVacancies", listVacancies);
+
+        SkillFilter skillFilter = new SkillFilter();
+        List<SkillResponse> listSkillResponse = skillService.getAllSkills(skillFilter).getContent();
+
+        model.addAttribute("listSkill", listSkillResponse);
+
+
         System.out.println("ppp" + listVacancies);
 
         return "hr/recruitmentManage";

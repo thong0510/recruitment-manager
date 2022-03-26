@@ -11,12 +11,12 @@ public final class RecruitmentSpecification {
 
     public static Specification<Recruitment> getSpecification(RecruitmentFilter filter) {
         return Specification.where(hasRecruitmentId(filter.getRecruitmentId() ))
-                .and(hasDateEnd(filter.getDateEnd()))
-                .and(hasDateStart(filter.getDateStart()))
+//                .and(hasDateEnd(filter.getDateEnd()))
+//                .and(hasDateStart(filter.getDateStart()))
                 .and(hasFromSalary(filter.getFromSalary()))
-                .and(hasToSalary(filter.getToSalary()))
-                .and(hasVacanciesName(filter.getVacanciesName()))
-                .and(hasMajorName(filter.getMajorName()));
+                .and(hasToSalary(filter.getToSalary()));
+//                .and(hasVacanciesName(filter.getVacanciesName()))
+//                .and(hasMajorName(filter.getMajorName()));
 
     }
 

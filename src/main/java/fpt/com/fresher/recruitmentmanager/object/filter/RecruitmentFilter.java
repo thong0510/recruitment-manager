@@ -23,9 +23,9 @@ public class RecruitmentFilter {
 
     private float toSalary;
 
-    private String dateStart;
-
-    private String dateEnd;
+//    private String dateStart;
+//
+//    private String dateEnd;
 
     private String majorName;
 
