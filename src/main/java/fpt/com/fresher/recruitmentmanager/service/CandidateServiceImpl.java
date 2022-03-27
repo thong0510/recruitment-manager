@@ -34,7 +34,6 @@ public class CandidateServiceImpl implements CandidateService {
     private final CloudinaryService cloudinaryService;
     private final SkillService skillService;
     private final SkillCandidateRepository skillCandidateRepository;
-    private final SkillMapper skillMapper;
 
     @Override
     public Page<CandidateResponse> getAllCandidates(CandidateFilter filter) {

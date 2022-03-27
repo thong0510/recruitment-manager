@@ -18,10 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -36,6 +33,7 @@ public class QuizController {
     private final CategoryMapper categoryMapper;
 
     @GetMapping("hr/list-quiz")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String getAll(Model model,
                          @RequestParam(defaultValue = "1") int page,
                          @RequestParam(defaultValue = "") String search,
@@ -76,6 +74,7 @@ public class QuizController {
     }
 
     @GetMapping("hr/update-quiz/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String getQuiz(@PathVariable Long id,
                           Model model) {
 
@@ -91,6 +90,7 @@ public class QuizController {
     }
 
     @PostMapping("hr/update-quiz/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String updateQuiz(@PathVariable long id,
                              @ModelAttribute @Valid QuizRequest quiz,
                              RedirectAttributes redirectAttr) {
@@ -105,6 +105,7 @@ public class QuizController {
     }
 
     @GetMapping("hr/delete-quiz/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public String deleteQuiz(@PathVariable long id,
                              RedirectAttributes redirectAttr) {
         quizService.deleteQuiz(id);

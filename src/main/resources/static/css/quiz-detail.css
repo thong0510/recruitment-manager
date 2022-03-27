@@ -1,0 +1,130 @@
+* {
+    box-sizing: border-box;
+}
+
+@media only screen and (max-width: 767px) {
+    .single-course .col-md-6 {
+        width: 50%;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .single-course .col-lg-4 {
+        width: 33.33%;
+    }
+
+    .single-course .col-lg-8 {
+        width: 66.66%;
+    }
+}
+
+.single-course {
+    width: 90%;
+    margin: 60px auto;
+    border-radius: 10px;
+}
+
+.single-course .me-2 {
+    margin-right: 3px;
+}
+
+.single-course .row {
+    display: flex;
+}
+
+.single-course .breadcrumb-item.active {
+    color: #6C757D;
+}
+
+.single-course .thumb {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #3e71d5;
+    border-radius: 10px 0px 0px 10px;
+}
+
+.single-course .thumb img {
+    width: 95%;
+    height: 95%;
+}
+
+.single-course .info {
+    position: relative;
+    background-color: #143880;
+    padding: 29px 44px;
+    border-radius: 0 10px 10px 0;
+}
+
+.single-course .info nav {
+    font-weight: bold;
+}
+
+.single-course .info nav a {
+    color: #ff831d;
+}
+
+.single-course .info h2 {
+    color: #f8f8f8;
+    font-size: 36px;
+}
+
+.single-course .info p {
+    color: #ffffff;
+}
+
+.single-course .info .description {
+    min-height: 200px;
+}
+
+.single-course .controls {
+    display: flex;
+    margin-bottom: 35px;
+}
+
+.single-course .controls .btn {
+    width: 100px;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+.single-course .controls .btn:not(:last-child) {
+    margin: 0 20px 0 0;
+}
+
+.single-course .controls .btn-enroll {
+    background: #d12d17;
+}
+
+.single-course .controls .btn-learn {
+    background: #004e97;
+}
+
+.single-course .controls .btn-quiz {
+    background: #fa7b13;
+}
+
+.single-course .controls .btn:hover {
+    filter: saturate(0.9) brightness(1.1) contrast(1.5);
+}
+
+.single-course .info span {
+    color: #ffffff;
+}
+
+.single-course .info .last-update {
+    position: absolute;
+    bottom: 10px;
+    left: 20px;
+    font-size: 15px;
+}
+
+.single-course .info .language {
+    position: absolute;
+    bottom: 10px;
+    right: 20px;
+    display: block;
+    width: 100px;
+    text-align: right;
+    font-size: 18px;
+}

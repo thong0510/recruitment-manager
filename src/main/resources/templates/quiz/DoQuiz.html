@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@1.24.3/dist/full.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.25.0/axios.min.js"></script>
+    <script defer th:src="@{/static/js/do-quiz.js}"></script>
+    <link rel="stylesheet" th:href="@{/static/css/Count.css}">
+    <script defer th:src="@{/static/js/download.js}"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+
+<!-- Modal -->
+<dialog id="count-down-modal" class="bg-transparent z-0 relative w-screen h-screen fadeIn">
+    <div
+            class="p-7 pt-52 flex justify-center items-start overflow-x-hidden overflow-y-auto fixed left-0 top-0 w-full h-full bg-gray-900 bg-opacity-50 z-50 transition-opacity duration-300 opacity-0">
+        <div class="bg-white flex rounded-lg lg:w-4/12 md:w-1/2 w-full relative">
+            <div class="flex flex-col items-start w-full">
+                <div class="demo" id="loading">
+                    <div class="demo__colored-blocks">
+
+                        <div class="demo__colored-blocks-rotater">
+                            <div class="demo__colored-block"></div>
+                            <div class="demo__colored-block"></div>
+                            <div class="demo__colored-block"></div>
+                        </div>
+                        <div class="demo__colored-blocks-inner"></div>
+                        <div class="demo__text">Ready</div>
+
+                    </div>
+                    <div class="demo__inner">
+                        <svg class="demo__numbers" viewBox="0 0 100 100">
+                            <defs>
+                                <path class="demo__num-path-1" d="M40,28 55,22 55,78" />
+                                <path class="demo__num-join-1-2"
+                                      d="M55,78 55,83 a17,17 0 1,0 34,0 a20,10 0 0,0 -20,-10" />
+                                <path class="demo__num-path-2"
+                                      d="M69,73 l-35,0 l30,-30 a16,16 0 0,0 -22.6,-22.6 l-7,7" />
+                                <path class="demo__num-join-2-3" d="M28,69 Q25,44 34.4,27.4" />
+                                <path class="demo__num-path-3" d="M30,20 60,20 40,50 a18,15 0 1,1 -12,19" />
+                            </defs>
+                            <path class="demo__numbers-path" d="M-10,20 60,20 40,50 a18,15 0 1,1 -12,19
+                                           Q25,44 34.4,27.4
+                                           l7,-7 a16,16 0 0,1 22.6,22.6 l-30,30 l35,0 L69,73
+                                           a20,10 0 0,1 20,10 a17,17 0 0,1 -34,0 L55,83
+                                           l0,-61 L40,28" />
+                        </svg>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</dialog>
+
+<div id="container" th:data-quizId="${quizId}" th:data-userId="${userId}" th:data-numberOfQuestions="${numberOfQuestions}" th:data-level="${level}" class="h-full pb-96 relative"
+     style="background-color: rgb(75, 4, 54);">
+    <div class="absolute">
+        <svg xmlns="http://www.w3.org/2000/svg" onclick="openModal('exits-modal')" class="h-10 w-10 text-white ml-10 mt-10 hover:text-blue-400 cursor-pointer"
+             viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clip-rule="evenodd" />
+        </svg>
+    </div>
+    <div class="h-10 pt-10">
+        <p id="timer" class="text-white font-semibold text-5xl flex justify-center items-center pt-10"></p>
+    </div>
+    <div class="w-10/12 mx-auto mt-20 mb-5 rounded-3xl flex justify-center items-center flex-col pt-10">
+        <div
+                class="lg:w-7/12 w-10/12 mb-10 p-12 mx-auto h-20 bg-yellow-500 rounded-xl flex justify-center items-center cursor-pointer">
+            <label id="title" class="text-2xl text-white font-semibold cursor-pointer">Title</label>
+        </div>
+    </div>
+    <div id="answers" class="flex flex-wrap">
+    </div>
+    <div class="w-12/12 mx-auto mt-5 h-20 rounded-3xl flex justify-center items-center ">
+        <ul class="grid grid-flow-col grid-cols-2 grid-rows-1">
+            <li class="flex items-center">
+                <div
+                        class="prev-btn flex justify-center items-center content-center bg-gradient-to-br from-blue-300 to-blue-600 shadow-md hover:shadow-lg h-20 w-20 rounded-full fill-current text-white cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 20 20"
+                         fill="currentColor">
+                        <path
+                                d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" />
+                    </svg>
+                </div>
+            </li>
+            <li class="flex items-center ml-5">
+                <div
+                        class="next-btn flex justify-center items-center content-center bg-gradient-to-br from-blue-300 to-blue-600 shadow-md hover:shadow-lg h-20 w-20 rounded-full fill-current text-white cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" viewBox="0 0 20 20"
+                         fill="currentColor" style="transform: rotate(-180deg);">
+                        <path
+                                d="M8.445 14.832A1 1 0 0010 14v-2.798l5.445 3.63A1 1 0 0017 14V6a1 1 0 00-1.555-.832L10 8.798V6a1 1 0 00-1.555-.832l-6 4a1 1 0 000 1.664l6 4z" />
+                    </svg>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="flex justify-center items-center flex-col mt-5">
+        <label class="text-3xl text-white font-semibold mb-5 question-count">10 / 12</label>
+
+        <button id="finish"
+                class='relative bg-green-600 w-52 text-white p-4 rounded text-2xl font-bold overflow-visible hover:bg-green-400'>
+            Finished
+        </button>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<dialog id="main-modal" class="bg-transparent z-0 relative w-screen h-screen fadeIn">
+    <div
+            class="p-7 pt-52 flex justify-center items-start overflow-x-hidden overflow-y-auto fixed left-0 top-0 w-full h-full bg-gray-900 bg-opacity-50 z-50 transition-opacity duration-300 opacity-0">
+        <div class="bg-white flex rounded-lg lg:w-4/12 md:w-1/2 w-full relative">
+            <div class="flex flex-col items-start w-full">
+                <div class="p-7 flex items-center w-full">
+                    <div class="text-gray-900 font-bold text-lg">Do you want to finish quiz ?</div>
+                    <svg onclick="modalClose('main-modal')"
+                         class="ml-auto fill-current text-gray-700 w-5 h-5 cursor-pointer"
+                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
+                        <path
+                                d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z" />
+                    </svg>
+                </div>
+
+                <div class="px-7 w-full">
+                    <!-- START FORM -->
+
+
+                    <!--Footer-->
+                    <div class="flex justify-center pt-2 mt-3 mb-5">
+                        <button type="submit" id="" onclick="viewResult('main-modal', 'finish')"
+                                class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3">
+                            Yes
+                        </button>
+                        <button type="button" onclick="modalClose('main-modal')"
+                                class="bg-transparent hover:bg-gray-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                            No
+                        </button>
+
+                    </div>
+                    <!-- END FORM -->
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</dialog>
+
+<dialog id="exits-modal" class="bg-transparent z-0 relative w-screen h-screen fadeIn">
+    <div
+            class="p-7 pt-52 flex justify-center items-start overflow-x-hidden overflow-y-auto fixed left-0 top-0 w-full h-full bg-gray-900 bg-opacity-50 z-50 transition-opacity duration-300 opacity-0">
+        <div class="bg-white flex rounded-lg lg:w-4/12 md:w-1/2 w-full relative">
+            <div class="flex flex-col items-start w-full">
+                <div class="p-7 flex items-center w-full">
+                    <div class="text-gray-900 font-bold text-lg">Do you want to exit quiz ?</div>
+                    <svg onclick="modalClose('exits-modal')"
+                         class="ml-auto fill-current text-gray-700 w-5 h-5 cursor-pointer"
+                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
+                        <path
+                                d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z" />
+                    </svg>
+                </div>
+
+                <div class="px-7 w-full">
+                    <!-- START FORM -->
+
+
+                    <!--Footer-->
+                    <div class="flex justify-center pt-2 mt-3 mb-5">
+                        <button type="submit" onclick="exits();"
+                                class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3">
+                            Yes
+                        </button>
+                        <button type="button" onclick="modalClose('exits-modal')"
+                                class="bg-transparent hover:bg-gray-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                            No
+                        </button>
+
+                    </div>
+                    <!-- END FORM -->
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</dialog>
+
+<!-- show results -->
+<dialog id="result-modal" class="bg-transparent z-0 relative w-screen h-screen fadeIn">
+    <div
+            class="p-7 pt-52 flex justify-center items-start overflow-x-hidden overflow-y-auto fixed left-0 top-0 w-full h-full bg-gray-900 bg-opacity-50 z-50 transition-opacity duration-300 opacity-0">
+        <div class="bg-white flex rounded-lg lg:w-5/12 md:w-1/2 w-10/12 relative">
+            <div class="flex flex-col items-start w-full">
+                <div class="p-7 flex items-center w-full">
+                    <div class="text-gray-900 font-bold text-2xl">Online Quiz Result</div>
+                    <svg onclick="openModal('exits-modal')"
+                         class="ml-auto fill-current text-gray-700 w-5 h-5 cursor-pointer"
+                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
+                        <path
+                                d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z" />
+                    </svg>
+                </div>
+
+                <div class="px-7 flex justify-between items-center flex-col w-full">
+                    <!-- START FORM -->
+                    <div class="flex justify-end w-full border-t-2 mb-4"></div>
+                    <div class="flex justify-end flex-col items-end mr-5">
+
+                        <table class="table-auto">
+                            <tbody>
+                            <tr>
+                                <td><div style="text-align: end;" class="text-2xl p-2"><span>Questions : </span></div></td>
+                                <td><span class="font-semibold text-2xl p-2" id="number-question">10</span></td>
+                            </tr>
+                            <tr>
+                                <td><div style="text-align: end;" class="text-2xl p-2"><span>Attempt : </span></div></td>
+                                <td><span class="font-semibold text-2xl p-2" id="answer-attempt">10</span></td>
+                            </tr>
+                            <tr>
+                                <td><div style="text-align: end;" class="text-2xl p-2"><span>Correct : </span></div></td>
+                                <td><span class="font-semibold text-2xl p-2" id="answer-correct">10</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="text-align: end;" class="text-2xl p-2"><span>Wrong : </span></div>
+                                </td>
+                                <td><span class="font-semibold text-2xl p-2" id="answer-wrong">10</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div style="text-align: end;" class="text-2xl p-2"><span>Time : </span></div>
+                                </td>
+                                <td><span class="font-semibold text-2xl p-2" id="time">10</span></td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div style="text-align: end;" class="text-2xl p-2"><span>Score : </span></div>
+                                </td>
+                                <td><span class="font-semibold text-2xl p-2" id="score">10</span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <!--Footer-->
+                    <div class="flex justify-center pt-5 mt-5 mb-5 w-full border-t-2 relative">
+                        <button type="submit" id="start-again"
+                                class="btn bg-blue-500 w-36 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-3xl mr-3">
+                            Start again
+                        </button>
+
+                        <button type="submit" id="view-details"
+                                class="btn bg-yellow-500 w-36 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-3xl mr-3">
+                            View Details
+                        </button>
+
+                        <div id="downloadBtn" class="absolute right-0 cursor-pointer">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);">
+                                <path d="M18 22a2 2 0 0 0 2-2v-5l-5 4v-3H8v-2h7v-3l5 4V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12zM13 4l5 5h-5V4z">
+                                </path>
+                            </svg>
+                        </div>
+
+                    </div>
+                    <!-- END FORM -->
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</dialog>
+
+<!-- view details -->
+<dialog id="view-modal" class="bg-transparent z-0 relative w-screen h-screen fadeIn">
+    <div
+            class="p-7 pt-20 pb-20 flex justify-center items-start overflow-x-hidden overflow-y-auto fixed left-0 top-0 w-full h-full bg-gray-900 bg-opacity-50 z-50 transition-opacity duration-300 opacity-0">
+        <div class="bg-white flex rounded-lg w-10/12 h-full relative">
+            <div class="flex flex-col items-start justify-center w-full">
+                <div class="p-7 flex items-center w-full">
+                    <div class="text-gray-900 font-bold text-2xl">View Quiz Result</div>
+                    <svg onclick="modalClose('view-modal')"
+                         class="ml-auto fill-current text-gray-700 w-5 h-5 cursor-pointer"
+                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
+                        <path
+                                d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z" />
+                    </svg>
+                </div>
+
+                <div class="px-7 flex justify-start items-center flex-col w-full">
+                    <!-- START FORM -->
+                    <div class="flex justify-end w-full border-t-2 mb-4"></div>
+                    <!-- END FORM -->
+
+                </div>
+
+                <div class="flex justify-start flex-col items-end mr-5 ml-8 w-11/12">
+                    <div class="bg-gray-100 w-full p-5 rounded-xl">
+                        <span id="question-review" class="font-bold">Question 1: </span>
+                        <span id="title-review"></span>
+                    </div>
+
+                    <div class="mx-auto w-10/12 border-t-2 mb-4 mt-10 mb-10"></div>
+
+                    <div class="w-full" id="answers-review">
+
+                    </div>
+
+                </div>
+
+                <div class="flex justify-center w-full mt-4">
+                    <button id="prev-btn-review"
+                            class="border border-teal-500 text-teal-500 block rounded-sm font-bold py-4 px-6 mr-2 flex items-center hover:bg-blue-500 hover:text-white">
+                        <svg class="h-5 w-5 mr-2 fill-current" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="-49 141 512 512"
+                             style="enable-background:new -49 141 512 512;" xml:space="preserve">
+                                <path id="XMLID_10_"
+                                      d="M438,372H36.355l72.822-72.822c9.763-9.763,9.763-25.592,0-35.355c-9.763-9.764-25.593-9.762-35.355,0 l-115.5,115.5C-46.366,384.01-49,390.369-49,397s2.634,12.989,7.322,17.678l115.5,115.5c9.763,9.762,25.593,9.763,35.355,0 c9.763-9.763,9.763-25.592,0-35.355L36.355,422H438c13.808,0,25-11.193,25-25S451.808,372,438,372z">
+                                </path>
+                            </svg>
+                        Previous page
+                    </button>
+                    <button id="next-btn-review"
+                            class="border border-teal-500 bg-teal-500 text-black block rounded-sm font-bold py-4 px-6 ml-2 flex items-center hover:bg-blue-500 hover:text-white">
+                        Next page
+                        <svg class="h-5 w-5 ml-2 fill-current" clasversion="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="-49 141 512 512"
+                             style="enable-background:new -49 141 512 512;" xml:space="preserve">
+                                <path id="XMLID_11_"
+                                      d="M-24,422h401.645l-72.822,72.822c-9.763,9.763-9.763,25.592,0,35.355c9.763,9.764,25.593,9.762,35.355,0
+                                                        l115.5-115.5C460.366,409.989,463,403.63,463,397s-2.634-12.989-7.322-17.678l-115.5-115.5c-9.763-9.762-25.593-9.763-35.355,0
+                                                        c-9.763,9.763-9.763,25.592,0,35.355l72.822,72.822H-24c-13.808,0-25,11.193-25,25S-37.808,422-24,422z" />
+                            </svg>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</dialog>
+
+</body>
+
+</html>

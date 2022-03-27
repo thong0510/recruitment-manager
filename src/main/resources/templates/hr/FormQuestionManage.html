@@ -6,287 +6,321 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Question form</title>
-    <link href="https://cdn.jsdelivr.net/npm/daisyui@1.20.1/dist/full.css" rel="stylesheet" type="text/css" />
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@1.20.1/dist/full.css" rel="stylesheet" type="text/css"/>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"
+          integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/28a05ca2b4.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <div th:replace="fragments/_Header"></div>
+<div th:replace="fragments/_Header"></div>
 
-    <div class=" shadow bg-base-200 drawer drawer-mobile " style="height: 91vh;">
-        <input id="my-drawer-2" type="checkbox" class="drawer-toggle">
+<div class=" shadow bg-base-200 drawer drawer-mobile " style="height: 91vh;">
+    <input id="my-drawer-2" type="checkbox" class="drawer-toggle">
 
-        <div class="flex flex-col items-center drawer-content">
-            <label for="my-drawer-2" class="mb-4 btn btn-primary drawer-button lg:hidden w-10 rounded-full right-5 top-16 md:top-28 fixed"><i class="fas fa-angle-right"></i></label>
-            <!-- STRART MAIN -->
-            <main class="my-4 w-11/12 mx-auto">
-                <!-- START Welcome text-->
-                <p th:if="${questionInfo == null}" class="text-xl font-semibold text-center mb-4 uppercase ">Create question in quiz [[${quizId}]]</p>
-                <p th:if="${questionInfo != null}" class="text-xl font-semibold text-center mb-4 uppercase ">Edit question in quiz [[${quizId}]]</p>
-                <div th:replace="fragments/_Alert"></div>
-                <!-- END welcome text -->
-                <!-- START TABLE -->
-                <div class="card text-center shadow-lg my-4 py-5 px-16">
-                    <!-- START FORM -->
-                    <form th:if="${questionInfo == null}" id="question-form" th:object="${question}" method="post" th:action="@{/hr/create-question/__${quizId}__}">
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="label-text">Title:</span>
-                            </label>
-                            <input type="text" th:field="*{title}" id="quizName" class="input input-bordered">
-                        </div>
+    <div class="flex flex-col items-center drawer-content">
+        <label for="my-drawer-2"
+               class="mb-4 btn btn-primary drawer-button lg:hidden w-10 rounded-full right-5 top-16 md:top-28 fixed"><i
+                class="fas fa-angle-right"></i></label>
+        <!-- STRART MAIN -->
+        <main class="my-4 w-11/12 mx-auto">
+            <!-- START Welcome text-->
+            <p th:if="${questionInfo == null}" class="text-xl font-semibold text-center mb-4 uppercase ">Create question
+                in quiz [[${quizId}]]</p>
+            <p th:if="${questionInfo != null}" class="text-xl font-semibold text-center mb-4 uppercase ">Edit question
+                in quiz [[${quizId}]]</p>
+            <div th:replace="fragments/_Alert"></div>
+            <!-- END welcome text -->
+            <!-- START TABLE -->
+            <div class="card text-center shadow-lg my-4 py-5 px-16">
+                <!-- START FORM -->
+                <form th:if="${questionInfo == null}" id="question-form" th:object="${question}" method="post"
+                      th:action="@{/hr/create-question/__${quizId}__}">
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Title:</span>
+                        </label>
+                        <input type="text" th:field="*{title}" id="quizName" class="input input-bordered">
+                    </div>
 
-                        <div class="form-control mt-2">
-                            <label class="label">
-                                <span class="label-text">Tag:</span>
-                            </label>
+                    <div class="form-control mt-2">
+                        <label class="label">
+                            <span class="label-text">Tag:</span>
+                        </label>
 
-                        </div>
-                        <select class="select select-bordered w-full" th:field="*{tagId}">
-                            <option disabled="disabled" selected="selected" value="">Choose question tag</option>
-                            <!--                                th:selected="${tag.id == question.tag.id}"-->
-                            <option th:each="tag : ${listTags}"
-                                    th:value="${tag.id}"
-                                    th:utext="${tag.name}"
+                    </div>
+                    <select class="select select-bordered w-full" th:field="*{tagId}">
+                        <option disabled="disabled" selected="selected" value="">Choose question tag</option>
+                        <!--                                th:selected="${tag.id == question.tag.id}"-->
+                        <option th:each="tag : ${listTags}"
+                                th:value="${tag.id}"
+                                th:utext="${tag.name}"
+                        ></option>
+                    </select>
+
+                    <div class="form-control mt-2">
+                        <label class="label">
+                            <span class="label-text">Difficulty:</span>
+                        </label>
+                        <select class="select select-bordered w-full" th:field="*{difficultyId}">
+                            <option disabled="disabled" selected="selected" value="">Choose question difficulty</option>
+                            <option th:each="difficulty : ${listDifficulties}"
+                                    th:value="${difficulty.id}"
+                                    th:utext="${difficulty.level}"
                             ></option>
                         </select>
+                    </div>
 
-                        <div class="form-control mt-2">
-                            <label class="label">
-                                <span class="label-text">Difficulty:</span>
+                    <div class="w-full border-2 rounded-xl border-gray-200 mt-5 px-5">
+                        <div class="form-control">
+                            <label class="cursor-pointer label">
+                                <span class="label-text">Multiple answers</span>
+                                <input type="checkbox" th:field="*{isMultiple}" id="isMultiple" value="true"
+                                       onclick="changeTypeInput(this.checked)" class="checkbox checkbox-primary">
                             </label>
-                            <select class="select select-bordered w-full" th:field="*{difficultyId}">
-                                <option disabled="disabled" selected="selected" value="">Choose question difficulty</option>
-                                <option th:each="difficulty : ${listDifficulties}"
-                                        th:value="${difficulty.id}"
-                                        th:utext="${difficulty.level}"
-                                ></option>
-                            </select>
                         </div>
+                    </div>
 
-                        <div class="w-full border-2 rounded-xl border-gray-200 mt-5 px-5">
-                            <div class="form-control">
-                                <label class="cursor-pointer label">
-                                    <span class="label-text">Multiple answers</span> 
-                                    <input type="checkbox" th:field="*{isMultiple}" id="isMultiple" value="true" onclick="changeTypeInput(this.checked)" class="checkbox checkbox-primary">
-                                </label>
+                    <div class="form-control mt-2" id="js-answersList">
+                        <label class="label">
+                            <span class="label-text">Possible answers:</span>
+                        </label>
+                        <div class="answer flex items-center mb-4">
+                            <div class="relative w-11/12">
+                                <input type="text" name="answersText" placeholder="Type the answer"
+                                       class="w-full pr-16 input input-primary input-bordered">
+                                <button type="button"
+                                        class="absolute top-0 right-0 rounded-l-none btn btn-primary add-answer-button"
+                                        style="visibility: hidden;"><i class="fas fa-plus" aria-hidden="true"></i>
+                                </button>
                             </div>
-                        </div>
-
-                        <div class="form-control mt-2" id="js-answersList">
-                            <label class="label">
-                                <span class="label-text">Possible answers:</span>
-                            </label>
-                            <div class="answer flex items-center mb-4">
-                                <div class="relative w-11/12">
-                                    <input type="text" name="answersText" placeholder="Type the answer" class="w-full pr-16 input input-primary input-bordered">
-                                    <button type="button" class="absolute top-0 right-0 rounded-l-none btn btn-primary add-answer-button" style="visibility: hidden;"><i class="fas fa-plus" aria-hidden="true"></i></button>
-                                </div>
-                                <div class="w-1/12 flex justify-center mt-2">
-                                    <div data-tip="Check if this is answer" class="tooltip">
-                                        <input type="radio" name="answersIsCorrect" value="1" class="js-isCorrect checkbox checkbox-primary">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="answer flex items-center">
-                                <div class="relative w-11/12">
-                                    <input type="text" name="answersText" placeholder="Type the answer" class="w-full pr-16 input input-primary input-bordered">
-                                    <button type="button" class="absolute top-0 right-0 rounded-l-none btn btn-primary add-answer-button"><i class="fas fa-plus"></i></button>
-                                </div>
-                                <div class="w-1/12 flex justify-center mt-2">
-                                    <div data-tip="Check if this is answer" class="tooltip">
-                                        <input type="radio" name="answersIsCorrect" value="2" class="js-isCorrect checkbox checkbox-primary">
-                                    </div>
+                            <div class="w-1/12 flex justify-center mt-2">
+                                <div data-tip="Check if this is answer" class="tooltip">
+                                    <input type="radio" name="answersIsCorrect" value="1"
+                                           class="js-isCorrect checkbox checkbox-primary">
                                 </div>
                             </div>
                         </div>
-                        <!--Footer-->
-                        <div class="flex justify-center pt-2 mt-3 mb-5">
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3">
+                        <div class="answer flex items-center">
+                            <div class="relative w-11/12">
+                                <input type="text" name="answersText" placeholder="Type the answer"
+                                       class="w-full pr-16 input input-primary input-bordered">
+                                <button type="button"
+                                        class="absolute top-0 right-0 rounded-l-none btn btn-primary add-answer-button">
+                                    <i class="fas fa-plus"></i></button>
+                            </div>
+                            <div class="w-1/12 flex justify-center mt-2">
+                                <div data-tip="Check if this is answer" class="tooltip">
+                                    <input type="radio" name="answersIsCorrect" value="2"
+                                           class="js-isCorrect checkbox checkbox-primary">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--Footer-->
+                    <div class="flex justify-center pt-2 mt-3 mb-5">
+                        <button type="submit"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3">
                             Save
                         </button>
-                            <a th:href="@{/hr/list-question/__${quizId}__}" class="bg-transparent hover:bg-gray-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                        <a th:href="@{/hr/list-question/__${quizId}__}"
+                           class="bg-transparent hover:bg-gray-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
                             Back to list
                         </a>
-                        </div>
-                    </form>
+                    </div>
+                </form>
 
-                    <form th:if="${questionInfo != null}" id="question-form" th:object="${question}" method="post"
-                          th:action="@{/hr/update-question/__${quizId}__/__${questionInfo.id}__}">
-                        <div class="form-control">
-                            <label class="label">
-                                <span class="label-text">Title:</span>
-                            </label>
-                            <input type="text" th:field="*{title}" id="quizName" class="input input-bordered">
-                        </div>
+                <form th:if="${questionInfo != null}" id="question-form" th:object="${question}" method="post"
+                      th:action="@{/hr/update-question/__${quizId}__/__${questionInfo.id}__}">
+                    <div class="form-control">
+                        <label class="label">
+                            <span class="label-text">Title:</span>
+                        </label>
+                        <input type="text" th:field="*{title}" id="quizName" class="input input-bordered">
+                    </div>
 
-                        <div class="form-control mt-2">
-                            <label class="label">
-                                <span class="label-text">Tag:</span>
-                            </label>
+                    <div class="form-control mt-2">
+                        <label class="label">
+                            <span class="label-text">Tag:</span>
+                        </label>
 
-                        </div>
-                        <select class="select select-bordered w-full" th:field="*{tagId}">
-                            <option th:each="tag : ${listTags}"
-                                    th:value="${tag.id}"
-                                    th:selected="${tag.id == question.tagId}"
-                                    th:utext="${tag.name}"
+                    </div>
+                    <select class="select select-bordered w-full" th:field="*{tagId}">
+                        <option th:each="tag : ${listTags}"
+                                th:value="${tag.id}"
+                                th:selected="${tag.id == question.tagId}"
+                                th:utext="${tag.name}"
+                        ></option>
+                    </select>
+
+                    <div class="form-control mt-2">
+                        <label class="label">
+                            <span class="label-text">Difficulty:</span>
+                        </label>
+                        <select class="select select-bordered w-full" th:field="*{difficultyId}">
+                            <option th:each="difficulty : ${listDifficulties}"
+                                    th:value="${difficulty.id}"
+                                    th:selected="${difficulty.id == question.difficultyId}"
+                                    th:utext="${difficulty.level}"
                             ></option>
                         </select>
+                    </div>
 
-                        <div class="form-control mt-2">
-                            <label class="label">
-                                <span class="label-text">Difficulty:</span>
+                    <div class="w-full border-2 rounded-xl border-gray-200 mt-5 px-5">
+                        <div class="form-control">
+                            <label class="cursor-pointer label">
+                                <span class="label-text">Multiple answers</span>
+                                <input type="checkbox" th:field="*{isMultiple}" id="isMultiple" value="true"
+                                       onclick="changeTypeInput(this.checked)" class="checkbox checkbox-primary">
                             </label>
-                            <select class="select select-bordered w-full" th:field="*{difficultyId}">
-                                <option th:each="difficulty : ${listDifficulties}"
-                                        th:value="${difficulty.id}"
-                                        th:selected="${difficulty.id == question.difficultyId}"
-                                        th:utext="${difficulty.level}"
-                                ></option>
-                            </select>
                         </div>
+                    </div>
 
-                        <div class="w-full border-2 rounded-xl border-gray-200 mt-5 px-5">
-                            <div class="form-control">
-                                <label class="cursor-pointer label">
-                                    <span class="label-text">Multiple answers</span>
-                                    <input type="checkbox" th:field="*{isMultiple}" id="isMultiple" value="true" onclick="changeTypeInput(this.checked)" class="checkbox checkbox-primary">
-                                </label>
+                    <div class="form-control mt-2" id="js-answersList">
+                        <label class="label">
+                            <span class="label-text">Possible answers:</span>
+                        </label>
+
+                        <div th:each="answer : ${question.answers}" class="answer flex items-center mb-4">
+                            <div class="relative w-11/12">
+                                <input type="text" th:value="${answer.text}" name="answersText"
+                                       placeholder="Type the answer"
+                                       class="w-full pr-16 input input-primary input-bordered">
+                                <button type="button"
+                                        class="absolute top-0 right-0 rounded-l-none btn btn-primary add-answer-button"
+                                        style="visibility: hidden;"><i class="fas fa-plus" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                            <div class="w-1/12 flex justify-center mt-2">
+                                <div data-tip="Check if this is answer" class="tooltip">
+                                    <input th:if="${question.isMultiple != true}" type="radio" name="answersIsCorrect"
+                                           th:value="${answerStat.count}" th:checked="${answer.isCorrect}"
+                                           class="js-isCorrect checkbox checkbox-primary">
+                                    <input th:if="${question.isMultiple == true}" type="checkbox"
+                                           name="answersIsCorrect" th:value="${answerStat.count}"
+                                           th:checked="${answer.isCorrect}"
+                                           class="js-isCorrect checkbox checkbox-primary">
+                                    <input th:value="${answer.getId()}" name="answersId" type="hidden">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-control mt-2" id="js-answersList">
-                            <label class="label">
-                                <span class="label-text">Possible answers:</span>
-                            </label>
-
-                            <div th:each="answer : ${question.answers}" class="answer flex items-center mb-4">
-                                <div class="relative w-11/12">
-                                    <input type="text" th:value="${answer.text}" name="answersText" placeholder="Type the answer" class="w-full pr-16 input input-primary input-bordered">
-                                    <button type="button" class="absolute top-0 right-0 rounded-l-none btn btn-primary add-answer-button" style="visibility: hidden;"><i class="fas fa-plus" aria-hidden="true"></i></button>
-                                </div>
-                                <div class="w-1/12 flex justify-center mt-2">
-                                    <div data-tip="Check if this is answer" class="tooltip">
-                                        <input th:if="${question.isMultiple != true}" type="radio" name="answersIsCorrect" th:value="${answerStat.count}" th:checked="${answer.isCorrect}" class="js-isCorrect checkbox checkbox-primary">
-                                        <input th:if="${question.isMultiple == true}" type="checkbox" name="answersIsCorrect" th:value="${answerStat.count}" th:checked="${answer.isCorrect}" class="js-isCorrect checkbox checkbox-primary">
-                                        <input th:value="${answer.getId()}" name="answersId" type="hidden">
-                                    </div>
+                        <div th:if="${question.answers.size() < 6}" class="answer flex items-center">
+                            <div class="relative w-11/12">
+                                <input type="text" name="answersText" placeholder="Type the answer"
+                                       class="w-full pr-16 input input-primary input-bordered">
+                                <button type="button"
+                                        class="absolute top-0 right-0 rounded-l-none btn btn-primary add-answer-button">
+                                    <i class="fas fa-plus"></i></button>
+                            </div>
+                            <div class="w-1/12 flex justify-center mt-2">
+                                <div data-tip="Check if this is answer" class="tooltip">
+                                    <input type="radio" name="answersIsCorrect" th:value="${question.answers.size()+1}"
+                                           class="js-isCorrect checkbox checkbox-primary">
                                 </div>
                             </div>
-
-                            <div th:if="${question.answers.size() < 6}" class="answer flex items-center">
-                                <div class="relative w-11/12">
-                                    <input type="text" name="answersText" placeholder="Type the answer" class="w-full pr-16 input input-primary input-bordered">
-                                    <button type="button" class="absolute top-0 right-0 rounded-l-none btn btn-primary add-answer-button"><i class="fas fa-plus"></i></button>
-                                </div>
-                                <div class="w-1/12 flex justify-center mt-2">
-                                    <div data-tip="Check if this is answer" class="tooltip">
-                                        <input type="radio" name="answersIsCorrect" th:value="${question.answers.size()+1}" class="js-isCorrect checkbox checkbox-primary">
-                                    </div>
-                                </div>
-                            </div>
-
                         </div>
-                        <!--Footer-->
-                        <div class="flex justify-center pt-2 mt-3 mb-5">
-                            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3">
-                                Save
-                            </button>
-                            <a th:href="@{/hr/list-question/__${quizId}__}" class="bg-transparent hover:bg-gray-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-                                Back to list
-                            </a>
-                        </div>
-                    </form>
-                    <!-- END FORM -->
-                </div>
-                <!-- END TABLE -->
 
-            </main>
-            <!-- END MAIN -->
-        </div>
+                    </div>
+                    <!--Footer-->
+                    <div class="flex justify-center pt-2 mt-3 mb-5">
+                        <button type="submit"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3">
+                            Save
+                        </button>
+                        <a th:href="@{/hr/list-question/__${quizId}__}"
+                           class="bg-transparent hover:bg-gray-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                            Back to list
+                        </a>
+                    </div>
+                </form>
+                <!-- END FORM -->
+            </div>
+            <!-- END TABLE -->
 
-        <div th:replace="fragments/_SideBar"></div>
-
+        </main>
+        <!-- END MAIN -->
     </div>
 
-    
+    <div th:replace="fragments/_SideBar"></div>
 
-    <script>
+</div>
 
-        function changeTypeInput(isMultiple){
-            let isCorrectElements = document.querySelectorAll("#js-answersList .answer .js-isCorrect");
-            isCorrectElements.forEach(element => {
-                element.type = isMultiple == true? 'checkbox' : 'radio';
-            })
 
+<script>
+
+    function changeTypeInput(isMultiple) {
+        let isCorrectElements = document.querySelectorAll("#js-answersList .answer .js-isCorrect");
+        isCorrectElements.forEach(element => {
+            element.type = isMultiple == true ? 'checkbox' : 'radio';
+        })
+
+    }
+
+    const createAnswer = function () {
+        var inputGroup = document.createElement('div');
+        inputGroup.classList.add('relative', 'mt-3', 'w-11/12');
+
+        var input = document.createElement('input');
+        input.classList.add('w-full', 'pr-16', 'input', 'input-primary', 'input-bordered');
+        input.placeholder = 'Type the answer';
+        input.name = "answersText";
+        input.type = 'text';
+
+        var button = document.createElement('button');
+        button.classList.add('absolute', 'top-0', 'right-0', 'rounded-l-none', 'btn', 'btn-primary', 'add-answer-button');
+        button.type = 'button';
+        button.innerHTML = '<i class="fas fa-plus"></i>';
+        if (numberQuestion == 5) {
+            button.style.visibility = "hidden"
         }
-        
-        const createAnswer = function() {
-            var inputGroup = document.createElement('div');
-            inputGroup.classList.add('relative', 'mt-3', 'w-11/12');
 
-            var input = document.createElement('input');
-            input.classList.add('w-full', 'pr-16', 'input', 'input-primary', 'input-bordered');
-            input.placeholder = 'Type the answer';
-            input.name="answersText";
-            input.type = 'text';
+        inputGroup.append(input, button);
 
-            var button = document.createElement('button');
-            button.classList.add('absolute', 'top-0', 'right-0', 'rounded-l-none', 'btn', 'btn-primary', 'add-answer-button');
-            button.type = 'button';
-            button.innerHTML = '<i class="fas fa-plus"></i>';
-            if(numberQuestion == 5){
-                button.style.visibility = "hidden"
-            }
+        var checkboxGroup = document.createElement('div');
+        checkboxGroup.classList.add('w-1/12', 'flex', 'justify-center', 'mt-4');
 
-            inputGroup.append(input, button);
+        var tooltip = document.createElement('div');
+        tooltip.classList.add('tooltip');
+        tooltip.setAttribute('data-tip', 'Check if this is answer');
 
-            var checkboxGroup = document.createElement('div');
-            checkboxGroup.classList.add('w-1/12', 'flex', 'justify-center', 'mt-4');
+        let isMultiple = document.getElementById("isMultiple").checked;
+        var checkbox = document.createElement('input');
+        checkbox.classList.add('checkbox', 'checkbox-primary', 'js-isCorrect');
+        checkbox.type = isMultiple == true ? 'checkbox' : 'radio';
+        checkbox.name = 'answersIsCorrect';
+        checkbox.value = numberQuestion + 1;
 
-            var tooltip = document.createElement('div');
-            tooltip.classList.add('tooltip');
-            tooltip.setAttribute('data-tip', 'Check if this is answer');
+        tooltip.appendChild(checkbox);
+        checkboxGroup.append(tooltip);
 
-            let isMultiple = document.getElementById("isMultiple").checked;
-            var checkbox = document.createElement('input');
-            checkbox.classList.add('checkbox', 'checkbox-primary', 'js-isCorrect');
-            checkbox.type = isMultiple == true? 'checkbox' : 'radio';
-            checkbox.name = 'answersIsCorrect';
-            checkbox.value = numberQuestion+1;
+        var answerGroup = document.createElement('div')
+        answerGroup.classList.add('answer', 'flex', 'items-center');
 
-            tooltip.appendChild(checkbox);
-            checkboxGroup.append(tooltip);
+        answerGroup.append(inputGroup, checkboxGroup);
 
-            var answerGroup = document.createElement('div')
-            answerGroup.classList.add('answer', 'flex', 'items-center');
+        return answerGroup;
+    };
 
-            answerGroup.append(inputGroup, checkboxGroup);
+    let numberQuestion = [[${questionInfo != null ? question.answers.size()+1 : 0}]];
 
-            return answerGroup;
-        };
-
-        let numberQuestion = [[${questionInfo != null ? question.answers.size()+1 : 0}]];
-
-        const addAnswer = function(e) {
-            if(numberQuestion < 6){
-                var answer = createAnswer();
-                e.target.closest('.form-control').appendChild(answer);
-                e.target.closest('button').style.visibility = "hidden";
-                numberQuestion++;
-            }
-        };
-
-        const question = document.getElementById('question-form');
-        if (!!question) {
-            question.addEventListener('click', function(e) {
-                (e.target.classList.contains('add-answer-button') || e.target.nodeName === 'I') && addAnswer(e);
-            });
+    const addAnswer = function (e) {
+        if (numberQuestion < 6) {
+            var answer = createAnswer();
+            e.target.closest('.form-control').appendChild(answer);
+            e.target.closest('button').style.visibility = "hidden";
+            numberQuestion++;
         }
-    </script>
+    };
+
+    const question = document.getElementById('question-form');
+    if (!!question) {
+        question.addEventListener('click', function (e) {
+            (e.target.classList.contains('add-answer-button') || e.target.nodeName === 'I') && addAnswer(e);
+        });
+    }
+</script>
 
 </body>
 

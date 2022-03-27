@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" th:href="@{/static/css/quiz-detail.css}">
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@1.24.3/dist/full.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.25.0/axios.min.js"></script>
+
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet"
+          href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css">
+
+</head>
+
+<body>
+
+<div th:replace="fragments/_Header"></div>
+
+<!-- Main Content -->
+<div class="flex justify-center">
+    <div class="single-course">
+        <div class="row g-0">
+            <div class="col-md-6 col-lg-4 thumb">
+                <img th:if="${quiz.image != null}" th:src="${quiz.image}" class="w-full">
+                <img th:if="${quiz.image == null}" src="https://langmaster.edu.vn/public/files/no-photo.png" class="w-full">
+            </div>
+            <div class="col-md-6 col-lg-8 info">
+                <h2 th:utext="${quiz.title}"></h2>
+                <p class="description w-8/12 mt-2" th:utext="${quiz.description}">
+                </p>
+                <div class="controls">
+                    <button class="btn btn-enroll">
+                        <i class="fas fa-bookmark me-2"></i>
+                        <span>Enroll</span>
+                    </button>
+                    <a class="btn btn-accent" href="#">
+                        <i class="fas fa-graduation-cap me-2"></i>
+                        <span>Learn</span>
+                    </a>
+                    <a class="btn btn-quiz" onclick="openModal('view-modal')" href="#">
+                        <i class="fas fa-gamepad me-2"></i>
+                        <span>Do Quiz</span>
+                    </a>
+                </div>
+                <span class="last-update"><i class="fas fa-calendar-alt me-2"></i>Last Update: 23/11/2022</span>
+                <span class="language"><i class="fas fa-globe-americas me-2"></i>English</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- show results -->
+<dialog id="view-modal" class="bg-transparent z-0 relative w-screen h-screen fadeIn">
+    <div
+            class="p-7 pt-52 flex justify-center items-start overflow-x-hidden overflow-y-auto fixed left-0 top-0 w-full h-full bg-gray-900 bg-opacity-50 z-50 transition-opacity duration-300 opacity-0">
+        <div class="bg-white flex rounded-lg lg:w-5/12 md:w-1/2 w-10/12 relative">
+            <div class="flex flex-col items-start w-full">
+                <div class="p-7 flex items-center w-full">
+                    <div class="text-gray-900 font-bold text-2xl">Do Quiz Online</div>
+                    <svg onclick="modalClose('view-modal')" class="ml-auto fill-current text-gray-700 w-5 h-5 cursor-pointer"
+                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
+                        <path
+                                d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z" />
+                    </svg>
+                </div>
+
+                <div class="px-7 flex justify-between items-center flex-col w-full">
+                    <!-- START FORM -->
+                    <div class="flex justify-end w-full border-t-2 mb-4"></div>
+                    <form id="do-quiz" th:action="@{/quiz/start}" method="get" class="w-full">
+                        <div class="flex justify-center w-full items-center">
+                            <label class="mr-10 font-bold">Difficulty level</label>
+                            <select class="select select-bordered select-sm select-info w-8/12 my-4" name="level">
+                                <option value="">Choose Level</option>
+                                <option th:each="difficulty : ${difficulties}" th:utext="${difficulty.level}" th:value="${difficulty.level}"></option>
+                            </select>
+
+
+                        </div>
+                        <input hidden th:value="${quiz.id}" name="quizId" />
+                    </form>
+
+
+                    <!--Footer-->
+                    <div class="flex justify-center pt-5 mt-5 mb-5 w-full border-t-2">
+
+                        <button type="button" id="view-details" onclick="document.getElementById('do-quiz').submit()"
+                                class="btn bg-yellow-500 w-36 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-3xl mr-3">
+                            Let's start
+                        </button>
+
+                    </div>
+                    <!-- END FORM -->
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</dialog>
+
+
+
+<!-- Footer -->
+<div th:replace="fragments/_FooterFix"></div>
+
+<script>
+    function openModal(key) {
+        document.getElementById(key).showModal();
+        document.body.setAttribute('style', 'overflow: hidden;');
+        document.getElementById(key).children[0].scrollTop = 0;
+        document.getElementById(key).children[0].classList.remove('opacity-0');
+        document.getElementById(key).children[0].classList.add('opacity-100')
+    }
+
+    function modalClose(key) {
+        document.getElementById(key).children[0].classList.remove('opacity-100');
+        document.getElementById(key).children[0].classList.add('opacity-0');
+        setTimeout(function () {
+            document.getElementById(key).close();
+            document.body.removeAttribute('style');
+        }, 100);
+    }
+</script>
+</body>
+
+</html>

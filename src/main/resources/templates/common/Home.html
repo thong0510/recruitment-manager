@@ -12,8 +12,8 @@
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
-    <link rel="stylesheet" th:href="@{/resources/owlcarousel/assets/owl.carousel.min.css}">
-    <link rel="stylesheet" th:href="@{/resources/owlcarousel/assets/owl.theme.default.min.css}">
+    <link rel="stylesheet" th:href="@{/static/owlcarousel/assets/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/static/owlcarousel/assets/owl.theme.default.min.css}">
     <style>
         section .container .affect-hover:hover {
             transform: scale(1.05);
@@ -85,9 +85,7 @@
             Alpine.data('sliderData', () => ({
                 currentIndex: 1,
                 images: [
-                    'https://scontent.fsgn5-13.fna.fbcdn.net/v/t1.6435-9/129920059_3503629313066805_4741456723758232911_n.png?_nc_cat=106&ccb=1-5&_nc_sid=e3f864&_nc_ohc=Uf5oxNwiKgkAX_8j8OT&_nc_ht=scontent.fsgn5-13.fna&oh=00_AT-gY09ME6_dN4PpzocSpotBLC19HBMoz28_ErDyomNAtw&oe=623B9CA8',
                     'https://www.fpt-software.com/wp-content/uploads/sites/2/2017/07/Ftown_Panorama2.jpg',
-                    'https://scontent.fsgn5-11.fna.fbcdn.net/v/t1.6435-9/90056851_2770455756384168_3360459777636302848_n.jpg?_nc_cat=110&ccb=1-5&_nc_sid=e3f864&_nc_ohc=Xyv7Tdgklx8AX-0vVtc&_nc_ht=scontent.fsgn5-11.fna&oh=00_AT8lrN17n7djZJhps8X1Ons9HfPdolwgjygy6td74PHa-Q&oe=623E7BA7',
                     'https://www.fpt-software.com/wp-content/uploads/sites/2/2017/07/Ftown-2.jpg',
                     'https://www.fpt-software.com/wp-content/uploads/sites/2/2017/07/Ftown-3.jpg',
                 ],
@@ -124,7 +122,7 @@
          id="wp-slider">
         <div class="owl-carousel owl-theme mt-10">
 
-            <div th:each="userQuiz : ${session.quizRecentList}"
+            <div th:each="userQuiz : ${quizRecentList}"
                  class="card shadow-2xl bg-base-100 w-full h-64 relative">
 
                 <img th:if="${userQuiz.quizImage == null or userQuiz.quizImage.equals('')}"
@@ -183,42 +181,41 @@
     <link rel="stylesheet" href="https://cdn.tailgrids.com/tailgrids-fallback.css"/>
 
 
-<!--    <section class="pt-10 lg:pt-[120px] lg:pb-10 bg-[#F3F4F6]">-->
-<!--        <div class="container">-->
-<!--            <div class="flex flex-wrap -mx-4">-->
-<!--                <div th:each="category : ${session.categoriesSession}"-->
-<!--                     class="w-full md:w-1/2 xl:w-1/4 px-4 affect-hover">-->
-<!--                    <div class="bg-white rounded-lg overflow-hidden mb-10 rounded-2xl affect-shadow"-->
-<!--                         style="box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;">-->
-<!--                        <img th:if="${category.image == null or category.image.equals('')}" class="bg-gray-300 w-full"-->
-<!--                             th:src="@{https://mntech.com.vn/common/images/noimg64.png}"/>-->
-<!--                        <img th:if="${category.image != null and !category.image.equals('')}" th:src="${category.image}"-->
-<!--                             class="w-full"/>-->
-<!--                        <div class="p-8 sm:p-9 md:p-7 xl:p-9 text-center">-->
-<!--                            <h3>-->
-<!--                                <a th:href="@{/quiz(category=${category.name})}"-->
-<!--                                   class="font-semibold text-dark text-xl sm:text-[22px] md:text-xl lg:text-[22px] xl:text-xl 2xl:text-[22px] mb-4 block hover:text-primary"-->
-<!--                                   th:text="${category.name}"></a>-->
-<!--                            </h3>-->
-<!--                            <a th:href="@{/quiz(category=${category.name})}"-->
-<!--                               class="inline-block py-2 px-7 border border-[#E5E7EB] rounded-full text-base text-body-color font-medium hover:border-primary hover:bg-primary hover:text-white transition">-->
-<!--                                View Details-->
-<!--                            </a>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </section>-->
-    <!-- ====== Cards Section End -->
+    <section class="pt-10 lg:pt-[120px] lg:pb-10 bg-[#F3F4F6]">
+        <div class="container">
+            <div class="flex flex-wrap -mx-4">
+                <div th:each="category : ${listC}"
+                     class="w-full md:w-1/2 xl:w-1/4 px-4 affect-hover">
+                    <div class="bg-white rounded-lg overflow-hidden mb-10 rounded-2xl affect-shadow"
+                         style="box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;">
+                        <img th:if="${category.image == null or category.image.equals('')}" class="bg-gray-300 w-full"
+                             th:src="@{https://mntech.com.vn/common/images/noimg64.png}"/>
+                        <img th:if="${category.image != null and !category.image.equals('')}" th:src="${category.image}"
+                             class="w-full"/>
+                        <div class="p-8 sm:p-9 md:p-7 xl:p-9 text-center">
+                            <h3>
+                                <a th:href="@{/quiz(category=${category.name})}"
+                                   class="font-semibold text-dark text-xl sm:text-[22px] md:text-xl lg:text-[22px] xl:text-xl 2xl:text-[22px] mb-4 block hover:text-primary"
+                                   th:text="${category.name}"></a>
+                            </h3>
+                            <a th:href="@{/quiz(category=${category.name})}"
+                               class="inline-block py-2 px-7 border border-[#E5E7EB] rounded-full text-base text-body-color font-medium hover:border-primary hover:bg-primary hover:text-white transition">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 
 <!-- Footer -->
 <div th:replace="fragments/_Footer"></div>
 
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script th:src="@{/resources/owlcarousel/owl.carousel.min.js}"></script>
-<script th:src="@{/resources/js/home.js}"></script>
+<script th:src="@{/static/owlcarousel/owl.carousel.min.js}"></script>
+<script th:src="@{/static/js/home.js}"></script>
 <script defer src="https://unpkg.com/alpinejs@3.2.3/dist/cdn.min.js"></script>
 
 </body>

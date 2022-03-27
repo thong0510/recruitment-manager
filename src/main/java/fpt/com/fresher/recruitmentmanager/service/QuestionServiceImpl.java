@@ -64,7 +64,9 @@ public class QuestionServiceImpl {
             boolean isCorrect = false;
             if (!answerText.isEmpty()) {
                 if (questionRequest.getAnswersId() != null) {
-                    answerId = questionRequest.getAnswersId().get(i);
+                    if (questionRequest.getAnswersId().size() - 1 >= i) {
+                        answerId = questionRequest.getAnswersId().get(i);
+                    }
                 }
 
                 for (Integer value : questionRequest.getAnswersIsCorrect()) {

@@ -45,7 +45,7 @@ public class AuthenticationController {
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
             return "/authenticate/Login";
         } else {
-            return "common/Home";
+            return "redirect:/home";
         }
 
     }

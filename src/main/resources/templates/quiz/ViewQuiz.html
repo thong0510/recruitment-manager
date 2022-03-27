@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@1.24.3/dist/full.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+
+    <style>
+        section .container .affect-hover:hover {
+            transform: scale(1.05);
+        }
+
+        section .container .affect-shadow:hover {
+            box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px !important;
+        }
+
+        section .container .affect-hover {
+            transition: all .3s ease-in-out;
+        }
+    </style>
+
+</head>
+
+<body>
+<!-- Form Navbar -->
+<div class="relative" th:replace="fragments/_Header"></div>
+
+<!-- Categories -->
+
+<link rel="stylesheet" href="https://cdn.tailgrids.com/tailgrids-fallback.css" />
+
+<!-- ====== Cards Section Start-->
+<section style="padding-bottom: 158px" class="pt-20 lg:pt-[120px] lg:pb-10 bg-[#F3F4F6]">
+    <div class="container">
+        <div class="flex flex-wrap -mx-4" id="listQuiz">
+
+            <div th:each="quiz : ${listQuizzes}" class="affect-hover w-full md:w-1/2 xl:w-1/4 pr-5 pl-5 totalElements rounded-xl">
+                <div class="bg-white rounded-xl mb-10 border-1 shadow-2xl affect-shadow">
+                    <div class="w-90 h-56 rounded-xl bg-gray-200 mx-auto mt-4">
+                        <img th:if="${quiz.image != null}" th:src="${quiz.image}" class="w-full h-56 bg-cover" style="border-top-left-radius: 10px; border-top-right-radius: 10px">
+                        <img th:if="${quiz.image == null}" src="https://langmaster.edu.vn/public/files/no-photo.png" style="border-left: 10px; border-right: 10px" class="w-full h-56 bg-cover">
+                    </div>
+                    <div class="p-8 sm:p-9 md:p-7 xl:p-9 text-center">
+                        <div class="tooltip" th:data-tip="${quiz.title}">
+                            <a href="javascript:void(0)" th:if="${quiz.title.length() > 17}" class="font-semibold text-dark text-lg mb-4 block hover:text-primary">
+                                [[${#strings.substring(quiz.title, 0, 17)}]]...
+                            </a>
+
+                            <a href="javascript:void(0)"
+                               th:if="${quiz.title.length() <= 17}"
+                               class="font-semibold text-dark text-lg mb-4 block hover:text-primary">
+                                [[${quiz.title}]]
+                            </a>
+                        </div>
+                        <div>
+                            <a th:href="@{'/quiz/detail/' + ${quiz.id}}" class="btn btn-outline btn-info rounded-2xl">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- ====== Cards Section End -->
+
+
+<!-- ====== Cards Section End -->
+
+<!-- More -->
+
+<div class="w-screen flex items-center p-1 justify-center mb-20">
+    <button id="addItem"
+            class="p-2 pl-5 pr-5 btn btn-warning text-white text-lg rounded-lg focus:border-4 border-yellow-300 font-bold" style="width: 120px;"
+    onclick="callApi();">More</button>
+
+</div>
+
+<!-- Footer -->
+<div th:replace="fragments/_Footer"></div>
+
+<script>
+
+    let count = 1;
+
+    async function postOrPut(method, url, data) {
+        try {
+            // Create request to api service
+            const req = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    // 'Authorization': `Bearer ${getCookie('Authorization')}`,
+                    'Access-Control-Allow-Credentials': 'true'
+                },
+
+                // format the data
+                body: JSON.stringify(data),
+            });
+
+            return await req.json();
+        } catch (err) {
+            alert(`ERROR: ${err}`);
+            return false;
+        }
+    }
+
+    async function callApi() {
+
+        let element = document.querySelector('#addItem');
+        element.classList.add("loading")
+        let categoryName = new URL(document.baseURI).searchParams.get("category");
+        let title = new URL(document.baseURI).searchParams.get("search");
+        let obj = {
+            title: title != null? title : '',
+            categoryName: categoryName != null? categoryName : '',
+            status: 'PUBLIC',
+            pagination: {
+                page: count,
+                limit: 4,
+                sort: {
+                    criteria: 'title',
+                    asc: true
+                }
+            }
+        }
+
+        count++;
+
+        const url = "http://localhost:8080/api/v1/quizzes/all";
+        let total;
+        let finish = await postOrPut('POST', url, obj).then(
+            response => {
+                let listQuiz = '';
+                const array = response.content;
+                console.log(response)
+                total = response.totalElements;
+
+                array.forEach(quiz => {
+                    // console.log(quiz)
+                    let imageQuiz = quiz.image != null ? `<img class="w-full h-56 bg-cover" style="border-top-left-radius: 10px; border-top-right-radius: 10px" src="${quiz.image}" />`
+                                                       : `<img class="w-full h-56 bg-cover" style="border-top-left-radius: 10px; border-top-right-radius: 10px" src="https://langmaster.edu.vn/public/files/no-photo.png"/>`
+
+                    let titleQuiz = quiz.title.length > 17? quiz.title.substring(0, 17)+'...' : quiz.title;
+
+                    listQuiz +=
+                        `<div class="w-full md:w-1/2 xl:w-1/4 pr-5 pl-5 totalElements rounded-xl affect-hover">
+                        <div class="bg-white rounded-xl mb-10 border-1 shadow-2xl affect-shadow">
+                                <div class="w-90 h-56 rounded-xl bg-gray-200 mx-auto mt-4">
+                                    ${imageQuiz}
+                                </div>
+                            <div class="p-8 sm:p-9 md:p-7 xl:p-9 text-center">
+                                <div class="tooltip" data-tip="${quiz.title}">
+                                    <a href="javascript:void(0)" class="font-semibold text-dark text-xl mb-4 block hover:text-primary">
+                                        ${titleQuiz}
+                                    </a>
+                                </div>
+                                <div>
+                                  <a href="/quizsystem_war//quiz/detail/${quiz.id}" class="btn btn-outline btn-info rounded-2xl">View Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                })
+
+                document.querySelector("#listQuiz").insertAdjacentHTML('beforeend', listQuiz);
+                return true;
+            }
+        );
+        if (finish) {
+            let check = document.querySelectorAll(".totalElements").length;
+            if (check === total) {
+                element.style.display = "none";
+            } else {
+                element.classList.remove("loading")
+            }
+        }
+    }
+</script>
+<script th:src="@{/static/js/common.js}"></script>
+</body>
+
+</html>
