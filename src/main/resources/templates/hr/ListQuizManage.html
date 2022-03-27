@@ -34,7 +34,7 @@
                         <select id="js-category" th:onchange="|paramFilters('category',this.value)|"
                                 class="select select-bordered select-sm select-info max-w-xs my-4 ml-4">
                             <option selected="selected" value="">Choose category</option>
-                            <option th:each="category : ${session.categoriesSession}"
+                            <option th:each="category : ${listCategory}"
                                     th:utext="${category.name}"
                                     th:selected="${category.name.equals(categoryFilter)}"
                                     th:value="${category.name}"></option>
@@ -100,15 +100,15 @@
                                             <td th:utext="${quiz.instructorName}"></td>
                                             <td class="flex">
                                                 <div class="tooltip" data-tip="List question">
-                                                    <a th:href="@{/admin/quiz/__${quiz.id}__/question}" class="btn btn-circle btn-outline btn-xs"><i class="fas fa-info-circle"></i></a>
+                                                    <a th:href="@{/hr/list-question/__${quiz.id}__}" class="btn btn-circle btn-outline btn-xs"><i class="fas fa-info-circle"></i></a>
                                                 </div>
 
                                                 <div class="tooltip" data-tip="Edit quiz">
-                                                    <a th:href="@{/admin/quiz/__${quiz.id}__}" class="ml-2 btn btn-circle btn-outline btn-xs"><i class="far fa-edit"></i></a>
+                                                    <a th:href="@{/hr/update-quiz/__${quiz.id}__}" class="ml-2 btn btn-circle btn-outline btn-xs"><i class="far fa-edit"></i></a>
                                                 </div>
 
                                                 <div class="tooltip" data-tip="Delete quiz">
-                                                    <a th:href="@{/admin/quiz/delete/__${quiz.id}__}" class="ml-2 btn btn-circle btn-outline btn-xs">
+                                                    <a th:href="@{/hr/delete-quiz/__${quiz.id}__}" class="ml-2 btn btn-circle btn-outline btn-xs">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-4 h-4 stroke-current">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                         </svg>
@@ -137,7 +137,7 @@
 
                                     </div>
                                     <div th:if="${listQuiz.getNumberOfElements() <= 0}">
-                                        <a class="btn btn-sm btn-outline mb-4" th:href="@{'/admin/quiz'}">Back to list</a>
+                                        <a class="btn btn-sm btn-outline mb-4" onclick="history.back()">Back to list</a>
                                     </div>
                                 </div>
 
@@ -152,7 +152,7 @@
         </div>
 
         <!-- Slide bar-->
-        <div th:replace="fragments/_SliderBar"></div>
+        <div th:replace="fragments/_SideBar"></div>
     </div>
 
     <div th:replace="fragments/_Footer"></div>
@@ -175,9 +175,9 @@
             }, 100);
         }
     </script>
-    <script th:src="@{/resources/js/api.js}"></script>
-    <script th:src="@{/resources/js/quiz-management.js}"></script>
-    <script th:src="@{/resources/js/common.js}"></script>
+    <script th:src="@{/static/js/api.js}"></script>
+    <script th:src="@{/static/js/quiz-management.js}"></script>
+    <script th:src="@{/static/js/common.js}"></script>
 </body>
 
 </html>

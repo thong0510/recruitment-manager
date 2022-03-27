@@ -3,6 +3,7 @@ package fpt.com.fresher.recruitmentmanager.service;
 import fpt.com.fresher.recruitmentmanager.object.contant.enums.SystemRole;
 import fpt.com.fresher.recruitmentmanager.object.entity.Role;
 import fpt.com.fresher.recruitmentmanager.object.entity.Users;
+import fpt.com.fresher.recruitmentmanager.object.exception.ResourceNotFoundException;
 import fpt.com.fresher.recruitmentmanager.object.exception.TokenExpiredException;
 import fpt.com.fresher.recruitmentmanager.object.filter.UserFilter;
 import fpt.com.fresher.recruitmentmanager.object.mapper.UserMapper;
@@ -65,7 +66,17 @@ public class UserServiceImpl implements UserService {
     @PostConstruct
     private void init() {
         userEmailMap = redissonClient.getMapCache("USER_EMAIL_MAP");
-
+        if (userRepository.count() == 0) {
+            Users admin = new Users();
+            admin.setUserName("admin");
+            admin.setEmail("admin123@gmail.com");
+            admin.setPhone("0976809331");
+            admin.setPassword(new BCryptPasswordEncoder().encode("123456"));
+            admin.setFullName("ADMIN USER");
+            admin.setStatus(true);
+            admin.setRoles(List.of(roleRepository.findByRole(SystemRole.ADMIN)));
+            userRepository.save(admin);
+        }
     }
 
     private RMapCache<String, String> userEmailMap;
@@ -163,7 +174,7 @@ public class UserServiceImpl implements UserService {
                         : null;
 
         return new org.springframework.security.core.userdetails.User(
-                user.get().getUsername(), user.get().getPassword(), grantedAuthorities
+                user.get().getUsername(), user.get().getPassword(), user.get().isEnabled(), true, true, true, grantedAuthorities
         );
     }
 
@@ -218,4 +229,5 @@ public class UserServiceImpl implements UserService {
             throw new TokenExpiredException("Refresh token has been expired");
         }
     }
+
 }

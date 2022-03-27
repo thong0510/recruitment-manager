@@ -2,10 +2,12 @@ package fpt.com.fresher.recruitmentmanager.controller;
 
 import fpt.com.fresher.recruitmentmanager.object.entity.Question;
 import fpt.com.fresher.recruitmentmanager.object.filter.QuestionFilter;
+import fpt.com.fresher.recruitmentmanager.object.filter.QuizFilter;
 import fpt.com.fresher.recruitmentmanager.object.mapper.DifficultyMapper;
 import fpt.com.fresher.recruitmentmanager.object.mapper.QuestionMapper;
 import fpt.com.fresher.recruitmentmanager.object.mapper.TagMapper;
 import fpt.com.fresher.recruitmentmanager.object.model.Pagination;
+import fpt.com.fresher.recruitmentmanager.object.request.AnswerRequest;
 import fpt.com.fresher.recruitmentmanager.object.request.QuestionRequest;
 import fpt.com.fresher.recruitmentmanager.object.response.DifficultyResponse;
 import fpt.com.fresher.recruitmentmanager.object.response.QuestionResponse;
@@ -13,16 +15,16 @@ import fpt.com.fresher.recruitmentmanager.object.response.TagResponse;
 import fpt.com.fresher.recruitmentmanager.service.DifficultyServiceImpl;
 import fpt.com.fresher.recruitmentmanager.service.QuestionServiceImpl;
 import fpt.com.fresher.recruitmentmanager.service.TagServiceImpl;
-import fpt.com.fresher.recruitmentmanager.service.interfaces.QuestionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -48,10 +50,10 @@ public class QuestionController {
         return difficultyService.findAllDifficulties().stream().map(difficultyMapper::entityToDifficultyResponse).collect(Collectors.toList());
     }
 
-    @GetMapping("/hr/list-question")
+    @GetMapping("/hr/list-question/{quizId}")
     public String listQuestion(Model model, @RequestParam Optional<String> successMessage,
                                @RequestParam Optional<String> errorMessage,
-                               @PathVariable long quizId,
+                               @PathVariable Long quizId,
                                @RequestParam(defaultValue = "1") int page,
                                @RequestParam(defaultValue = "") String search,
                                @RequestParam(defaultValue = "0") long tagId,
@@ -59,6 +61,7 @@ public class QuestionController {
 
         Pagination pagination = new Pagination();
         pagination.setPageNumber(page - 1);
+        pagination.setPageSize(5);
         QuestionFilter questionFilter = QuestionFilter
                                         .builder()
                                         .difficultyId(difficultyId)
@@ -67,10 +70,9 @@ public class QuestionController {
                                         .title(search)
                                         .build();
 
-        Page<Question> list = questionService.findAllQuestionsByQuizId(quizId, questionFilter);
-        List<QuestionResponse> listQuestionResponse = list.getContent().stream().map(questionMapper::entityToQuestionResponse).collect(Collectors.toList());
+        Page<QuestionResponse> list = questionService.findAllQuestionsByQuizId(quizId, questionFilter).map(questionMapper::entityToQuestionResponse);
 
-        model.addAttribute("listQuestion", listQuestionResponse);
+        model.addAttribute("listQuestion", list);
         model.addAttribute("tagIdFilter", tagId);
         model.addAttribute("difficultyIdFilter", difficultyId);
         model.addAttribute("quizId", quizId);
@@ -79,48 +81,81 @@ public class QuestionController {
         return "hr/ListQuestionManage";
     }
 
+    @GetMapping("hr/create-question/{quizId}")
+    public String newQuestion(Model model, @PathVariable Long quizId) {
+        model.addAttribute("question", new QuestionRequest());
+        model.addAttribute("quizId", quizId);
+        return "hr/FormQuestionManage";
+    }
 
-//    @GetMapping("/hr/detail-question")
-//    public String detail(Model model, @RequestParam(name = "id") Long id) {
-//        Question question = questionService.findOne(id);
-//        QuestionResponse questionResponse = questionMapper.entityToQuestionResponse(question);
-//        model.addAttribute("question", questionResponse);
-//        return "hr/questionDetail";
-//    }
-//
-//    @GetMapping("/hr/edit-question")
-//    public String edit(Model model, @RequestParam Long id) {
-//        Question question = questionService.findOne(id);
-//        QuestionResponse questionResponse = questionMapper.entityToQuestionResponse(question);
-//        model.addAttribute("question", questionResponse);
-//        return "hr/editQuestion";
-//    }
-//
-//    @PostMapping("/hr/edit-question")
-//    public String edit(@ModelAttribute QuestionRequest question) {
-//        questionService.updateQuestion(question);
-//        return "redirect:/hr/list-question";
-//    }
-//
-//    @GetMapping("/hr/create-question")
-//    public String create(Model model) {
-//        QuestionRequest questionRequest = new QuestionRequest();
-//        model.addAttribute("question", questionRequest);
-//        return "hr/createQuestion";
-//    }
-//
-//    @PostMapping("/hr/create-question")
-//    public String create(@ModelAttribute QuestionRequest question) {
-//        questionService.createQuestion(question);
-//        return "redirect:/hr/list-question";
-//    }
-//
-//    @GetMapping("/hr/delete-question")
-//    public String delete(@RequestParam Long id) {
-//
-//        questionService.deleteQuestion(id);
-//        return "redirect:/hr/list-question";
-//
-//    }
+    @PostMapping("hr/create-question/{quizId}")
+    public String createQuestionInQuiz(@PathVariable Long quizId,
+                                       @ModelAttribute QuestionRequest questionRequest,
+                                       RedirectAttributes redirectAttr) {
+
+        try {
+            questionService.createQuestion(questionRequest);
+            redirectAttr.addAttribute("successMessage", "Create quiz successfully");
+            return "redirect:/hr/list-question/" + quizId;
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttr.addAttribute("errorMessage", "Something wrong, please try again");
+            return "redirect:/hr/create-question/" + quizId;
+        }
+
+    }
+
+    @GetMapping("hr/edit-question/{questionId}/{quizId}")
+    public String GetQuestionInQuiz(Model model,
+                                    @PathVariable long quizId,
+                                    @PathVariable long questionId,
+                                    RedirectAttributes redirectAttr) {
+
+        try {
+
+            QuestionResponse resp = questionMapper.entityToQuestionResponse(questionService.findQuestionById(questionId));
+
+            QuestionRequest questionRequest = new QuestionRequest(resp.getTitle(), resp.getTag().getId(), resp.getDifficulty().getId(), resp.getIsMultiple(), resp.getQuizId());
+            resp.getAnswers().forEach(answerResp -> questionRequest.addAnswer(new AnswerRequest(answerResp.getId(), answerResp.getText(), answerResp.getIsCorrect())));
+
+            model.addAttribute("question", questionRequest);
+            model.addAttribute("questionInfo", resp);
+            model.addAttribute("quizId", quizId);
+            return "hr/FormQuestionManage";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttr.addAttribute("errorMessage", "Something wrong, please try again");
+            return "redirect:/hr/list-quiz/" + quizId;
+        }
+
+    }
+
+    @PostMapping("hr/update-question/{quizId}/{questionId}")
+    public String updateQuestion(@PathVariable long quizId,
+                                 @PathVariable long questionId,
+                                 @ModelAttribute QuestionRequest questionRequest,
+                                 RedirectAttributes redirectAttr) {
+        try {
+            questionService.updateQuestion(questionId, questionRequest);
+            redirectAttr.addAttribute("successMessage", "Update quiz successfully");
+            return "redirect:/hr/list-question/" + quizId;
+        } catch (Exception e) {
+            e.printStackTrace();
+            redirectAttr.addAttribute("errorMessage", "Something wrong, please try again");
+            return "redirect:/admin/quiz/" + quizId + "/question/" + questionId;
+        }
+    }
+
+    @GetMapping("hr/delete-question/{quizId}/{questionId}")
+    public String deleteQuestion(@PathVariable long quizId,
+                                 @PathVariable long questionId,
+                                 RedirectAttributes redirectAttr) {
+
+        questionService.deleteQuestion(questionId);
+        redirectAttr.addAttribute("successMessage", "Delete quiz successfully");
+
+        return "redirect:/hr/list-question/" + quizId;
+    }
 
 }

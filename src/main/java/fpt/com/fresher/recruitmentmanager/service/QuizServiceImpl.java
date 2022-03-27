@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,18 +46,18 @@ public class QuizServiceImpl {
                 () -> new ResourceNotFoundException("Not found any quiz with id " + id));
     }
 
-    public Quiz createQuiz(QuizRequest requestBody) {
+    public Quiz createQuiz(QuizRequest requestBody) throws IOException {
         Quiz quiz = quizMapper.quizRequestToEntity(requestBody);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        Users instructor = (Users) authentication.getPrincipal();
+        Users instructor = userService.findUserByUsername(authentication.getName());
         quiz.setInstructor(instructor);
 
         Category category = categoryService.findCategoryById(requestBody.getCategoryId());
         quiz.setCategory(category);
 
-        if (!ObjectUtils.isEmpty(requestBody.getImageFile())) {
+        if (!ObjectUtils.isEmpty(requestBody.getImageFile().getBytes())) {
             String image = cloudinaryService.uploadImage(null, requestBody.getImageFile());
             if (image != null) quiz.setImage(image);
         }
@@ -71,7 +72,7 @@ public class QuizServiceImpl {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        Users instructor = (Users) authentication.getPrincipal();
+        Users instructor = userService.findUserByUsername(authentication.getName());
         quiz.setInstructor(instructor);
 
         Category category = categoryService.findCategoryById(requestBody.getCategoryId());
@@ -87,11 +88,6 @@ public class QuizServiceImpl {
 
     public void deleteQuiz(long id) {
         Quiz quiz = this.findQuizById(id);
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        Users instructor = (Users) authentication.getPrincipal();
-
         quizRepository.delete(quiz);
     }
 

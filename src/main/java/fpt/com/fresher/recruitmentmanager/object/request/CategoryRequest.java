@@ -9,6 +9,8 @@ import javax.validation.constraints.Size;
 @Data
 public class CategoryRequest {
 
+    private Long id;
+
     @NotBlank(message = "blank")
     @Size(min = 3, max = 50, message = "size(min:3,max:50)")
     private String name;

@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class QuestionFilter {
 
+    private Long id;
     private String title;
     private Long tagId;
     private DifficultyLevel level;

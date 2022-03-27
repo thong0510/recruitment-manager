@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Category management</title>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@1.20.1/dist/full.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2/dist/tailwind.min.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+
+</head>
+
+<body>
+<!-- Form Navbar -->
+<div th:replace="fragments/_Header"></div>
+
+<div class=" shadow bg-base-200 drawer drawer-mobile" style="height: 91vh;">
+    <input id="my-drawer-2" type="checkbox" class="drawer-toggle">
+
+    <div class="flex flex-col items-center drawer-content">
+        <label for="my-drawer-2" class="mb-4 btn btn-primary drawer-button lg:hidden w-10 rounded-full right-5 top-16 md:top-28 fixed"><i class="fas fa-angle-right"></i></label>
+        <!-- STRART MAIN -->
+        <main class="my-4 w-11/12 mx-auto">
+            <!-- START Welcome text-->
+            <p class="text-xl font-semibold text-center mb-4 uppercase ">Category management</p>
+            <!-- END welcome text -->
+
+            <button onclick="openModal('main-modal')" class="btn btn-sm w-42 btn-primary m-2">Add Category</button>
+
+            <!-- START TABLE -->
+            <div class="card text-center shadow-lg my-4">
+                <div class="card-body p-0">
+                    <div class="overflow-x-auto">
+                        <div class="overflow-x-auto">
+                            <table class="table w-full" id="add-category">
+                                <thead>
+                                <tr>
+                                    <th>Image</th>
+                                    <th>Title</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody id="pagination-category">
+                                <th:block th:each="category : ${listC}">
+                                    <tr class="totalElements">
+                                        <th>
+                                            <div class="avatar">
+                                                <div class="rounded-btn w-10 h-10">
+                                                    <img th:if="${category.image == null}" class="bg-gray-300" th:id="'image' + ${category.id}" th:src="@{https://mntech.com.vn/common/images/noimg64.png}">
+                                                    <img th:if="${category.image != null}" th:src="${category.image}" th:id="'image' + ${category.id}">
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <td th:utext="${category.name}" th:id="'name' + ${category.id}"></td>
+                                        <td>
+                                            <div class="tooltip" data-tip="Edit category">
+                                                <button th:attr="onclick=|openFormEdit('${category.id}')|" class="ml-2 btn btn-circle btn-outline btn-xs"><i class="far fa-edit"></i></button>
+                                            </div>
+
+                                            <div class="tooltip" data-tip="Delete category">
+                                                <button th:attr="onclick=|deleteCategory('${category.id}')|" class="ml-2 btn btn-circle btn-outline btn-xs">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-4 h-4 stroke-current">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </th:block>
+
+                                </tbody>
+                            </table>
+
+                            <div class="flex justify-center">
+                                <div class="btn-group my-4 mr-4" id="pagination">
+                                    <a class="btn btn-sm btn-outline" onclick="previousPageNumber();">Previous</a>
+
+                                    <th:block th:each="i : ${#numbers.sequence(1, totalPages)}">
+                                        <th:block th:if="${i} == 1">
+                                            <div class="btn btn-sm btn-outline totalPages bg-blue-500 border-black text-white" th:id="'page' + ${i}" th:attr="onclick=|paginationByNumberPages('${i}')|" th:href="@{'/admin/category?numberPages=' + ${i}}">[[${i}]]</div>
+                                        </th:block>
+                                        <th:block th:unless="${i} == 1">
+                                            <div class="btn btn-sm btn-outline totalPages" th:id="'page' + ${i}" th:attr="onclick=|paginationByNumberPages('${i}')|" th:href="@{'/admin/category?numberPages=' + ${i}}">[[${i}]]</div>
+                                        </th:block>
+                                    </th:block>
+
+                                    <a class="btn btn-sm btn-outline addPagination" onclick="nextPage();">Next</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END TABLE -->
+
+        </main>
+        <!-- END MAIN -->
+    </div>
+
+    <div th:replace="fragments/_SideBar"></div>
+</div>
+
+<dialog id="main-modal" class="bg-transparent z-0 relative w-screen h-screen fadeIn">
+    <div class="p-7 pt-20 flex justify-center items-start overflow-x-hidden overflow-y-auto fixed left-0 top-0 w-full h-full bg-gray-900 bg-opacity-50 z-50 transition-opacity duration-300 opacity-0">
+        <div class="bg-white flex rounded-lg lg:w-4/12 md:w-1/2 w-full relative">
+            <div class="flex flex-col items-start w-full">
+                <div class="p-7 flex items-center w-full">
+                    <div class="text-gray-900 font-bold text-lg">Add Quiz</div>
+                    <svg onclick="modalClose('main-modal')" class="ml-auto fill-current text-gray-700 w-5 h-5 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
+                        <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z" />
+                    </svg>
+                </div>
+
+                <div class="px-7 w-full">
+                    <!-- START FORM -->
+                    <form id="create-category-form" th:action="@{/admin/category/create}" enctype="multipart/form-data" th:object="${newCategory}" method="post">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Title:</span>
+                            </label>
+                            <input type="text" id="quizName" class="input input-sm input-bordered" th:field="*{name}">
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Image: </span>
+                            </label>
+                            <div class="py-5 bg-white px-2">
+                                <div class="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl">
+                                    <div class="md:flex">
+                                        <div class="w-full p-3">
+                                            <div
+                                                    class="relative border-dotted h-48 rounded-lg overflow-hidden rounded-2xl border-dashed border-2 border-blue-700 bg-gray-100 flex justify-center items-center">
+                                                <div class="absolute">
+                                                    <div class="flex flex-col items-center">
+                                                            <span>
+                                                               <img id="preview-image" class="h-48 w-screen" src="https://mntech.com.vn/common/images/noimg64.png">
+                                                            </span>
+                                                    </div>
+                                                </div> <input type="file" class="opacity-0"
+                                                              onchange="showPreviewImage(event);" name=""
+                                                              th:field="*{imageFile}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Footer-->
+                        <div class="flex justify-end pt-2 mt-3 mb-5">
+                            <button type="submit" id="closeCreate" class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3">
+                                Add
+                            </button>
+                            <button type="button" onclick="modalClose('main-modal')" class="bg-transparent hover:bg-gray-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                                Close
+                            </button>
+
+                        </div>
+                    </form>
+                    <!-- END FORM -->
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</dialog>
+
+<!--Form Edit-->
+
+<dialog id="edit-modal" class="bg-transparent z-0 relative w-screen h-screen fadeIn">
+    <div class="p-7 pt-20 flex justify-center items-start overflow-x-hidden overflow-y-auto fixed left-0 top-0 w-full h-full bg-gray-900 bg-opacity-50 z-50 transition-opacity duration-300 opacity-0">
+        <div class="bg-white flex rounded-lg lg:w-4/12 md:w-1/2 w-full relative">
+            <div class="flex flex-col items-start w-full">
+                <div class="p-7 flex items-center w-full">
+                    <div class="text-gray-900 font-bold text-lg">Edit Quiz</div>
+                    <svg onclick="modalClose('edit-modal')" class="ml-auto fill-current text-gray-700 w-5 h-5 cursor-pointer" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
+                        <path d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z" />
+                    </svg>
+                </div>
+
+                <div class="px-7 w-full">
+                    <!-- START FORM -->
+                    <form id="edit-category-form" th:action="@{/admin/category/edit}" enctype="multipart/form-data" th:object="${newCategory}" method="post">
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Title:</span>
+                            </label>
+                            <input type="text" id="editName" class="input input-sm input-bordered" th:field="*{name}">
+                            <input hidden type="text" id="editId" class="input input-sm input-bordered" th:field="*{id}">
+                        </div>
+
+                        <div class="form-control">
+                            <label class="label">
+                                <span class="label-text">Image: </span>
+                            </label>
+                            <div class="py-5 bg-white px-2">
+                                <div class="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl">
+                                    <div class="md:flex">
+                                        <div class="w-full p-3">
+                                            <div
+                                                    class="relative border-dotted h-48 rounded-lg overflow-hidden rounded-2xl border-dashed border-2 border-blue-700 bg-gray-100 flex justify-center items-center">
+                                                <div class="absolute">
+                                                    <div class="flex flex-col items-center">
+                                                            <span>
+                                                               <img id="preview" class="h-48 w-screen" src="https://mntech.com.vn/common/images/noimg64.png">
+                                                            </span>
+                                                    </div>
+                                                </div> <input type="file" class="opacity-0"
+                                                              onchange="showPreviewImage1(event);" name="" id="editImage"
+                                                              th:field="*{imageFile}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Footer-->
+                        <div class="flex justify-end pt-2 mt-3 mb-5">
+                            <button type="submit" id="closeEdit" class="btn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-3">
+                                Edit
+                            </button>
+                            <button type="button" onclick="modalClose('edit-modal')" class="bg-transparent hover:bg-gray-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                                Close
+                            </button>
+
+                        </div>
+                    </form>
+                    <!-- END FORM -->
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</dialog>
+
+<div th:replace="fragments/_Footer"></div>
+
+<script th:src="@{/static/js/CategoryApi.js}"></script>
+<script th:src="@{/static/js/validator.js}"></script>
+
+<script>
+
+    function showPreviewImage(event) {
+        if (event.target.files.length > 0) {
+            var preview = document.getElementById("preview-image");
+            var src = URL.createObjectURL(event.target.files[0]);
+            preview.src = src;
+        }
+    }
+
+    function showPreviewImage1(event) {
+        if (event.target.files.length > 0) {
+            var preview = document.getElementById("preview");
+            var src = URL.createObjectURL(event.target.files[0]);
+            preview.src = src;
+        }
+    }
+
+    const formValidator1 = new FormValidator("#create-category-form", {
+        formGroup: "input-group",
+        errorMessages: {
+            "name": {
+                required: "Category name must not be blank",
+                minlength: "Category name must be at least 3 characters long",
+                maxlength: "Category name must be at most 50 characters long",
+            }
+        },
+    });
+
+    const formValidator2 = new FormValidator("#edit-category-form", {
+        formGroup: "input-group",
+        errorMessages: {
+            "name": {
+                required: "Category name must not be blank",
+                minlength: "Category name must be at least 3 characters long",
+                maxlength: "Category name must be at most 50 characters long",
+            }
+        },
+    });
+</script>
+</body>
+
+</html>

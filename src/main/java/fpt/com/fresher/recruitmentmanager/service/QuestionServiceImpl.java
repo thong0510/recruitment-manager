@@ -6,6 +6,7 @@ import fpt.com.fresher.recruitmentmanager.object.exception.ResourceNotFoundExcep
 import fpt.com.fresher.recruitmentmanager.object.filter.QuestionFilter;
 import fpt.com.fresher.recruitmentmanager.object.mapper.AnswerMapper;
 import fpt.com.fresher.recruitmentmanager.object.mapper.QuestionMapper;
+import fpt.com.fresher.recruitmentmanager.object.request.AnswerRequest;
 import fpt.com.fresher.recruitmentmanager.object.request.QuestionRequest;
 import fpt.com.fresher.recruitmentmanager.repository.QuestionRepository;
 import fpt.com.fresher.recruitmentmanager.repository.spec.QuestionSpecification;
@@ -47,14 +48,38 @@ public class QuestionServiceImpl {
     }
 
     public Question createQuestion(QuestionRequest requestBody) {
+        convertAnswerTextToAnswersReq(requestBody);
         Question question = questionMapper.questionRequestToEntity(requestBody);
         updateRelationProperties(question, requestBody);
 
         return question;
     }
 
+    private void convertAnswerTextToAnswersReq(QuestionRequest questionRequest) {
+
+        for (int i = 0; i < questionRequest.getAnswersText().size(); i++) {
+
+            String answerText = questionRequest.getAnswersText().get(i);
+            Long answerId = null;
+            boolean isCorrect = false;
+            if (!answerText.isEmpty()) {
+                if (questionRequest.getAnswersId() != null) {
+                    answerId = questionRequest.getAnswersId().get(i);
+                }
+
+                for (Integer value : questionRequest.getAnswersIsCorrect()) {
+                    isCorrect = value == (i + 1);
+                    if (isCorrect) break;
+                }
+                questionRequest.getAnswers().add(new AnswerRequest(answerId, answerText, isCorrect));
+            }
+        }
+
+    }
+
     public Question updateQuestion(long id, QuestionRequest requestBody) {
         Question question = this.findQuestionById(id);
+        convertAnswerTextToAnswersReq(requestBody);
         questionMapper.updateEntity(question, requestBody);
         updateRelationProperties(question, requestBody);
 
@@ -81,9 +106,9 @@ public class QuestionServiceImpl {
                 .map(answerMapper::answerRequestToEntity)
                 .collect(Collectors.toSet());
 
-        if(question.getId() != null){
+        if (question.getId() != null) {
             answers.forEach(answer -> answer.setQuestion(question));
-        }else{
+        } else {
             Question question1 = questionRepository.save(question);
             answers.forEach(answer -> answer.setQuestion(question1));
         }

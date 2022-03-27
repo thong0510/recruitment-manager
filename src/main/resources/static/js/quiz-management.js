@@ -20,11 +20,11 @@ function getTokenByHeader() {
 
 async function changeStatusQuiz(id,selectedInput){
 
-    const url = `http://localhost:8081/api/v1/quizzes/${id}/${selectedInput.value}`;
-    const urlRefreshToken = `http://localhost:8081/api/auth/refresh-token/${getTokenByHeader().refreshtoken}`;
+    const url = `http://localhost:8080/api/v1/quizzes/${id}/${selectedInput.value}`;
+    // const urlRefreshToken = `http://localhost:8081/api/auth/refresh-token/${getTokenByHeader().refreshtoken}`;
 
     const myHeaders = new Headers();
-    myHeaders.append('Authorization', `Bearer ${getTokenByHeader().authorization}`);
+    // myHeaders.append('Authorization', `Bearer ${getTokenByHeader().authorization}`);
     try {
         const response = await fetch(url, {
             method: 'PATCH',
@@ -34,23 +34,23 @@ async function changeStatusQuiz(id,selectedInput){
 
         let data = await response.json();
 
-        if (data.id === undefined) {
-            const callToken = await fetch(urlRefreshToken, {
-                method: 'GET'
-            });
-            let result = await callToken.json();
-
-            const newHeader = new Headers();
-            newHeader.append('Authorization', 'Bearer ' + result.accessToken);
-            setCookie('Authorization', result.accessToken, 1);
-            setCookie('RefreshToken', result.refreshToken, 1);
-            const responseAgain = await fetch(url, {
-                method: 'PATCH',
-                headers: newHeader,
-                body: null
-            });
-            data = await responseAgain.json();
-        }
+        // if (data.id === undefined) {
+        //     const callToken = await fetch(urlRefreshToken, {
+        //         method: 'GET'
+        //     });
+        //     let result = await callToken.json();
+        //
+        //     const newHeader = new Headers();
+        //     newHeader.append('Authorization', 'Bearer ' + result.accessToken);
+        //     setCookie('Authorization', result.accessToken, 1);
+        //     setCookie('RefreshToken', result.refreshToken, 1);
+        //     const responseAgain = await fetch(url, {
+        //         method: 'PATCH',
+        //         headers: newHeader,
+        //         body: null
+        //     });
+        //     data = await responseAgain.json();
+        // }
 
     } catch (error) {
         console.error(error);

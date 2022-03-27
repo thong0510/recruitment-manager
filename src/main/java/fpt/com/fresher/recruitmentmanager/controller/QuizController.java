@@ -12,6 +12,7 @@ import fpt.com.fresher.recruitmentmanager.service.CategoryServiceImpl;
 import fpt.com.fresher.recruitmentmanager.service.QuizServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -66,6 +67,7 @@ public class QuizController {
     }
 
     @GetMapping("hr/create-quiz")
+    @PreAuthorize("isAuthenticated()")
     public String newQuiz(Model model) {
         List<CategoryResponse> listCategory = categoryService.findAllCategories().stream().map(categoryMapper::entityToCategoryResponse).collect(Collectors.toList());
         model.addAttribute("listCategory", listCategory);
@@ -73,8 +75,8 @@ public class QuizController {
         return "hr/FormQuizManage";
     }
 
-    @GetMapping("hr/create-quiz/{id}")
-    public String getQuiz(@PathVariable long id,
+    @GetMapping("hr/update-quiz/{id}")
+    public String getQuiz(@PathVariable Long id,
                           Model model) {
 
         QuizResponse quiz = quizMapper.entityToQuizResponse(quizService.findQuizById(id));
@@ -88,44 +90,39 @@ public class QuizController {
         return "hr/FormQuizManage";
     }
 
-//    @PostMapping("hr/update-quiz/{id}")
-//    public String updateQuiz(HttpServletRequest request,
-//                             HttpServletResponse response,
-//                             @PathVariable long id, @ModelAttribute QuizRequest quiz,
-//                             RedirectAttributes redirectAttr) throws TokenExpiredException, IOException {
-//        try {
-//            quizService.updateQuizById(request, response, id, quiz);
-//            redirectAttr.addAttribute("successMessage", "Update quiz successfully");
-//            return "redirect:/admin/quiz";
-//        } catch (Exception e) {
-//            redirectAttr.addAttribute("errorMessage", "Something wrong, please try again");
-//            return "redirect:/admin/quiz/" + id;
-//        }
-//    }
-//
-//    @GetMapping("hr/update-quiz/{id}")
-//    public String deleteQuiz(HttpServletRequest request,
-//                             HttpServletResponse response,
-//                             @PathVariable long id,
-//                             RedirectAttributes redirectAttr) throws TokenExpiredException, IOException {
-//        quizService.softDeleteByQuizID(request, response, id);
-//        redirectAttr.addAttribute("successMessage", "Delete quiz successfully");
-//
-//
-//        return "redirect:/admin/quiz";
-//    }
-//
-//    @PostMapping("hr/create-quiz")
-//    public String createQuiz(
-//            @ModelAttribute @Valid QuizRequest newQuiz,
-//            RedirectAttributes redirect) {
-//        try {
-//            quizService.createQuiz(newQuiz, request, response);
-//            redirect.addAttribute("successMessage", "Create quiz successfully");
-//        } catch (Exception e) {
-//            redirect.addAttribute("errorMessage", "Something wrong, please try again");
-//            return "redirect:/admin/quiz/new";
-//        }
-//        return "redirect:/admin/quiz";
-//    }
+    @PostMapping("hr/update-quiz/{id}")
+    public String updateQuiz(@PathVariable long id,
+                             @ModelAttribute @Valid QuizRequest quiz,
+                             RedirectAttributes redirectAttr) {
+        try {
+            quizService.updateQuiz(id, quiz);
+            redirectAttr.addAttribute("successMessage", "Update quiz successfully");
+            return "redirect:/hr/list-quiz";
+        } catch (Exception e) {
+            redirectAttr.addAttribute("errorMessage", "Something wrong, please try again");
+            return "redirect:/hr/list-quiz" + id;
+        }
+    }
+
+    @GetMapping("hr/delete-quiz/{id}")
+    public String deleteQuiz(@PathVariable long id,
+                             RedirectAttributes redirectAttr) {
+        quizService.deleteQuiz(id);
+        redirectAttr.addAttribute("successMessage", "Delete quiz successfully");
+        return "redirect:/hr/list-quiz";
+    }
+
+    @PostMapping("hr/create-quiz")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public String createQuiz(@ModelAttribute @Valid QuizRequest newQuiz,
+                             RedirectAttributes redirect) {
+        try {
+            quizService.createQuiz(newQuiz);
+            redirect.addAttribute("successMessage", "Create quiz successfully");
+        } catch (Exception e) {
+            redirect.addAttribute("errorMessage", "Something wrong, please try again");
+            return "redirect:/hr/list-quiz";
+        }
+        return "redirect:/hr/list-quiz";
+    }
 }

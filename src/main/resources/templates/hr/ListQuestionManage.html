@@ -27,7 +27,7 @@
                 <div th:replace="fragments/_Alert"></div>
                 <!-- END welcome text -->
                 <div class="flex justify-between">
-                    <a th:href="@{/admin/quiz/__${quizId}__/question/new}"
+                    <a th:href="@{/hr/create-question/__${quizId}__}"
                        class="btn btn-sm w-32 btn-primary my-4">Add Question</a>
                     <div class="flex">
                         <select th:onchange="|paramFilters('tagId', this.value)|"
@@ -82,10 +82,10 @@
                                             <td th:utext="${question.tag.name}"></td>
                                             <td class="flex">
                                                 <div class="tooltip" data-tip="Edit question">
-                                                    <a th:href="@{/admin/quiz/__${quizId}__/question/__${question.id}__}" class="ml-2 btn btn-circle btn-outline btn-xs"><i class="far fa-edit"></i></a>
+                                                    <a th:href="@{/hr/edit-question/__${question.id}__/__${quizId}__}" class="ml-2 btn btn-circle btn-outline btn-xs"><i class="far fa-edit"></i></a>
                                                 </div>
                                                 <div class="tooltip" data-tip="Delete question">
-                                                    <a th:href="@{/admin/quiz/__${quizId}__/question/delete/__${question.id}__}" class="ml-2 btn btn-circle btn-outline btn-xs"><i class="far fa-trash-alt"></i></a>
+                                                    <a th:href="@{/hr/delete-question/__${quizId}__/__${question.id}__}" class="ml-2 btn btn-circle btn-outline btn-xs"><i class="far fa-trash-alt"></i></a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -110,7 +110,7 @@
 
                                     </div>
                                     <div th:if="${listQuestion.getNumberOfElements() <= 0}">
-                                        <a class="btn btn-sm btn-outline mb-4" th:href="@{/admin/quiz/__${quizId}__/question}">Back to list</a>
+                                        <a class="btn btn-sm btn-outline mb-4" th:href="@{/hr/list-question/__${quizId}__}">Back to list</a>
                                     </div>
                                 </div>
 
@@ -125,7 +125,7 @@
         </div>
 
         <!-- Slide bar-->
-        <div th:replace="fragments/_SliderBar"></div>
+        <div th:replace="fragments/_SideBar"></div>
     </div>
 
     <script>
@@ -182,7 +182,7 @@
         }
     </script>
 
-    <script th:src="@{/resources/static/js/common.js}"></script>
+    <script th:src="@{/static/js/common.js}"></script>
 
 </body>
 

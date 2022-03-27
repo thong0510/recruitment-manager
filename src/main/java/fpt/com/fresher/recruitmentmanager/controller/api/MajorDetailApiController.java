@@ -1,4 +1,4 @@
-package fpt.com.fresher.recruitmentmanager.controller;
+package fpt.com.fresher.recruitmentmanager.controller.api;
 
 import fpt.com.fresher.recruitmentmanager.object.filter.MajorDetailFilter;
 import fpt.com.fresher.recruitmentmanager.object.response.MajorDetailResponse;
