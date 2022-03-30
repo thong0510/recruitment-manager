@@ -24,8 +24,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE users SET deleted = true WHERE user_name=?")
-@Where(clause = "deleted=false")
 public class Users extends BaseEntity implements Serializable, UserDetails {
 
     @Id
@@ -73,8 +71,6 @@ public class Users extends BaseEntity implements Serializable, UserDetails {
     private Set<Quiz> quizSet;
 
     private Boolean status = true;
-
-    private Boolean deleted = false;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @ToString.Exclude

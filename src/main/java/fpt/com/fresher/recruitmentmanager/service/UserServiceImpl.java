@@ -47,18 +47,18 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
     private final RedissonClient redissonClient;
     private final PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(UserRepository userRepository,
                            UserMapper userMapper,
-                           RoleRepository roleRepository,
+                           RoleService roleService,
                            RedissonClient redissonClient,
                            @Lazy PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
-        this.roleRepository = roleRepository;
+        this.roleService = roleService;
         this.redissonClient = redissonClient;
         this.passwordEncoder = passwordEncoder;
     }
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
             admin.setPassword(new BCryptPasswordEncoder().encode("123456"));
             admin.setFullName("ADMIN USER");
             admin.setStatus(true);
-            admin.setRoles(List.of(roleRepository.findByRole(SystemRole.ADMIN)));
+            admin.setRoles(List.of(roleService.findRoleByName(SystemRole.ADMIN)));
             userRepository.save(admin);
         }
     }
@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
             Set<Role> roles1 = new HashSet<>();
 
             for (String r : request.getListRole()) {
-                Role role = roleRepository.findByRole(SystemRole.valueOf(r));
+                Role role = roleService.findRoleByName(SystemRole.valueOf(r));
                 roles1.add(role);
             }
 
@@ -143,15 +143,9 @@ public class UserServiceImpl implements UserService {
 
         Set<Role> roles = new HashSet<>();
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication == null || authentication instanceof AnonymousAuthenticationToken) {
-            roles.add(roleRepository.findByRole(SystemRole.USER));
-        } else {
-            for (String r : request.getListRole()) {
-                Role role = roleRepository.findByRole(SystemRole.valueOf(r));
-                roles.add(role);
-            }
+        for (String r : request.getListRole()) {
+            Role role = roleService.findRoleByName(SystemRole.valueOf(r));
+            roles.add(role);
         }
 
         user.setRoles(roles);

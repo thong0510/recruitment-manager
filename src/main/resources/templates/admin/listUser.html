@@ -226,7 +226,7 @@
 
                                     <select x-cloak id="select">
                                         <option th:each="role : ${T(fpt.com.fresher.recruitmentmanager.object.contant.enums.SystemRole).values()}"
-                                                th:value="${role.getValue()}" th:text="${role}"></option>
+                                                th:value="${role}" th:text="${role}"></option>
                                     </select>
                                     <div id="roles"></div>
 

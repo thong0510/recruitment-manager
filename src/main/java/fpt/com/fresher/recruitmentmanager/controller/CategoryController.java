@@ -1,7 +1,6 @@
 package fpt.com.fresher.recruitmentmanager.controller;
 
 import fpt.com.fresher.recruitmentmanager.object.filter.CategoryFilter;
-import fpt.com.fresher.recruitmentmanager.object.filter.QuizFilter;
 import fpt.com.fresher.recruitmentmanager.object.mapper.CategoryMapper;
 import fpt.com.fresher.recruitmentmanager.object.model.Pagination;
 import fpt.com.fresher.recruitmentmanager.object.request.CategoryRequest;
